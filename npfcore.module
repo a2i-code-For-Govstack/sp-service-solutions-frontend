@@ -1,0 +1,2324 @@
+<?php
+
+include($_SERVER['DOCUMENT_ROOT'] . '/dbconnect.php');
+global $print_btn;
+$domain_info = array();
+$datadb = $dbphlcn;
+global $dbphlcn;
+$dbphlcn = $datadb;
+
+
+function getAnalyticsId($domain)
+{
+    $domains = array(
+        4 => "www.sylhetdiv.gov.bd",
+        6 => "www.sylhet.gov.bd",
+        8 => "www.moulvibazar.gov.bd",
+        10 => "www.habiganj.gov.bd",
+        12 => "www.sunamganj.gov.bd",
+        14 => "www.barisaldiv.gov.bd",
+        16 => "www.jhalakathi.gov.bd",
+        18 => "www.patuakhali.gov.bd",
+        20 => "www.pirojpur.gov.bd",
+        22 => "www.barisal.gov.bd",
+        24 => "www.bhola.gov.bd",
+        26 => "www.barguna.gov.bd",
+        28 => "www.rangpurdiv.gov.bd",
+        30 => "www.panchagarh.gov.bd",
+        32 => "www.dinajpur.gov.bd",
+        34 => "www.lalmonirhat.gov.bd",
+        36 => "www.nilphamari.gov.bd",
+        38 => "www.gaibandha.gov.bd",
+        40 => "www.thakurgaon.gov.bd",
+        42 => "www.rangpur.gov.bd",
+        44 => "www.kurigram.gov.bd",
+        46 => "www.rajshahidiv.gov.bd",
+        48 => "www.sirajganj.gov.bd",
+        50 => "www.pabna.gov.bd",
+        52 => "www.bogra.gov.bd",
+        54 => "www.rajshahi.gov.bd",
+        56 => "www.natore.gov.bd",
+        58 => "www.joypurhat.gov.bd",
+        60 => "www.chapainawabganj.gov.bd",
+        62 => "www.naogaon.gov.bd",
+        64 => "www.jessore.gov.bd",
+        66 => "www.khulnadiv.gov.bd",
+        68 => "www.satkhira.gov.bd",
+        70 => "www.meherpur.gov.bd",
+        72 => "www.narail.gov.bd",
+        74 => "www.chuadanga.gov.bd",
+        76 => "www.kushtia.gov.bd",
+        78 => "www.magura.gov.bd",
+        80 => "www.khulna.gov.bd",
+        82 => "www.bagerhat.gov.bd",
+        84 => "www.jhenaidah.gov.bd",
+        86 => "www.comilla.gov.bd",
+        88 => "www.chittagongdiv.gov.bd",
+        90 => "www.feni.gov.bd",
+        92 => "www.brahmanbaria.gov.bd",
+        94 => "www.rangamati.gov.bd",
+        96 => "www.noakhali.gov.bd",
+        98 => "www.chandpur.gov.bd",
+        100 => "www.lakshmipur.gov.bd",
+        102 => "www.chittagong.gov.bd",
+        104 => "www.coxsbazar.gov.bd",
+        106 => "www.khagrachhari.gov.bd",
+        108 => "www.bandarban.gov.bd",
+        110 => "www.sherpur.gov.bd",
+        112 => "www.mymensingh.gov.bd",
+        114 => "www.jamalpur.gov.bd",
+        116 => "www.netrokona.gov.bd",
+        118 => "www.dhakadiv.gov.bd",
+        120 => "www.narsingdi.gov.bd",
+        122 => "www.gazipur.gov.bd",
+        124 => "www.mymensinghdiv.gov.bd",
+        126 => "www.shariatpur.gov.bd",
+        128 => "www.narayanganj.gov.bd",
+        130 => "www.tangail.gov.bd",
+        132 => "www.kishoreganj.gov.bd",
+        134 => "www.manikganj.gov.bd",
+        136 => "www.dhaka.gov.bd",
+        138 => "www.munshiganj.gov.bd",
+        140 => "www.rajbari.gov.bd",
+        142 => "www.madaripur.gov.bd",
+        144 => "www.gopalganj.gov.bd",
+        146 => "www.faridpur.gov.bd",
+    );
+
+    return array_search($domain, $domains);
+
+}
+
+
+//die;
+/**
+ * Implements hook_menu.
+ */
+function npfcore_init()
+{
+    global $domain_info;
+    global $print_btn;
+    global $language;
+    global $is_right_side_bar;
+    $print_btn = true;
+    $is_right_side_bar = "0";
+    // get lang cookie
+    $domain_name = $_SERVER['HTTP_HOST'] == 'localhost' ? 'cabinet.gov.bd' : $_SERVER['HTTP_HOST'];
+    //////////////////////////////////
+    $domain_info_temp = get_domain_info($domain_name, 'bn', 'subdomain');
+    select_lan($domain_info_temp['site_default_language']);
+    $lang = $language->language;
+    //////////////////////////////////
+    $domain_info = get_domain_info($domain_name, $lang, 'subdomain');
+    $app_name = '/npfministry';
+
+    // Analytics ID
+    $domainParts = explode('.', $domain_info['subdomain']);
+    $slice = array_slice($domainParts, '-3', 3, true);
+    $domainName = 'www.' . implode('.', $slice);
+    $domain_info['analytics_id'] = getAnalyticsId($domainName);
+    $domain_info['analytics_domain'] = $domainParts[1];
+
+
+}
+
+function select_lan($default_lan)
+{
+    global $language;
+    ///////////////////////////////
+
+
+    if (isset($_POST['lang']) and $_POST['lang'] != $_COOKIE['lang']) {
+        setcookie("lang", '');
+        setcookie("lang", $_POST['lang'], 0, '/', null);
+        $_COOKIE['lang'] = $_POST['lang'];
+    }
+
+    $lang = $_COOKIE['lang'] ? $_COOKIE['lang'] : $default_lan;
+
+    $languages = language_list();
+    if (isset($languages[$lang])) {
+        $language = $languages[$lang];
+    }
+}
+
+function get_domain_info($domain_fldval, $lang, $domain_fldname = "subdomain")
+{
+    global $dbphlcn;
+
+    // Domain Info Caching Start
+    $cache_file_path = 'sites/default/files/cachetmp/'.$domain_fldval.$lang.domain_fldname.'.json';
+    if(file_exists($cache_file_path)){
+        $content = file_get_contents($cache_file_path);
+        // $time = filemtime($cache_file_path);
+        // $timeDiff = number_format(abs(time() - $time) / 60, 0);
+        // $timeDiff = (int)str_replace(',','',$timeDiff);
+        // if($timeDiff>10)
+        //     unlink($cache_file_path);
+        return json_decode($content,true);
+    }
+    // Domain Info Caching End
+
+    $sql = "
+		SELECT
+		  d.`id`,
+		  d.`subdomain`,
+		  d.`alias`,
+		  d.`domain_type_id`,
+		  d.`parent_id`,
+		  d.`active`,
+
+		  d.`site_mail`,
+		  d.`analytics_id`,
+		  d.`template`,
+		  d.`site_default_language`,
+		  d.`site_frontpage`,
+		  d.`site_offline`,
+		  d.`last_content_updated`,
+                  d.`sitename_en`,
+                  d.`sitename_bn`,
+		  d.`sitename_" . $lang . "` 'sitename',
+		  d.`site_slogan_" . $lang . "` 'siteslogan',
+		  d.`site_footer_" . $lang . "` 'sitefooter',
+		  d.`site_mission_" . $lang . "` 'sitemission',
+		  dt.name 'type_name'
+			FROM `{$dbphlcn}`.npf_domains d
+			INNER JOIN `{$dbphlcn}`.npf_domain_types dt
+			ON d.domain_type_id = dt.id
+		WHERE d.`$domain_fldname` = '$domain_fldval'
+	";
+
+    if ($domain_fldname == "subdomain") {
+        $sql .= " OR FIND_IN_SET('$domain_fldval',d.`alias`)";
+    }
+    $result = db_query($sql);
+    $a_result = array();
+    while ($row = db_fetch_object($result)) {
+        $a_result = get_object_vars($row);
+    }
+	
+	//cache
+	//$cachePath = $_SERVER["DOCUMENT_ROOT"] . "/tmp/cache/".str_replace('.','-',$_SERVER['HTTP_HOST']).'/domain_info_'.$lang.'.txt';
+	
+	//file_put_contents($cachePath,json_encode($a_result));	
+    
+
+    // Domain Info Caching Start
+    if(!file_exists($cache_file_path)){
+        $file = fopen($cache_file_path,"w");
+        fwrite($file,json_encode($a_result,JSON_UNESCAPED_UNICODE));
+        fclose($file);
+    }
+    // Domain Info Caching End
+    
+	return $a_result;
+}
+
+/**
+ * Implements hook_menu.
+ */
+function npfcore_menu()
+{
+    $items = array();
+    $items['nolink'] = array(
+        'page callback' => 'get_nolink',
+        'page arguments' => array(2),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['site/view/%'] = array(
+        'page callback' => 'get_view_content',
+        'page arguments' => array(2),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+
+    $items['site/ajaxview/%'] = array(
+        'page callback' => 'get_ajax_view_content',
+        'page arguments' => array(2),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['site/%/%'] = array(
+        'page callback' => 'get_contents',
+        'page arguments' => array(1, 2),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['user'] = array(
+        'title' => t('User Admin'),
+        'page callback' => 'drupal_goto',
+        'page arguments' => array('npfadmin/'),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['site/search'] = array(
+        'page callback' => 'do_search',
+        'page arguments' => array(2),
+        'access arguments' => array('access content'),
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+}
+
+function npfcore_preprocess_html(&$vars)
+{
+
+}
+
+function do_search()
+{
+    $domain = $_SERVER['HTTP_HOST'];
+    $css = '';
+    if ($_GET['q'] == 'site/search') {
+        $css = '<style>#right-content{display: none;}#left-content{width: 960px}</style>';
+    }
+    $q = cleanInput($_GET['key']);
+    $url = 'https://a2i.pipilika.com/#/search?q=' . $q . '&t=all';
+    $iframe = '<iframe id="pip_iframe" src="' . $url . '" style="border:0px #FFFFFF none;" name="Pipilika Search" scrolling="yes" frameborder="0" marginheight="0px" marginwidth="0px" height="1700px" width="100%px"></iframe>';
+    return $css . $iframe;
+}
+
+function get_nolink()
+{
+    return "The page is under-construction.";
+}
+
+function getRegionId($region)
+{
+    switch ($region) {
+        case 'left':
+            return 1;
+        case 'footer':
+            return 2;
+        case 'right':
+            return 3;
+        case 'header':
+            return 4;
+        case 'header_top':
+            return 5;
+    }
+    return 0;
+}
+
+function get_all_block_by_region($regionid)
+{
+    global $dbphlcn;
+    global $language;
+    $lang = $language->language;
+    global $domain_info;
+    $domainid = $domain_info['id'];
+    $sql = "SELECT more, title_$lang 'title', body_$lang 'body',  template_block_name FROM `{$dbphlcn}`.`npf_blocks` WHERE `domain_id`=$domainid AND `region_id`=$regionid ORDER BY weight";
+    //echo $sql;
+    $result = db_query($sql);
+    $html = '';
+    while ($row = db_fetch_object($result)) {
+        $html .= get_block_view($row->template_block_name, $row->title, $row->body, $row->more);
+    }
+    return $html;
+}
+
+function get_block_view($block_name, $title, $body, $more)
+{
+    global $dbphlcn;
+    global $language;
+    $lang = $language->language;
+    global $domain_info;
+    $domainid = $domain_info['id'];
+
+    //get the query for list block_name
+    $sql = "SELECT `sql` FROM `{$dbphlcn}`.`npf_template_blocks` WHERE `name` = '{$block_name}' LIMIT 0, 1";
+    $result = db_query($sql);
+    $a_result = array();
+    $params = array(
+        'lang' => $lang,
+        'domainid' => $domainid,
+    );
+
+    $t = array();
+    while ($row = db_fetch_object($result)) {
+        $a_result = get_object_vars($row);
+        $sql = get_view_sql_query($a_result['sql'], $params);
+    }
+
+    $t['contents'] = array();
+    if (!empty($sql)) {
+        $result = db_query($sql);
+        while ($row = db_fetch_object($result)) {
+            unserializedRows($row);
+            $t['contents'][] = get_object_vars($row);
+        }
+    }
+
+    $t['lang'] = $lang;
+    $t['title'] = $title;
+    $t['body'] = $body;
+    $t['more'] = $more;
+    return renderPhpFile("./sites/default/files/templates/blocks/" . $block_name . "/" . $block_name . "_template_" . $lang . ".compiled", $t);
+}
+
+function get_ajax_view_content($view_name)
+{
+    $v_content = get_view_content($view_name);
+    print $v_content;
+    //die();
+    drupal_page_footer();
+}
+
+function get_view_content_ref($viewuri)
+{
+    $tmp = explode("/", $viewuri);
+    $view_name = $tmp[3];
+    return get_view_content($view_name);
+}
+
+function check_uuid($guid)
+{
+    if (preg_match('/^\{?[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}\}?$/', $guid)) {
+        return true;
+    }
+    return false;
+}
+
+function check_word($word, $min, $max)
+{
+    if (preg_match('/^[a-zA-Z]+[-a-zA-Z0-9_]{' . $min . ',' . $max . '}$/', $word)) {
+        return true;
+    }
+    return false;
+}
+
+function check_number($number, $min, $max)
+{
+    if (preg_match('/^[0-9]{' . $min . ',' . $max . '}$/', $number)) {
+        return true;
+    }
+    return false;
+}
+
+function get_view_content($view_name)
+{
+    $view_name = strtolower(trim($view_name));
+    global $dbphlcn;
+    $view_name = mysql_real_escape_string($view_name);
+    if (!check_word($view_name, 1, 20)) {
+        return "<p>Invalid view!</p>";
+    }
+    global $is_right_side_bar;
+    global $language;
+    $lang = $language->language;
+    global $domain_info;
+    $domainid = $domain_info['id'];
+
+    $args = get_args($_GET['q']); // 0 site, 1 view, 2 view_name, 3 arg0, 4 arg1, 5 arg2 ... N argN-3
+
+    $page = isset($_GET['page']) ? cleanInput($_GET['page']) : '1';
+    $rows = isset($_GET['rows']) ? cleanInput($_GET['rows']) : '20';
+    $rows = $rows <= 99999 ? $rows : 99999;
+
+    $offset = ($page - 1) * $rows;
+
+    $t = isset($_GET['t']) ? cleanInput($_GET['t']) : '';
+
+    //get the query for list view_name
+    $sql = "SELECT `header_{$lang}` AS header, `footer_{$lang}` AS footer, `sql_query`, `is_right_side_bar`, `is_pagination` FROM `{$dbphlcn}`.`npf_view_contents` WHERE `name` = '{$view_name}' LIMIT 0, 1";
+    $result = db_query($sql);
+    $a_result = array();
+    $params = array(
+        'lang' => $lang,
+        'domainid' => $domainid,
+        'offset' => $offset,
+        'rows' => $rows,
+        't' => $t,
+        'q' => $args,
+    );
+    $isPagination = false;
+    $t = array();
+    while ($row = db_fetch_object($result)) {
+
+        $a_result = get_object_vars($row);
+        $sql = get_view_sql_query($a_result['sql_query'], $params);
+        $t['header'] = $a_result['header'];
+        $t['footer'] = $a_result['footer'];
+        $t['footer'] = $a_result['footer'];
+        $is_right_side_bar = $a_result['is_right_side_bar'];
+        $isPagination = $a_result['is_pagination'];
+    }
+
+    $t['contents'] = array();
+    $t['paginate'] = array();
+    $t['offset'] = $offset;
+    $t['rows'] = $rows;
+
+    if (!empty($sql)) {
+        $result = db_query($sql);
+
+        while ($row = db_fetch_object($result)) {
+            unserializedRows($row);
+            $t['contents'][] = get_object_vars($row);
+        }
+        if ($isPagination) {
+            $t['paginate'] = get_pagination_props($sql, $page, $rows);
+        }
+    }
+
+    $t['lang'] = $lang;
+    $t['q'] = $params['q'];
+    $t['t'] = $params['t'];
+    $rendered_content = '';
+
+    global $print_btn;
+    //var_dump($print_btn);
+    if ($print_btn) {
+        $rendered_content .= '<div style="float:right;" id="print_btn_div"><img src="/themes/responsive_npf/images/print_btn.png" style="cursor: pointer;" onclick="print_content();" width="24" title="প্রিন্ট" /></div><div id="printable_area">';
+    }
+
+    $rendered_content .= renderPhpFile("./sites/default/files/templates/views/" . $view_name . "/" . $view_name . "_template_" . $lang . ".compiled", $t);
+
+    if ($print_btn) {
+        $rendered_content .= '</div>';
+    }
+
+    if ($isPagination) {
+        $paginated_content = '<div id="div-view-pagination-' . $view_name . '">';
+        $paginated_content .= $rendered_content;
+        $paginated_content .= '</div>';
+        return $paginated_content;
+    } else {
+        return $rendered_content;
+    }
+}
+
+function cleanInput($val)
+{
+    $input_data = mysql_real_escape_string(strip_tags($val));
+    return htmlentities($input_data, ENT_QUOTES);
+}
+
+function get_args($uri)
+{
+    $args = array();
+    $tmp = explode("/", $uri);
+    for ($i = 3; $i < sizeof($tmp); $i++) {
+        $args[] = cleanInput($tmp[$i]);
+    }
+    return $args;
+}
+function get_pagination_props($sql, $page, $rows)
+{
+    $t = array();
+    $sql = get_sql_row_count_statement($sql);
+    //echo $sql;
+    $result = db_query($sql);
+    while ($row = db_fetch_object($result)) {
+        //var_dump($row->cnt);
+        $t['total'] = $row->cnt;
+        $t['total_pages'] = ceil($t['total'] / $rows);
+    }
+    $t['rows'] = $rows;
+    $t['page'] = $page;
+    return $t;
+}
+
+function renderPagination($view_name, $pag)
+{
+//    if(!check_word($view_name,3,20)){
+//        return "<p>Invalid view!</p>";
+//    }
+    if (empty($pag)) return '';
+    $uri = strtok($_SERVER["REQUEST_URI"], '?');
+    global $language;
+    $lang = $language->language;
+    $n = $pag['total_pages'];
+
+    $currentPage = isset($_GET['page']) ? cleanInput($_GET['page']) : 1;
+    $previousPage = $currentPage == 1 ? 1 : $currentPage - 1;
+    $nextPage = $currentPage + 1;
+
+    $html = '<ul class="pagination">';
+    $html .= '<li><a href="' . $uri . '?page=1&rows=' . $pag['rows'] . '"><<</a></li>
+    <li><a href="' . $uri . '?page=' . $previousPage . '&rows=' . $pag['rows'] . '"><</a></li>
+    <li style="color:#fff">' . $currentPage . '</li>
+    <li><a href="' . $uri . '?page=' . $nextPage . '&rows=' . $pag['rows'] . '">></a></li>
+    <li><a href="' . $uri . '?page=' . $n . '&rows=' . $pag['rows'] . '">>></a></li>';
+    $html .= '</ul>';
+
+    if ($lang == 'bn') {
+        $html .= '<p>সর্বমোট তথ্য: ' . digit_to_bangla($pag['total'], $lang) . '</p>';
+    } else {
+        $html .= '<p>Total records: ' . $pag['total'] . '</p>';
+    }
+
+    if ($n <= 1)
+        $html = '';
+    return $html;
+}
+
+function get_sql_row_count_statement($sql)
+{
+    $sql = strtolower($sql);
+    $startSelect = strpos($sql, 'select');
+    $startFrom = strpos($sql, 'from');
+    $startLimit = strpos($sql, 'limit');
+    $len = $startLimit - $startFrom;
+    $tmp = 'select count(*) cnt ' . substr($sql, $startFrom, $len);
+    return $tmp;
+}
+
+function renderView($view_ref, $params = array())
+{
+    global $dbphlcn;
+    $tmp = explode("/", $view_ref);
+    $view_name = $tmp[3];
+    global $is_right_side_bar;
+    global $language;
+    $lang = $language->language;
+    global $domain_info;
+    $domainid = $domain_info['id'];
+
+    $offset = isset($params['offset']) ? $params['offset'] : '0';
+    $rows = isset($params['rows']) ? $params['rows'] : '20';
+    $t = isset($params['t']) ? $params['t'] : '';
+
+    if (!check_word($view_name, 3, 20)) {
+        return "<p>Invalid view!</p>";
+    }
+
+    //get the query for list view_name
+    $sql = "SELECT `header_{$lang}` AS header, `footer_{$lang}` AS footer, `sql_query`, `is_right_side_bar` FROM `{$dbphlcn}`.`npf_view_contents` WHERE `name` = '{$view_name}' LIMIT 0, 1";
+    $result = db_query($sql);
+    $a_result = array();
+    $params = array(
+        'lang' => $lang,
+        'domainid' => $domainid,
+        'offset' => $offset,
+        'rows' => $rows,
+        't' => $t,
+    );
+
+    $t = array();
+    while ($row = db_fetch_object($result)) {
+
+        $a_result = get_object_vars($row);
+        $sql = get_view_sql_query($a_result['sql_query'], $params);
+
+        $t['header'] = $a_result['header'];
+        $t['footer'] = $a_result['footer'];
+        $t['footer'] = $a_result['footer'];
+        $is_right_side_bar = $a_result['is_right_side_bar'];
+    }
+    $t['contents'] = array();
+    if (!empty($sql)) {
+        $result = db_query($sql);
+
+        while ($row = db_fetch_object($result)) {
+            unserializedRows($row);
+            $t['contents'][] = get_object_vars($row);
+        }
+    }
+    $t['lang'] = $lang;
+    return renderPhpFile("./sites/default/files/templates/views/" . $view_name . "/" . $view_name . "_template_" . $lang . ".compiled", $t);
+}
+
+function unserializedRows(&$row)
+{
+    foreach ($row as &$col) {
+        if (is_serialized($col)) {
+            $col = unserialize($col);
+        }
+    }
+}
+
+function get_view_sql_query($sql, $params)
+{
+    global $dbphlcn;
+    if (isset($params['t'])) {
+        if (is_array($params['t'])) {
+            foreach ($params['t'] as $tag => $replace) {
+                $sql = str_replace('{$t_' . $tag . '}', $replace, $sql);
+            }
+            unset($params['t']);
+        }
+    }
+    if (isset($params['q']) && is_array($params['q'])) {
+        foreach ($params['q'] as $tag => $replace) {
+            $lookup = getLookupByName($replace, 'en');
+            if (!empty($lookup)) {
+                $replace = $lookup;
+                $sql = str_replace('{$q_' . $tag . '}', $replace, $sql);
+            } else {
+                unset($params['q'][$tag]);
+            }
+        }
+        if (count($params['q']) > 0) {
+            if (strpos($sql, "{::") !== false) {
+                $sql = str_replace("{::", '', $sql);
+                $sql = str_replace("::}", '', $sql);
+            }
+        } else {
+            $sql = preg_replace('/' . preg_quote('{::') .
+                '.*?' .
+                preg_quote('::}') . '/', '', $sql);
+        }
+        unset($params['q']);
+    }
+    foreach ($params as $tag => $replace) {
+        $sql = str_replace('{$' . $tag . '}', $replace, $sql);
+    }
+    if (strpos($sql, $dbphlcn) === false) {
+        $sql = str_replace('npfministryadmin', '`' . $dbphlcn . '`', $sql);
+    }
+    if (strpos($sql, "{{:") !== false) {
+        $sql = str_replace("{{:", '`' . $dbphlcn . '`.npf_content_', $sql);
+        $sql = str_replace(":}}", '', $sql);
+    }
+
+    return $sql;
+}
+
+function get_contents($content_type, $content_id)
+{
+    global $dbphlcn;
+    if (!check_word($content_type, 1, 20)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+    if (!check_uuid($content_id)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+    $content_type = cleanInput($content_type);
+    $content_id = cleanInput($content_id);
+    global $language;
+    $lang = $language->language;
+    global $domain_info;
+    $domainid = $domain_info['id'];
+
+    if ($content_id == 'nolink') {
+        $nolink = '<h1 class="title">Under Construction</h1>';
+        $nolink .= '<p>This page is under construction. Please visit again soon!</p>';
+        return $nolink;
+    }
+    $props = get_content_type_props($content_type, $domainid);
+    if ($props == "ERROR") {
+        return "Invalid content found !!!";
+    }
+    $flds = unserialize($props['flds']);
+    $sql = unserialize($props['sql_query']);
+    if (!check_domain_access($content_type, $content_id, $domainid)) {
+        @http_response_code(404);
+        return "<p>Requested page is not assigned for the domain.</p>";
+    }
+    $sqls = array();
+    if (sizeof($sql) <= 0) {
+        $sqls[] = "SELECT *
+        FROM `{$dbphlcn}`.npf_content_$content_type
+        WHERE id = '$content_id' AND AND active = 1 AND publish = 1";
+    } else {
+        $params = get_defualt_params($domainid, $content_id);
+        $sysflds = get_system_fields();
+        $flds = get_fld_merge($sysflds, $flds);
+        foreach ($sql as $s) {
+            $sqls[] = gen_raw_sql($content_type, $s, $flds, $params, $lang);
+        }
+    }
+    $t = getResultValuesInVars($sqls, $flds, $lang);
+
+    $t['lang'] = $lang;
+    if ($t != false) {
+
+        if (isset($t['content']['is_right_side_bar'])) {
+            global $is_right_side_bar;
+            $is_right_side_bar = $t['content']['is_right_side_bar'] | $is_right_side_bar;
+        }
+
+        $output = renderPhpFile("./sites/default/files/templates/" . $content_type . "_" . $lang . ".compiled", $t);
+        $uri = generateContentEditUri($domain_info, $content_type, $content_id);
+        /////////////////Edited by hafij//////////////////////
+        //$output= $uri.$output;
+        $output = $uri . "<div id='printable_area'>" . $output . "</div>";
+        /////////////////Edited by hafij//////////////////////
+        $lastupdated = getlastupdate($content_type, $content_id, $domainid, $lang);
+        if (isset($t['content']['is_right_side_bar'])) {
+            global $is_right_side_bar;
+            $is_right_side_bar = $t['content']['is_right_side_bar'] | $is_right_side_bar;
+        }
+        return $lastupdated . $output;
+    }
+    return "";
+}
+
+function getlastupdate($content_type, $content_id, $domainid, $lang)
+{
+    global $dbphlcn;
+    if (!check_word($content_type, 1, 20)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+    if (!check_uuid($content_id)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+    $sql = "SELECT DATE_FORMAT(lastmodified,'%D %M %Y') lastmodified FROM `{$dbphlcn}`.npf_content_$content_type WHERE id = '$content_id' AND domain_id = $domainid AND active = 1 AND publish = 1";
+    $result = db_query($sql);
+    $row = db_fetch_object($result);
+    if ($row) {
+        $a_result = get_object_vars($row);
+        $lastmodified = digit_to_bangla($a_result['lastmodified'], $lang);
+        if ($lang == 'bn') {
+            return '<div id="print_btn_div"><img src="/themes/responsive_npf/images/print_btn.png" style="cursor: pointer;" onclick="print_content();" width="24" title="প্রিন্ট" /></div><div style="float:right;font-style:italic;font-size:.8em;color:#666;">সর্ব-শেষ হাল-নাগাদ: ' . $lastmodified . '</div><hr id="print_div_hr" />';
+        } else {
+            return '<div id="print_btn_div"><img src="/themes/responsive_npf/images/print_btn.png" style="cursor: pointer;" onclick="print_content();" width="24" title="print" /></div><div style="float:right;font-style:italic;font-size:.8em;color:#666;">Last updated: ' . $lastmodified . '</div><hr id="print_div_hr" />';
+        }
+    }
+    return '';
+}
+
+function generateContentEditUri($domain_info, $content_type, $content_id)
+{
+    global $dbphlcn;
+    if (!check_word($content_type, 1, 20)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+    if (!check_uuid($content_id)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+
+    if (!isset($_COOKIE['logged-in'])) {
+        return '';
+    }
+    if ($_COOKIE['logged-in'] != "logged-in") {
+        return '';
+    }
+    $sql = "SELECT version FROM `{$dbphlcn}`.npf_content_$content_type WHERE id = '$content_id' AND domain_id = " . $domain_info['id'] . " AND active = 1 AND publish = 1 ORDER BY version LIMIT 0,1";
+    $result = db_query($sql);
+    $row = db_fetch_object($result);
+    $version = '';
+    if ($row) {
+        $row = get_object_vars($row);
+        $version = $row['version'];
+        $uri = $domain_info['subdomain'] . '/npfadmin/content/' . $content_type . '/edit/' . $content_id . '/' . $version;
+        $uri = '<a href="http://' . $uri . '" target="_blank" > Edit </a>';
+        return $uri . '<hr/>';
+    } else {
+        return '';
+    }
+}
+
+function renderContent($content_ref)
+{
+    global $language;
+    $lang = $language->language;
+    global $domain_info;
+    $domainid = $domain_info['id'];
+    return render_content_by_ref($domainid, $lang, $content_ref);
+}
+
+function render_content_by_ref($domainid, $lang, $content_ref)
+{
+    $tmp = explode("/", $content_ref);
+    global $dbphlcn;
+
+    $content_type = $tmp[2];
+    $content_id = $tmp[3];
+
+    if (!check_word($content_type, 1, 20)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+    if (!check_uuid($content_id)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+
+    $props = get_content_type_props($content_type, $domainid);
+    if ($props == "ERROR") {
+        return "Invalid content...";
+    }
+    $flds = unserialize($props['flds']);
+    $sql = unserialize($props['sql_query']);
+    $sqls = array();
+    if (sizeof($sql) <= 0) {
+        $sqls[] = "SELECT * FROM `{$dbphlcn}`.npf_content_$content_type WHERE id = '$content_id' AND active = 1 AND publish = 1";
+    } else {
+        $params = get_defualt_params($domainid, $content_id);
+        $sysflds = get_system_fields();
+        $flds = get_fld_merge($sysflds, $flds);
+        foreach ($sql as $s) {
+            $sqls[] = gen_raw_sql($content_type, $s, $flds, $params, $lang);
+        }
+    }
+    $t = getResultValuesInVars($sqls, $flds, $lang);
+    $t['lang'] = $lang;
+    if ($t != false) {
+        return renderPhpFile("./sites/default/files/templates/" . $content_type . "_" . $lang . ".compiled", $t);
+    }
+    return "";
+}
+
+function getResultValuesInVars($sqls, $flds, $lang)
+{
+    $t = array();
+    foreach ($sqls as $sql) {
+        $result = db_query($sql);
+        $row = db_fetch_object($result);
+        if ($row) {
+            $row = get_object_vars($row);
+            getUnserializeValues($row, $flds, $lang);
+            $t['content'] = $row;
+        } else {
+            return false;
+        }
+    }
+    return $t;
+}
+
+function getUnserializeValues(&$contentValues, $flds, $lang)
+{
+    foreach ($flds as &$fld) {
+        if ($fld['active'] == 0) {
+            continue;
+        }
+        switch ($fld['type']) {
+            case "filefield":
+            case "nodereference":
+            case "imglist":
+            case "geocode":
+            case "linklist":
+            case "multitext":
+            case "string":
+            case "multihtmltext":
+                if (isset($contentValues[$fld['name']])) {
+                    $contentValues[$fld['name']] = is_serialized($contentValues[$fld['name']]) ? unserialize($contentValues[$fld['name']]) : $contentValues[$fld['name']];
+                }
+                break;
+            case "contentref":
+                if (!empty($contentValues[$fld['name']])) {
+                    $contentValues[$fld['name']] = get_refcontent_value($contentValues[$fld['name']], $lang);
+                }
+                break;
+            case "multicontentref":
+                if (!empty($contentValues[$fld['name']])) {
+                    $contentValues[$fld['name']] = get_refcontent_value($contentValues[$fld['name']], $lang);
+                }
+                break;
+            case "lookuptbl":
+                if (isset($contentValues[$fld['name']])) {
+                    $contentValues[$fld['name']] = get_lookup_value($fld['lookup'], $contentValues[$fld['name']], $lang);
+                }
+                break;
+            case "multiselect":
+                if (isset($contentValues[$fld['name']])) {
+                    $vals = explode(',', $contentValues[$fld['name']]);
+                    $tmp = array();
+                    foreach ($vals as &$val) {
+                        $tmp[] = array('id' => $val, 'name' => get_lookup_value($fld['lookup'], $val, $lang));
+                    }
+                    $contentValues[$fld['name']] = $tmp;
+                }
+                break;
+            case "domainselector":
+                if (isset($contentValues[$fld['name']])) {
+                    $val = get_domain_info($contentValues[$fld['name']], $lang, "id");
+                    $tmp = null;
+                    if ($val) {
+                        $tmp = array('id' => $val['id'], 'subdomain' => $val['subdomain'], 'name' => $val['sitename']);
+                    }
+                    $contentValues[$fld['name']] = $tmp;
+                }
+                break;
+            case "number_integer":
+            case "number_long":
+            case "number_decimal":
+                $contentValues[$fld['name']] = digit_to_bangla($contentValues[$fld['name']], $lang);
+                break;
+        }
+    }
+}
+
+
+function get_lookup_value($lookuptblid, $lookupid, $lang)
+{
+    global $dbphlcn;
+    $sql = "SELECT name_$lang AS name FROM `{$dbphlcn}`.npf_lookups WHERE lookuptype_id = '$lookuptblid' AND id = '$lookupid' "; //-- AND domain_id = $domainid AND active = 1
+    //echo $sql;
+    $result = db_query($sql);
+    $row = db_fetch_object($result);
+    if ($row) {
+        return $row->name;
+    } else {
+        return "";
+    }
+}
+
+function getLookupById($lookupid, $lang)
+{
+    global $dbphlcn;
+    $sql = "SELECT name_$lang AS name FROM `{$dbphlcn}`.npf_lookups WHERE id = '$lookupid' "; //-- AND domain_id = $domainid AND active = 1
+    $result = db_query($sql);
+    $row = db_fetch_object($result);
+    if ($row) {
+        return $row->name;
+    } else {
+        return "";
+    }
+}
+
+function getLookupByName($lookup, $lang)
+{
+    global $dbphlcn;
+    $sql = "SELECT id FROM `{$dbphlcn}`.npf_lookups WHERE name_$lang = '$lookup' "; //-- AND domain_id = $domainid AND active = 1
+    $result = db_query($sql);
+    $row = db_fetch_object($result);
+    if ($row) {
+        return $row->id;
+    } else {
+        return "";
+    }
+}
+
+function get_refcontent_value($refvalue, $lang)
+{
+    global $dbphlcn;
+    $refvalue_arr = unserialize($refvalue);
+    $type = "";
+    $ids = [];
+
+    foreach ($refvalue_arr as $value) {
+        $link = $value['link'];
+        $link = ltrim($link, '/');
+        $link_arr = explode('/', $link);
+        if (count($link_arr) > 2) {
+            $type = $link_arr[1];
+            $ids[] = "'" . $link_arr[2] . "'";
+        }
+    }
+    $result_data = [];
+
+    if (count($ids) > 0) {
+        $ids = implode(",", $ids);
+        $cols = "id, title_$lang";
+        if ($type == 'officer_list' || $type == 'staff_list') {
+            $cols = "*";
+        }
+        $sql = "SELECT $cols FROM `{$dbphlcn}`.npf_content_$type WHERE id IN ($ids) AND active = 1 ";
+        $result = db_query($sql);
+        while ($row = db_fetch_array($result)) {
+            $result_data[] = $row;
+        }
+    }
+    return $result_data;
+}
+
+function get_content_type_flds($content_type, $domainid)
+{
+    global $dbphlcn;
+    if (!check_word($content_type, 1, 20)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+    $sql = "SELECT flds FROM `{$dbphlcn}`.npf_content_types WHERE name = '{$content_type}' "; //-- AND domain_id = $domainid AND active = 1
+    $result = db_query($sql);
+    $row = db_fetch_object($result);
+    if ($row) {
+        return $row->flds;
+    } else {
+        return "ERROR";
+    }
+}
+
+function get_content_type_props($content_type, $domainid)
+{
+    global $dbphlcn;
+    if (!check_word($content_type, 1, 20)) {
+        return "<p>Invalid Content Type!</p>";
+    }
+    global $is_right_side_bar;
+
+    $sql = "SELECT flds, sql_query, is_right_side_bar FROM `{$dbphlcn}`.npf_content_types WHERE name = '{$content_type}' "; //-- AND domain_id = $domainid AND active = 1
+    $result = db_query($sql);
+    $row = db_fetch_object($result);
+    if ($row) {
+        $tmp['flds'] = $row->flds;
+        $tmp['sql_query'] = $row->sql_query;
+        $is_right_side_bar = $row->is_right_side_bar;
+        return $tmp;
+    } else {
+        return "ERROR";
+    }
+}
+
+function renderPhpFile($filename, $vars = null)
+{
+    global $domain_info;
+    if (is_array($vars) && !empty($vars)) {
+        extract($vars);
+    }
+    ob_start();
+    include $filename;
+    return ob_get_clean();
+}
+
+
+function get_fld_merge($sysflds, $content_flds)
+{
+    $flds = array();
+    foreach ($sysflds as $fld) {
+        $flds[] = $fld; //array("name"=>$fld['name'],"type"=>$fld['type']);
+    }
+    foreach ($content_flds as $fld) {
+        $flds[] = $fld; //array("name"=>$fld['name'],"type"=>$fld['type']);
+    }
+    return $flds;
+}
+
+
+function gen_raw_sql($contentName, $sql, $flds, $params, $lang)
+{
+    global $dbphlcn;
+    foreach ($flds as $fld) {
+        $fld_name = get_org_fld_name($fld, $lang);
+        $sql = str_replace("{{" . $fld['name'] . "}}", $fld_name, $sql);
+    }
+    $sql = get_sysinject_values_n($contentName, $sql, $params);
+    // replace the content_type names last
+    if (strpos($sql, $dbphlcn) === false) {
+        $sql = str_replace('npfministryadmin', '`' . $dbphlcn . '`', $sql);
+    }
+    $sql = str_replace("{{:", '`' . $dbphlcn . '`.npf_content_', $sql);
+    $sql = str_replace(":}}", '', $sql);
+    return $sql;
+}
+
+
+function get_org_fld_name($fld, $lang)
+{
+    if ($fld['type'] == 'text' || $fld['type'] == 'htmltext') {
+        return $fld['name'] . '_' . $lang;
+    }
+    return $fld['name'];
+}
+
+/*function get_sysinject_values($contentName, $sql, $params)
+{
+    $sysvars = get_sysinject_vars();
+    foreach ($sysvars as $name => $flds) {
+        $pos = strpos($sql, '{{' . $name . '}}');
+
+        if ($pos === false) {
+        } else {
+            $tmp = '1=1 ';
+            foreach ($flds as $fld) {
+                if (isset($params['' . $fld])) {
+                    $tmp .= " AND " . $contentName . "." . $fld . "='" . $params['' . $fld] . "' ";
+                }
+            }
+            $sql = str_replace("{{" . $name . "}}", $tmp, $sql);
+        }
+    }
+    return $sql;
+}*/
+
+function get_sysinject_values_n($contentName, $sql, $params)
+{
+    $sysvars = get_sysinject_vars();
+
+    foreach ($sysvars as $name => $flds) {
+        $pos = strpos($sql, '{{' . $name . '}}');
+
+        if ($pos === false) {
+        } else {
+            $tmp = '1=1 ';
+            foreach ($flds as $fld) {
+                if ($fld == "domain_id") {
+                    continue;
+                }
+                if (isset($params['' . $fld])) {
+                    $tmp .= " AND " . $contentName . "." . $fld . "='" . $params['' . $fld] . "' ";
+                }
+            }
+            $sql = str_replace("{{" . $name . "}}", $tmp, $sql);
+        }
+    }
+    return $sql;
+}
+
+function get_sysinject_vars()
+{
+    $sysvars = array(
+        'sysinject' => array('domain_id', 'active', 'publish', 'id'),
+        'domain' => array('domain_id'),
+        'active' => array('active'),
+        'publish' => array('publish'),
+        'id' => array('id')
+    );
+    return $sysvars;
+}
+
+function get_defualt_params($domain_id, $id)
+{
+    $params = array(
+        'id' => $id,
+        'domain_id' => $domain_id,
+        'active' => 1,
+        'publish' => 1
+    );
+    return $params;
+}
+
+function get_system_fields()
+{
+    $flds = array();
+    $flds[] = array('name' => 'id', 'type' => 'id');
+    $flds[] = array('name' => 'version', 'type' => 'number_integer');
+    $flds[] = array('name' => 'active', 'type' => 'bool');
+    $flds[] = array('name' => 'publish', 'type' => 'bool');
+    $flds[] = array('name' => 'created', 'type' => 'datetime');
+    $flds[] = array('name' => 'lastmodified', 'type' => 'datetime');
+    $flds[] = array('name' => 'createdby', 'type' => 'uuid');
+    $flds[] = array('name' => 'lastmodifiedby', 'type' => 'uuid');
+    $flds[] = array('name' => 'title', 'type' => 'text');
+    $flds[] = array('name' => 'body', 'type' => 'htmltext');
+    $flds[] = array('name' => 'userpermissionsids', 'type' => 'serialized');
+    $flds[] = array('name' => 'uploadpath', 'type' => 'uuid');
+    $flds[] = array('name' => 'uploaddomain', 'type' => 'string');
+    return $flds;
+}
+
+
+function is_serialized($data)
+{
+    // if it isn't a string, it isn't serialized
+    if (!is_string($data))
+        return false;
+    $data = trim($data);
+    if ('N;' == $data)
+        return true;
+    if (!preg_match('/^([adObis]):/', $data, $badions))
+        return false;
+    switch ($badions[1]) {
+        case 'a':
+        case 'O':
+        case 's':
+            if (preg_match("/^{$badions[1]}:[0-9]+:.*[;}]\$/s", $data))
+                return true;
+            break;
+        case 'b':
+        case 'i':
+        case 'd':
+            if (preg_match("/^{$badions[1]}:[0-9.E-]+;\$/", $data))
+                return true;
+            break;
+    }
+    return false;
+}
+
+function teaser_text($text, $charLimit = 100)
+{
+    //mb_internal_encoding("UTF-8");
+    $teaserText = $text;
+    if (mb_strlen($text) >= $charLimit) {
+        $teaserText = mb_substr($text, 0, $charLimit) . '...';
+    }
+
+    return $teaserText;
+}
+
+function teaser($content_ref, $text, $charLimit = 100)
+{
+    $teaserText = $text;
+    if (mb_strlen($text) >= $charLimit) {
+        $teaserText = mb_substr($text, 0, $charLimit) . '... <a class="btn" href="' . $content_ref . '">more</a>';
+    }
+    return $teaserText;
+}
+
+function renderImagePath($contentType, $uploadpath, $filefield)
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+    if (!isset($filefield['name'])) {
+        $filefield = $filefield[0];
+    }
+    if (!empty($filefield['name'])) {
+        global $domain_info;
+        $name = $filefield['name'];
+        $uploadpath = str_replace("-", '_', $uploadpath);
+        if (isset($filefield['path']) && !empty($filefield['path'])) {
+            $base_path = $filefield['path'] . $name;
+            $base_path = str_replace(":uploadpath", $uploadpath, $base_path);
+        } else {
+            $base_path = 'sites/default/files/files/' . $domain_info['subdomain'] . '/' . $contentType . '/' . $uploadpath . '/' . $name;
+        }
+        $base_path = base_path() . $base_path;
+        $base_path = preg_replace('#/+#', '/', $base_path);
+        return $base_path;
+    } else {
+        return '';
+    }
+}
+
+function renderLink($lnk, $lang, $title = "")
+{
+    if (is_serialized($lnk)) {
+        $lnk = unserialize($lnk);
+    }
+    if (!isset($lnk['link'])) {
+        $lnk = $lnk[0];
+    }
+    //-------------Tappware
+    $extra_title = str_replace(" ", "-", $lnk['caption_' . $lang]);
+    $extra_title = htmlspecialchars($extra_title, ENT_QUOTES);
+    $lnk['link'] = rtrim(trim($lnk['link']), '/');
+
+    if ((strpos($lnk['link'], 'www') !== false) || (strpos($lnk['link'], 'http') !== false)) {
+        $extra_title = "";
+    } else {
+        $lnk['link'] = ltrim($lnk['link'], '/');
+        $lnk['link'] = base_path() . $lnk['link'];
+    }
+    if ($title != "") {
+        return '<a href="' . $lnk['link'] . '/' . $extra_title . '">' . $title . '</a>';
+    }
+    if (empty($lnk['caption_' . $lang])) {
+        return '<a href="' . $lnk['link'] . '/' . $extra_title . '">' . $lnk['link'] . '</a>';
+    } else {
+        return '<a href="' . $lnk['link'] . '/' . $extra_title . '">' . $lnk['caption_' . $lang] . '</a>';
+    }
+    //-------------Tappware
+}
+
+function renderLinkBy($contentType, $id, $title)
+{
+    //-------------Tappware
+    $extra_title = str_replace(" ", "-", $title);
+    $extra_title = htmlspecialchars($extra_title, ENT_QUOTES);
+    return '<a href="/site/' . $contentType . '/' . $id . '/' . $extra_title . '">' . $title . '</a>';
+    //-------------Tappware
+}
+
+function renderContentRef($contentType, $id, $title)
+{
+    return '<a href="/site/' . $contentType . '/' . $id . '">' . $title . '</a>';
+}
+
+function getFileUrl($contentType, $uploadpath, $filefield, $domain_name = null)
+{
+    if (empty($domain_name)) {
+        global $domain_info;
+        $domain_name = $domain_info['subdomain'];
+    }
+    $uri = getFileUri($contentType, $uploadpath, $filefield, $domain_name);
+    $url = $domain_name . '/' . $uri;
+    $url = 'http://' . preg_replace('#/+#', '/', $url);
+    return $url;
+}
+
+function getFileUri($contentType, $uploadpath, $filefield, $domain_name = null)
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+    if (!isset($filefield['name'])) {
+        $filefield = $filefield[0];
+    }
+    if (!empty($filefield['name'])) {
+        if (empty($domain_name)) {
+            global $domain_info;
+            $domain_name = $domain_info['subdomain'];
+        }
+        $name = $filefield['name'];
+        $uploadpath = str_replace("-", '_', $uploadpath);
+        if (isset($filefield['path']) && !empty($filefield['path'])) {
+            $uri = $filefield['path'] . $name;
+            $uri = str_replace(":uploadpath", $uploadpath, $uri);
+        } else {
+            $uri = 'sites/default/files/files/' . $domain_name . '/' . $contentType . '/' . $uploadpath . '/' . $name;
+        }
+        $uri = base_path() . $uri;
+        $url = preg_replace('#/+#', '/', $uri);
+        return $uri;
+    } else {
+        return '';
+    }
+}
+
+function getFileExt($file_path)
+{
+    $path_parts = pathinfo($file_path);
+    return $path_parts['extension'];
+}
+
+function getFileExtIcon($file_path, $res = 32)
+{
+    $file_ext = getFileExt($file_path);
+    $icon_file = $file_ext . '.png';
+    $icon_path = '/' . path_to_theme() . '/img/file-icons/' . $res . 'px';
+    return $icon_path . '/' . $icon_file;
+}
+
+/*function renderDownloadLink($contentType, $uploadpath, $filefield){
+    if(is_serialized( $filefield )){
+        $filefield = unserialize( $filefield );
+        //var_dump($filefield);
+    }
+    if(!isset($filefield['name'])){
+        $filefield = $filefield[0];
+    }
+    if(!empty($filefield['name'])){
+        global $domain_info;
+        $uploadpath = str_replace("-", '_', $uploadpath);
+        $base_path = 'sites/default/files/files/'.$domain_info['subdomain'].'/'.$contentType.'/'.$uploadpath.'/'.$filefield['name'];
+        $file_path = base_path().$base_path;
+        $url_path = 'http://'.$domain_info['subdomain'].'/'.$base_path;
+
+        $ext_icon = getFileExtIcon($file_path);
+        return '<a href="'.$url_path.'"><img src="'.$ext_icon.'" alt="" class="file-icon"/></a>';
+    }else{
+        return '';
+    }
+}*/
+
+function renderDownloadLink($contentType, $uploadpath, $filefield, $is_caption = false, $domain_name = null, $icon_size = 32)
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+    if (!isset($filefield['name'])) {
+        $filefield = $filefield[0];
+    }
+    if (!empty($filefield['name'])) {
+        if ($domain_name == null) {
+            global $domain_info;
+            $domain_name = $domain_info['subdomain'];
+        }
+        $name = $filefield['name'];
+        $uploadpath = str_replace("-", '_', $uploadpath);
+        if (isset($filefield['path']) && !empty($filefield['path'])) {
+            $base_path = $filefield['path'] . $name;
+            $base_path = str_replace(":uploadpath", $uploadpath, $base_path);
+        } else {
+            $base_path = 'sites/default/files/files/' . $domain_name . '/' . $contentType . '/' . $uploadpath . '/' . $name;
+        }
+
+        $file_path = base_path() . $base_path;
+        $url_path = $domain_name . '/' . $file_path;
+        $url_path = 'http://' . preg_replace('#/+#', '/', $url_path);
+        $t = "";
+        global $language;
+        $lang = $language->language;
+
+        $f_cap = $filefield['name'];
+        if (!empty($filefield['caption_' . $lang])) {
+            $f_cap = $filefield['caption_' . $lang];
+        }
+        if ($is_caption) {
+            $ext_icon = getFileExtIcon($file_path, 16);
+            $t = '<a href="' . $url_path . '"><img src="' . $ext_icon . '" alt="' . $f_cap . '" class="file-icon"/> ' . $f_cap . '</a>';
+        } else {
+            $ext_icon = getFileExtIcon($file_path, $icon_size);
+            $t = '<a href="' . $url_path . '" title="' . $f_cap . '"><img src="' . $ext_icon . '" alt="' . $f_cap . '" class="file-icon"/></a>';
+        }
+        return $t;
+    } else {
+        return '';
+    }
+}
+
+//Tapp
+function renderFile($contentType, $uploadpath, $filefield, $width = "", $height = "")
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+
+    if (!is_array($filefield) || count($filefield) == 1) {
+        $image_path = renderImagePath($contentType, $uploadpath, $filefield);
+        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $image_path)) {
+            if (@is_array(getimagesize($_SERVER['DOCUMENT_ROOT'] . $image_path))) {
+                if ($contentType == 'top_banner') {
+                    return '<p><img src="' . $image_path . '" alt="" width="' . $width . '" height="' . $height . '"/></p>';
+                } else {
+                    return '<p><img style="max-width:500px;" src="' . $image_path . '" alt="" width="' . $width . '" height="' . $height . '"/></p>';
+                }
+            } else {
+                return renderFileViewer($contentType, $uploadpath, $filefield);
+            }
+        }
+        return renderFileViewer($contentType, $uploadpath, $filefield);
+    } else {
+        return renderMultiDownloadLink($contentType, $uploadpath, $filefield);
+    }
+
+}
+
+function renderMultiDownloadLink($contentType, $uploadpath, $filefield, $is_caption = true, $domain_name = null, $icon_size = 32)
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+    if (!is_array($filefield)) {
+        $filefield[0] = $filefield;
+    }
+    $arr_file_field = $filefield;
+
+    global $language;
+    $lang = $language->language;
+    $t = '<table class="table">';
+    global $domain_info;
+    $domain_name = $domain_info['subdomain'];
+    foreach ($arr_file_field as $filefield) {
+        $base_path = renderImagePath($contentType, $uploadpath, $filefield);
+        $url_path = $domain_name . $base_path;
+        $url_path = 'http://' . preg_replace('#/+#', '/', $url_path);
+
+        if (!file_exists($_SERVER['DOCUMENT_ROOT'] . $base_path)) {
+            continue;
+        }
+        $t .= '<tr><td>';
+        $f_cap = $filefield['name'];
+        if (!empty($filefield['caption_' . $lang])) {
+            $f_cap = $filefield['caption_' . $lang];
+        }
+        if ($is_caption) {
+            $ext_icon = getFileExtIcon($base_path, 16);
+            $t .= '<a href="' . $url_path . '"><img src="' . $ext_icon . '" alt="' . $f_cap . '" class="file-icon"/> ' . $f_cap . '</a>';
+        } else {
+            $ext_icon = getFileExtIcon($base_path, $icon_size);
+            $t .= '<a href="' . $url_path . '" title="' . $f_cap . '"><img src="' . $ext_icon . '" alt="' . $f_cap . '" class="file-icon"/></a>';
+        }
+        $t .= '</td></tr>';
+    }
+    $t .= '</table>';
+    return $t;
+}
+
+function renderFileViewer($contentType, $uploadpath, $filefields, $domain_name = null)
+{
+    $content = '';
+    if (sizeof($filefields) > 1) {
+        $content .= '<ul class="multifile-viewer-list">';
+        //for ($i = 0; $i < sizeof($filefields); $i++) {
+        foreach ($filefields as $i => $value) {
+            if (!empty($filefields[$i]['name'])) {
+                $content .= '<li class="' . ($i == 0 ? "active" : "") . '">';
+                $content .= renderDownloadLink($contentType, $uploadpath, $filefields[$i], true, $domain_name);
+                $url = 'http://docs.google.com/viewer?url=' . getFileUrl($contentType, $uploadpath, $filefields[$i], $domain_name) . '&embedded=true';
+                $content .= ' <a class="file-btn view" href="javascript:;" onclick="$(this).parent().parent(\'ul\').children(\'li\').removeClass(\'active\');$(this).parent(\'li\').addClass(\'active\');$(\'#iframe-fileviewer > iframe\').attr(\'src\',\'' . $url . '\')">view</a>';
+                $content .= '</li>';
+            }
+        }
+        $file_path = getFileUrl($contentType, $uploadpath, $filefields[0], $domain_name);
+        $url = 'http://docs.google.com/viewer?url=' . getFileUrl($contentType, $uploadpath, $filefields[0], $domain_name) . '&embedded=true';
+        $content .= '</ul>';
+
+        if (strtolower(end(explode('.', $file_path))) == 'pdf')
+            $content .= '<div><a class="viewer" href="' . $file_path . '"></a></div>';
+        else
+            $content .= '<div id="iframe-fileviewer"><iframe src="' . $url . '" width="100%" height="780" style="border: none;"></iframe></div>';
+
+    } else {
+        if (!empty($filefields[0]['name'])) {
+
+            if (isExternalFile($filefields[0])) {
+
+                $content = renderExternalFile($filefields[0]);
+            } else {
+                $content .= renderDownloadLink($contentType, $uploadpath, $filefields[0], true, $domain_name);
+                $content .= "<br/>";
+                $content .= renderGoogleDocViewer($contentType, $uploadpath, $filefields[0], $domain_name);
+                $content .= "<br/>";
+            }
+        }
+    }
+
+    return $content;
+}
+
+function isExternalFile($filefield)
+{
+    $external = (strpos($filefield['link'], 'http') !== false);
+    return $external;
+}
+function renderExternalFile($filefield)
+{
+    $fileUrl = $filefield['link'];
+    $f_cap = $filefield['name'];
+    $ext_icon = getFileExtIcon($fileUrl, 16);
+    $html = '<a target="__blank" href="' . $fileUrl . '"><img src="' . $ext_icon . '" alt="' . $f_cap . '" class="file-icon"/> ' . $f_cap . '</a>';
+    $html .= '<br/><div><a class="viewer" href="' . $fileUrl . '"></a></div>';
+    return $html;
+}
+
+
+function renderGoogleDocViewer($contentType, $uploadpath, $filefield, $domain_name = null)
+{
+    $file_path = getFileUrl($contentType, $uploadpath, $filefield, $domain_name);
+    $p_f_path = rawurlencode($file_path);
+
+    if (strtolower(end(explode('.', $file_path))) == 'pdf')
+        return '<div><a class="viewer" href="' . $file_path . '"></a></div>';
+    return '<iframe src="http://docs.google.com/viewer?url=' . $p_f_path . '&embedded=true" width="100%" height="780" style="border: none;"></iframe>';
+
+
+}
+
+function getThumbnailPath($contentType, $uploadpath, $filefield)
+{
+    return getImagePath($contentType, $uploadpath, $filefield, "thumbnail");
+}
+
+function getImagePath($contentType, $uploadpath, $filefield, $type = false)
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+    if (!isset($filefield['name'])) {
+        $filefield = $filefield[0];
+    }
+    if (!empty($filefield['name'])) {
+        global $domain_info;
+        $name = $filefield['name'];
+        $uploadpath = str_replace("-", '_', $uploadpath);
+        if (isset($filefield['path']) && !empty($filefield['path'])) {
+            $basepath = $filefield['path'];
+            $basepath = str_replace(":uploadpath", $uploadpath, $basepath);
+        } else {
+            $basepath = 'sites/default/files/files/' . $domain_info['subdomain'] . '/' . $contentType . '/' . $uploadpath . '/';
+        }
+        $basepath = base_path() . $basepath;
+        if ($type == "thumbnail") {
+            $base_path = $domain_info['subdomain'] . $basepath . 'thumbnail/' . $name;
+        } else {
+            $base_path = $domain_info['subdomain'] . $basepath . $name;
+        }
+        $base_path = 'http://' . preg_replace('#/+#', '/', $base_path);
+        return $base_path;
+    } else {
+        return '';
+    }
+}
+
+function renderImage($contentType, $uploadpath, $filefield, $width = '', $height = '', $old_fid = 0)
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+    if (!isset($filefield['name'])) {
+        $filefield = $filefield[0];
+    }
+
+    if (!empty($filefield['name'])) {
+        global $domain_info;
+        $name = $filefield['name'];
+        $uploadpath = str_replace("-", '_', $uploadpath);
+        if (isset($filefield['path']) && !empty($filefield['path'])) {
+            $file_path = $filefield['path'] . $name;
+            $file_path = str_replace(":uploadpath", $uploadpath, $file_path);
+        } else {
+            $file_path = 'sites/default/files/files/' . $domain_info['subdomain'] . '/' . $contentType . '/' . $uploadpath . '/' . $name;
+        }
+        $file_path = base_path() . $file_path;
+        $base_path = $domain_info['subdomain'] . $file_path;
+        $base_path = 'http://' . preg_replace('#/+#', '/', $base_path);
+        //echo '<img src="' . $base_path . '" alt="" width="' . $width . '" height="' . $height . '"/>';
+        if ($contentType == 'top_banner') {
+            $img = '<img src="' . $base_path . '" alt="" width="' . $width . '" height="' . $height . '"/>';
+            if (!empty($filefield['link'])) {
+                $caption = !empty($filefield['caption_' . $lang]) ? $filefield['caption_' . $lang] : $file_path;
+                return '<a href = "' . $filefield['link'] . '" title="' . $caption . '">' . $img . '</a>';
+            }
+            return $img;
+        } else {
+            $img = '<img style="max-width:700px;" src="' . $base_path . '" alt="" width="' . $width . '" height="' . $height . '"/>';
+            if (!empty($filefield['link'])) {
+                $caption = !empty($filefield['caption_' . $lang]) ? $filefield['caption_' . $lang] : $file_path;
+                return '<a href = "' . $filefield['link'] . '" title="' . $caption . '">' . $img . '</a>';
+            }
+            return $img;
+        }
+    } else {
+        return '';
+    }
+}
+
+function renderImageThumbnil($contentType, $uploadpath, $filefield, $old_fid = 0)
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+    if (!isset($filefield['name'])) {
+        $filefield = $filefield[0];
+    }
+    if (!empty($filefield['name'])) {
+        global $domain_info;
+        $name = $filefield['name'];
+        $uploadpath = str_replace("-", '_', $uploadpath);
+        if (isset($filefield['path']) && !empty($filefield['path'])) {
+            $file_path = $filefield['path'] . 'thumbnail/' . $name;
+            $file_path = str_replace(":uploadpath", $uploadpath, $file_path);
+        } else {
+            $file_path = 'sites/default/files/files/' . $domain_info['subdomain'] . '/' . $contentType . '/' . $uploadpath . '/thumbnail/' . $name;
+        }
+        $file_path = base_path() . $file_path;
+        $base_path = $domain_info['subdomain'] . $file_path;
+        $base_path = 'http://' . preg_replace('#/+#', '/', $base_path);
+        return '<img src="' . $base_path . '" alt=""/>';
+    } else {
+        return '';
+    }
+}
+
+function makeArrayGroup($group, $data)
+{
+    $group_size = sizeof($group);
+    $result = null;
+    foreach ($data as $dt) {
+        $tmp1 = array();
+        for ($st = $group_size - 1; $st >= 0; $st--) {
+            $tmp2 = array();
+            $key_val = $dt[$group[$st]];
+            $tmp2[$key_val] = $tmp1;
+            $tmp1 = $tmp2;
+        }
+        if ($result == null) {
+            $result = $tmp1;
+        } else {
+            $result = array_merge_recursive($result, $tmp1);
+        }
+    }
+    makeArrayGroupDFS($group[$group_size - 1], $data, $result);
+    return $result;
+}
+
+function makeArrayGroupDFS($f, $data, &$tmp)
+{
+    foreach ($tmp as $key => &$val) {
+        if (is_array($val) && (sizeof($val) > 0)) {
+            makeArrayGroupDFS($f, $data, $val);
+        } else {
+            $tmp_key = makeArrayGroupSearch($data, $f, $key);
+            $tmp[$key] = $tmp_key;
+        }
+    }
+}
+
+function makeArrayGroupSearch($array, $key, $value)
+{
+    $results = array();
+    if (is_array($array)) {
+        if (isset($array[$key]) && $array[$key] == $value) {
+            $results[] = $array;
+        }
+        foreach ($array as $subarray) {
+            $results = array_merge($results, makeArrayGroupSearch($subarray, $key, $value));
+        }
+    }
+    return $results;
+}
+
+function digit_to_bangla($digits, $lang)
+{
+    if ($lang != 'bn') return $digits;
+    $dig_arr = str_split($digits);
+    $dig_bn = '';
+    foreach ($dig_arr as $dig) {
+        switch ($dig) {
+            case '0':
+                $dig_bn .= '&#x09E6;';
+                break;
+            case '1':
+                $dig_bn .= '&#x09E7;';
+                break;
+            case '2':
+                $dig_bn .= '&#x09E8;';
+                break;
+            case '3':
+                $dig_bn .= '&#x09E9;';
+                break;
+            case '4':
+                $dig_bn .= '&#x09EA;';
+                break;
+            case '5':
+                $dig_bn .= '&#x09EB;';
+                break;
+            case '6':
+                $dig_bn .= '&#x09EC;';
+                break;
+            case '7':
+                $dig_bn .= '&#x09ED;';
+                break;
+            case '8':
+                $dig_bn .= '&#x09EE;';
+                break;
+            case '9':
+                $dig_bn .= '&#x09EF;';
+                break;
+            default:
+                $dig_bn .= $dig;
+        }
+    }
+    $dig_bn = str_replace("th", "", $dig_bn);
+
+    $dig_bn = str_replace("January", "জানুয়ারি", $dig_bn);
+    $dig_bn = str_replace("February", "ফেব্রুয়ারি", $dig_bn);
+    $dig_bn = str_replace("March", "মার্চ", $dig_bn);
+    $dig_bn = str_replace("April", "এপ্রিল", $dig_bn);
+    $dig_bn = str_replace("May", "মে", $dig_bn);
+    $dig_bn = str_replace("June", "জুন", $dig_bn);
+    $dig_bn = str_replace("July", "জুলাই", $dig_bn);
+    $dig_bn = str_replace("Augst", "আগস্ট", $dig_bn);
+    $dig_bn = str_replace("September", "সেপ্টেম্বর", $dig_bn);
+    $dig_bn = str_replace("October", "অক্টোবর", $dig_bn);
+    $dig_bn = str_replace("November", "নভেম্বর", $dig_bn);
+    $dig_bn = str_replace("December", "ডিসেম্বর", $dig_bn);
+    return $dig_bn;
+}
+
+function hitcount($domainid)
+{
+
+    return 0;
+
+}
+
+function getGoogleAnalytics()
+{
+    global $domain_info;
+    if ($domain_info['id'] == 5934) {
+        $trackingId = "'UA-58123229-1'";
+        $ga = <<<EOT
+    <script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', $trackingId, 'auto');
+    ga('send', 'pageview');
+
+</script>
+EOT;
+        return $ga;
+    }
+}
+
+/*===============Site Map work Start=================*/
+function initSitemap($tree, $root)
+{
+    global $domain_info;
+    global $language;
+    $domainid = $domain_info['id'];
+    $lang = $language->language;
+    global $dbphlcn;
+    //get main menu items
+    $sql = "SELECT id, title_bn,title_en, parent_id,link_type,link_path,router_path,external,has_children,depth,active FROM {$dbname}.npf_menus WHERE   active=1 AND domain_id = '$domainid' ORDER BY depth, weight;";
+    $resource = db_query($sql);
+    $title = 'title_' . $lang;
+    $caption = 'caption_' . $lang;
+    while ($result = mysql_fetch_array($resource)) {
+        $menuItem = array(
+            'parent' => count(explode('-', $result['parent_id'])) > 2 ? $result['parent_id'] : $root,
+            'title' => $result[$title],
+            'link' => $result['link_path']
+        );
+        $tree[$result['id']] = $menuItem;
+    }
+
+    return $tree;
+}
+
+function addLinks($sql, &$tree, $section, $external = true, $root = 'pmo')
+{
+    global $language;
+    $lang = $language->language;
+    $caption = 'caption_' . $lang;
+    $title = 'title_' . $lang;
+
+    $resource = db_query($sql);
+    switch ($section) {
+        case 'service_box':
+            while ($result = mysql_fetch_array($resource)) {
+                $tree[$result['id']] = array(
+                    'parent' => $root,
+                    'title' => $result[$title],
+                    'link' => 'nolink'
+                );
+                for ($i = 1; $i < 5; $i++) {
+                    $linkKey = 'link' . $i;
+                    if (!empty($result[$linkKey])) {
+                        $link = unserialize($result[$linkKey])[0];
+                        $tree[rand(1111111111, 9999999999)] = array(
+                            'parent' => $result['id'],
+                            'title' => $link[$caption],
+                            'link' => $link['link']
+                        );
+                    }
+                }
+            }
+            break;
+        default:
+            while ($result = mysql_fetch_array($resource)) {
+                $link = unserialize($result['link'])[0];
+                $tree[$result['id']] = array(
+                    'parent' => $section,
+                    'title' => $link[$caption],
+                    'link' => $link['link'],
+                    'external' => $external
+                );
+            }
+
+    }
+
+    return $tree;
+}
+
+function parseAndPrintTree($root, $tree)
+{
+    if (!is_null($tree) && count($tree) > 0) {
+        echo '<ul>';
+        foreach ($tree as $child => $parent) {
+
+            $record = $parent;
+            if ($record['link'] == '[front]')
+                $record['link'] = '/';
+
+            if ($record['parent'] == $root) {
+                unset($tree[$child]);
+                echo '<li>';
+                if ($record['link'] != 'nolink') {
+                    //----------------Tappware
+                    $checkExternal = $record['link'];
+
+                    if ($checkExternal[0] != '/') {
+                        echo '<a target="_blank" href="' . $record['link'] . '">' . $record['title'] . '</a>';
+                    } else {
+                        $ownUrl = rawurldecode($_SERVER['HTTP_HOST']);
+
+                        if ($record['link'] == "/") {
+                            echo '<a href="' . $record['link'] . '">' . $record['title'] . '</a>';
+                        } else {
+                            $new_title = str_replace(" ", "-", $record['title']);
+                            $new_title = htmlspecialchars($new_title, ENT_QUOTES);
+                            echo '<a href="' . $record['link'] . "/" . $new_title . '">' . $record['title'] . '</a>';
+                        }
+
+                    }
+                    //----------------Tappware
+                } else
+                    echo '<span>' . $record['title'] . '</span>';
+                parseAndPrintTree($child, $tree);
+                echo '</li>';
+            }
+        }
+        echo '</ul>';
+    }
+}
+
+/*===============Site Map work End=================*/
+
+
+function contentsGroupingByLookup($contents, $fields, $seperator = ' , ')
+{
+    global $dbphlcn;
+    $lookup_ids = [];
+    foreach ($contents as $content) {
+        $lookup = [];
+        foreach ($fields as $field) {
+            if (!empty($content[$field])) {
+                $lookup[] = $content[$field];
+            }
+        }
+        $lookup = implode(',', $lookup);
+        if (empty($lookup)) {
+            continue;
+        } else {
+            $lookup = explode(',', $lookup);
+            $lookup_ids_m = array_merge($lookup_ids, $lookup);
+            $lookup_ids = array_unique($lookup_ids_m, SORT_REGULAR);
+        }
+    }
+    $lookup_ids = implode(',', $lookup_ids);
+    $lookup = [];
+    $lookup_query = "select * from `{$dbphlcn}`.npf_lookups where id in ({$lookup_ids}) order by weight";
+    $lk_result = db_query($lookup_query);
+    while ($row = db_fetch_object($lk_result)) {
+        $lookup[$row->id] = $row;
+    }
+    $formatted_contents = [];
+    foreach ($contents as $content) {
+        $lk = [];
+        foreach ($fields as $field) {
+            if (!empty($content[$field])) {
+                $lk[] = $content[$field];
+            }
+        }
+        $lk = implode(',', $lk);
+        $lk_arr = explode(',', $lk);
+        $lk_data = [];
+        foreach ($lk_arr as $lk) {
+            $lk_data[] = $lookup[$lk];
+        }
+        usort($lk_data, function ($a, $b) {
+            return $a->weight - $b->weight;
+        });
+        $lk_str = "";
+        foreach ($lk_data as $lk) {
+            $lk_str .= $lk->name_bn . "" . $seperator;
+        }
+        $lk_str = rtrim($lk_str, $seperator);
+        $formatted_contents[$lk_str][] = $content;
+    }
+    return $formatted_contents;
+}
+
+function check_domain_access($content_type, $content_id, $domain_id)
+{
+    return 1;
+    global $dbphlcn;
+    $table_name = 'npf_content_' . $content_type . '_domain';
+    $source_repo = $dbphlcn;
+    $domain_access_query = " SELECT count(domain_id) as domain_count FROM `$source_repo`.$table_name WHERE node_id = '{$content_id}' and domain_id = $domain_id ";
+    $result_domain_access = db_query($domain_access_query);
+    $result_domain_access_data = db_fetch_object($result_domain_access);
+    $result_domain_access_data = get_object_vars($result_domain_access_data);
+    return (intval($result_domain_access_data['domain_count']) > 0);
+}
+
+function renderData($content, $content_type)
+{
+    $props = get_content_type_props($content_type, 0);
+    if ($props == "ERROR") {
+        return "Invalid content found !!!";
+    }
+    global $language;
+    $lang = $language->language;
+    global $dbphlcn;
+    $flds = unserialize($props['flds']);
+    $html = '<h3>' . $content['title_' . $lang] . '</h3><div>';
+
+    if (isset($content['body_' . $lang])) {
+        $html .= '<p>' . html_entity_decode($content['body_' . $lang]) . '</p>';
+    }
+    foreach ($flds as $fld) {
+        if ($fld['active'] != 1 || $fld['name'] == 'sl') {
+            continue;
+        }
+        if ($fld['type'] == 'filefield') {
+            if (in_array($content_type, ['officer_list', 'staff_list'])) {
+                if (!empty($content[$fld['name']])) {
+                    $html .= "<p style='font-weight:bold'>" . $fld['hname'] . "</p>";
+                    $html .= renderImage($content_type, $content['uploadpath'], $content[$fld['name']], '120', '150');
+                    $html .= "<br/>";
+                }
+            } else {
+                if (!empty($content[$fld['name']])) {
+                    $html .= "<p style='font-weight:bold'>" . $fld['hname'] . "</p>";
+                    $html .= renderFile($content_type, $content['uploadpath'], $content[$fld['name']]);
+                    $html .= "<br/>";
+                }
+            }
+        } else if ($fld['type'] == 'imglist' || $fld['type'] == 'singlecropimage') {
+            if (!empty($content[$fld['name']])) {
+                $html .= "<p style='font-weight:bold'>" . $fld['hname'] . "</p>";
+                $html .= renderFile($content_type, $content['uploadpath'], $content[$fld['name']]);
+                $html .= "<br/>";
+            }
+        } else if ($fld['type'] == 'htmltext' || $fld['type'] == 'LString' || $fld['type'] == 'text') {
+            if (!empty($content[$fld['name'] . "_" . $lang])) {
+                $html .= "<p style='font-weight:bold'>" . $fld['hname'] . "</p>";
+                $html .= "<p>" . html_entity_decode($content[$fld['name'] . "_" . $lang]) . "</p>";
+            }
+        } else if ($fld['type'] == 'date') {
+            $has_value = (strtotime($content[$fld['name']]) > 0);
+            if ($has_value) {
+                $html .= "<p style='font-weight:bold'>" . $fld['hname'] . "</p>";
+                $html .= "<p>" . digit_to_bangla($content[$fld['name']], $lang) . "</p>";
+            }
+        } else if ($fld['type'] == 'contentref') {
+            $html .= "<p>" . renderLinkBy($fld['contentname'], $content[$fld['name']][0]['id'], $content[$fld['name']][0]['title_' . $lang]) . "</p>";
+        } else if ($fld['type'] == 'nodereference') {
+            $html .= "<p>" . renderLink($content[$fld['name']][0], $lang) . "</p>";
+        } else if ($fld['type'] == 'linklist') {
+            $html .= "<ul>";
+            foreach ($content[$fld['name']] as $link) {
+                $html .= "<li>" . renderLink($link, $lang) . "</li>";
+            }
+            $html .= "</ul>";
+        } else if ($fld['type'] == 'multicontentref') {
+            $html .= "<p style='font-weight:bold'>" . $fld['hname'] . "</p>";
+            if ($fld['contentname'] == 'officer_list') {
+                $html .= renderOfficerList($content[$fld['name']], $lang);
+            } else {
+                $html .= renderMultipleContentLink($content[$fld['name']], 'title_' . $lang);
+            }
+        } else {
+            if (!empty($content[$fld['name']])) {
+                $html .= "<p style='font-weight:bold'>" . $fld['hname'] . "</p>";
+                $html .= "<p>" . $content[$fld['name']] . "</p>";
+            }
+        }
+    }
+    $html .= "</div>";
+    return $html;
+}
+
+function renderOfficerList($datas, $lang)
+{
+    if ($lang == 'en') {
+        $html = '<table><thead><tr style="border-top:1px solid grey;"><th>Photo</th><th>Name</th><th>Designation</th><th>Mobile</th></tr></thead><tbody>';
+    } else {
+        $html = '<table><thead><tr style="border-top:1px solid grey;"><th>ছবি</th><th>নাম</th><th>পদবি</th><th>মোবাইল</th></tr></thead><tbody>';
+    }
+    foreach ($datas as $data) {
+        $html .= "<tr>";
+        $html .= "<td>" . renderImage('officer_list', $data['uploadpath'], $data['photo'], 60) . "</td>";
+        $html .= "<td>" . renderLinkBy('officer_list', $data['id'], $data['title_' . $lang]) . "</td>";
+        $html .= "<td>" . $data['designation_' . $lang] . "</td>";
+        $html .= "<td>" . $data['mobile'] . "</td>";
+        $html .= "</tr>";
+    }
+
+    $html .= '</tbody></table>';
+    return $html;
+}
+
+function renderStaffList($datas, $lang)
+{
+    if ($lang == 'en') {
+        $html = '<table><thead><tr><th>Photo</th><th>Name</th><th>Designation</th></tr></thead><tbody>';
+    } else {
+        $html = '<table><thead><tr><th>ছবি</th><th>নাম</th><th>পদবি</th></tr></thead><tbody>';
+    }
+    foreach ($datas as $data) {
+        $html .= "<tr>";
+        $html .= "<td>" . renderImage('staff_list', $data['uploadpath'], $data['photo'], 60) . "</td>";
+        $html .= "<td>" . renderLinkBy('staff_list', $data['id'], $data['title_' . $lang]) . "</td>";
+        $html .= "<td>" . $data['designation_' . $lang] . "</td>";
+        $html .= "</tr>";
+    }
+
+    $html .= '</tbody></table>';
+    return $html;
+}
+
+function renderMultipleContentLink($datas, $col)
+{
+    $html = '<ul>';
+    foreach ($datas as $data) {
+        $html .= "<li>" . renderLinkBy($fld['contentname'], $data['id'], $data[$col]) . "</li>";
+    }
+    $html .= '</ul>';
+    return $html;
+}
+
+function renderAdCorner($lang)
+{
+    global $dbphlcn;
+    global $domain_info;
+    $domain_id = $domain_info['id'];
+
+    $sql_job = "SELECT a.id, a.field_pubdate, a.field_archive_date FROM `{$dbphlcn}`.npf_content_revenue_model_job as a "
+        . " JOIN `{$dbphlcn}`.npf_content_revenue_model_job_domain as b on a.id = b.node_id and b.domain_id IN (-1, {$domain_id}) "
+        . "WHERE a.active = 1 and a.publish = 1";
+
+    $job_result = db_query($sql_job);
+    $job_count = 0;
+    while ($row_s = db_fetch_object($job_result)) {
+        $row = get_object_vars($row_s);
+        if (strtotime($row['field_pubdate']) <= 0 && strtotime($row['field_archive_date']) <= 0) {
+            $job_count++;
+            continue;
+        } else if (strtotime($row['field_pubdate']) > 0 && strtotime($row['field_archive_date']) <= 0) {
+            if (strtotime($row['field_pubdate']) <= strtotime(date('Y-m-d'))) {
+                $job_count++;
+                continue;
+            }
+        } else if (strtotime($row['field_pubdate']) <= 0 && strtotime($row['field_archive_date']) > 0) {
+            if (strtotime($row['field_archive_date']) >= strtotime(date('Y-m-d'))) {
+                $job_count++;
+                continue;
+            }
+        } else {
+            if (strtotime($row['field_pubdate']) <= strtotime(date('Y-m-d')) && strtotime($row['field_archive_date']) >= strtotime(date('Y-m-d'))) {
+                $job_count++;
+                continue;
+            }
+        }
+    }
+
+    //
+    $tender_count = 0;
+    $sql_tender = "SELECT a.id, a.field_pubdate, a.field_archive_date FROM `{$dbphlcn}`.npf_content_revenue_model_tender as a "
+        . " JOIN `{$dbphlcn}`.npf_content_revenue_model_tender_domain as b on a.id = b.node_id and b.domain_id IN (-1, {$domain_id}) "
+        . "WHERE a.active = 1 and a.publish = 1";
+
+    $tender_result = db_query($sql_tender);
+    while ($row_s = db_fetch_object($tender_result)) {
+        $row = get_object_vars($row_s);
+        if (strtotime($row['field_pubdate']) <= 0 && strtotime($row['field_archive_date']) <= 0) {
+            $tender_count++;
+            continue;
+        } else if (strtotime($row['field_pubdate']) > 0 && strtotime($row['field_archive_date']) <= 0) {
+            if (strtotime($row['field_pubdate']) <= strtotime(date('Y-m-d'))) {
+                $tender_count++;
+                continue;
+            }
+        } else if (strtotime($row['field_pubdate']) <= 0 && strtotime($row['field_archive_date']) > 0) {
+            if (strtotime($row['field_archive_date']) >= strtotime(date('Y-m-d'))) {
+                $tender_count++;
+                continue;
+            }
+        } else {
+            if (strtotime($row['field_pubdate']) <= strtotime(date('Y-m-d')) && strtotime($row['field_archive_date']) >= strtotime(date('Y-m-d'))) {
+                $tender_count++;
+                continue;
+            }
+        }
+    }
+
+    //
+    $ad_count = 0;
+    $sql_ad = "SELECT a.id, a.field_pubdate, a.field_archive_date FROM `{$dbphlcn}`.npf_content_revenue_model_advertisement as a "
+        . " JOIN `{$dbphlcn}`.npf_content_revenue_model_advertisement_domain as b on a.id = b.node_id and b.domain_id IN (-1, {$domain_id}) "
+        . "WHERE a.active = 1 and a.publish = 1";
+
+    $ad_result = db_query($sql_ad);
+    while ($row_s = db_fetch_object($ad_result)) {
+        $row = get_object_vars($row_s);
+        if (strtotime($row['field_pubdate']) <= 0 && strtotime($row['field_archive_date']) <= 0) {
+            $ad_count++;
+            continue;
+        } else if (strtotime($row['field_pubdate']) > 0 && strtotime($row['field_archive_date']) <= 0) {
+            if (strtotime($row['field_pubdate']) <= strtotime(date('Y-m-d'))) {
+                $ad_count++;
+                continue;
+            }
+        } else if (strtotime($row['field_pubdate']) <= 0 && strtotime($row['field_archive_date']) > 0) {
+            if (strtotime($row['field_archive_date']) >= strtotime(date('Y-m-d'))) {
+                $ad_count++;
+                continue;
+            }
+        } else {
+            if (strtotime($row['field_pubdate']) <= strtotime(date('Y-m-d')) && strtotime($row['field_archive_date']) >= strtotime(date('Y-m-d'))) {
+                $ad_count++;
+                continue;
+            }
+        }
+    }
+
+    if ($lang == 'bn') {
+        $job_count = digit_to_bangla($job_count, $lang);
+        $ad_count = digit_to_bangla($ad_count, $lang);
+        $tender_count = digit_to_bangla($tender_count, $lang);
+    }
+
+    $ad_images = [];
+    $sql_ad_images = "SELECT a.* FROM `{$dbphlcn}`.npf_content_revenue_model_advertisement as a "
+        . " JOIN `{$dbphlcn}`.npf_content_revenue_model_advertisement_domain as b on a.id = b.node_id and b.domain_id IN (-1, {$domain_id}) "
+        . "WHERE a.active = 1 and a.publish = 1 and a.field_is_slide = 1";
+
+
+    $ad_images_result = db_query($sql_ad_images);
+    foreach ($ad_images_result as $ad) {
+        $row = get_object_vars($row_s);
+        if (strtotime($row['field_pubdate']) <= 0 && strtotime($row['field_archive_date']) <= 0) {
+            $ad_images[] = $row;
+            continue;
+        } else if (strtotime($row['field_pubdate']) > 0 && strtotime($row['field_archive_date']) <= 0) {
+            if (strtotime($row['field_pubdate']) <= strtotime(date('Y-m-d'))) {
+                $ad_images[] = $row;
+                continue;
+            }
+        } else if (strtotime($row['field_pubdate']) <= 0 && strtotime($row['field_archive_date']) > 0) {
+            if (strtotime($row['field_archive_date']) >= strtotime(date('Y-m-d'))) {
+                $ad_images[] = $row;
+                continue;
+            }
+        } else {
+            if (strtotime($row['field_pubdate']) <= strtotime(date('Y-m-d')) && strtotime($row['field_archive_date']) >= strtotime(date('Y-m-d'))) {
+                $ad_images[] = $row;
+                continue;
+            }
+        }
+    }
+
+    return ['job_count' => $job_count, 'tender_count' => $tender_count, 'ad_count' => $ad_count, 'ad_images' => $ad_images];
+}
+
+function renderAdImage($filefield, $title, $uploadpath)
+{
+    if (is_serialized($filefield)) {
+        $filefield = unserialize($filefield);
+    }
+    if (!isset($filefield['name'])) {
+        $filefield = $filefield[0];
+    }
+    if (!empty($filefield['name'])) {
+        global $domain_info;
+        $uploadpath = str_replace("-", '_', $uploadpath);
+        $base_path = 'http://' . $domain_info['subdomain'] . '/sites/default/files/files/' . $domain_info['subdomain'] . '/' . $contentType . '/' . $uploadpath . '/' . $filefield['name'];
+        //echo '<img src="' . $base_path . '" alt="" width="' . $width . '" height="' . $height . '"/>';
+        return '<img src="' . $base_path . '" data-content-piece="' . $title . '" alt="' . $title . '"/>';
+    } else {
+        return '';
+    }
+}
+
+function filterDataByDate($contents, $start_field, $end_field)
+{
+    $new_contents = [];
+    foreach ($contents as $row) {
+        if (strtotime($row[$start_field]) <= 0 && strtotime($row[$end_field]) <= 0) {
+            $new_contents[] = $row;
+            continue;
+        } else if (strtotime($row[$start_field]) > 0 && strtotime($row[$end_field]) <= 0) {
+            if (strtotime($row[$start_field]) <= strtotime(date('Y-m-d'))) {
+                $new_contents[] = $row;
+                continue;
+            }
+        } else if (strtotime($row[$start_field]) <= 0 && strtotime($row[$end_field]) > 0) {
+            if (strtotime($row[$start_field]) >= strtotime(date('Y-m-d'))) {
+                $new_contents[] = $row;
+                continue;
+            }
+        } else {
+            if (strtotime($row[$start_field]) <= strtotime(date('Y-m-d')) && strtotime($row[$end_field]) >= strtotime(date('Y-m-d'))) {
+                $new_contents[] = $row;
+                continue;
+            }
+        }
+    }
+    return $new_contents;
+}
+
+function getEduCountByLookup()
+{
+    global $dbphlcn;
+    global $domain_info;
+    $query = "SELECT npf_lookups.name_bn AS name_bn, id
+            FROM `$dbphlcn`.npf_lookups
+            WHERE lookuptype_id = 40
+            GROUP BY name_bn ORDER BY name_bn ASC";
+    $lookup_set = db_query($query);
+
+    $data_set = [];
+    while ($lookup = db_fetch_array($lookup_set)) {
+
+        if ($lookup['id'] == '728') {
+            $query = "SELECT count(a.id) as count_id FROM `$dbphlcn`.`npf_content_education_institute` a 
+                                JOIN `$dbphlcn`.`npf_content_education_institute_domain` b on a.id = b.node_id
+                                WHERE b.domain_id IN ({$domain_info['id']}, -1) and (a.institute_type = {$lookup['id']} or a.institute_type = '') and a.active = 1 and a.publish = 1";
+        } else {
+            $query = "SELECT count(a.id) as count_id FROM `$dbphlcn`.`npf_content_education_institute` a 
+                                JOIN `$dbphlcn`.`npf_content_education_institute_domain` b on a.id = b.node_id
+                                WHERE b.domain_id IN ({$domain_info['id']}, -1) and a.institute_type = {$lookup['id']} and a.active = 1 and a.publish = 1";
+
+        }
+        $result = db_query($query);
+        $count_set = db_fetch_array($result);
+        $data_set[$lookup['name_bn']] = $count_set['count_id'];
+    }
+    return $data_set;
+}
