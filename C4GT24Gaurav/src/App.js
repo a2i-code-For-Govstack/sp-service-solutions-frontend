@@ -23,7 +23,8 @@ import ProfilePage from './pages/Profile/ProfilePage';
 import ResetUsernamePage from './pages/Auth/ResetUsernamePage';
 import Forms from './pages/FormAdmin/Forms'
 import Create from './pages/FormAdmin/Create'
-import RenderReactiveForm from './components/FormAdmin/RenderReactiveForm';
+// import RenderReactiveForm from './components/FormAdmin/RenderReactiveForm';
+import Fill from './pages/FormAdmin/Fill';
 function App() {
   const [mode, setMode] = React.useState('light');
   const LPtheme = createTheme(getLPTheme(mode));
@@ -95,7 +96,7 @@ function App() {
           <Route path="/auth/reset-username" element={<ResetUsernamePage />} />
           <Route path="/forms" element={<Forms/>} />
           <Route path="/create-form" element={<Create/>} />
-          <Route path="/fill-form" element={<RenderReactiveForm/>}/>
+          <Route path="/fill-form" element={<Fill/>}/>
           {/* Add more routes as needed */}
         </Routes>
         {/* <Footer /> */}
