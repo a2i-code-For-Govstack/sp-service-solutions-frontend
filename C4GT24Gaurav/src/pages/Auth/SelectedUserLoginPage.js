@@ -1,20 +1,22 @@
-import React from 'react';
-import SelectedUserLogin from '../../components/Auth/SelectedUserLogin';
-import { useAuth } from '../../hooks/useAuth';
+//no use of this page 
 
-const SelectedUserLoginPage = () => {
-    const { login } = useAuth();
+// import React from 'react';
+// import SelectedUserLogin from '../../components/Auth/SelectedUserLogin';
+// import { useAuth } from '../../hooks/useAuth';
 
-    const handleLogin = (email, password) => {
-        login(email, password);
-    };
+// const SelectedUserLoginPage = () => {
+//     const { login } = useAuth();
 
-    return (
-        <div>
-            <h3>Selected User Login</h3>
-            <SelectedUserLogin onLogin={handleLogin} />
-        </div>
-    );
-};
+//     const handleLogin = (email, password) => {
+//         login(email, password);
+//     };
 
-export default SelectedUserLoginPage;
+//     return (
+//         <div>
+//             <h3>Selected User Login</h3>
+//             <SelectedUserLogin onLogin={handleLogin} />
+//         </div>
+//     );
+// };
+
+// export default SelectedUserLoginPage;

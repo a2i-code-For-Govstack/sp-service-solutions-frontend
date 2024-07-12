@@ -6,7 +6,7 @@ import { getDateFromMillis } from '../../utils/index'
 
 import RenderPlainForm from "../../components/FormAdmin/RenderPlainForm"
 
-function FormCard({ form, onDelete }){
+function FormCard({ form,  onDelete }){
     const [preview, setPreview] = useState(false)
     const [loading, setLoading] = useState(false)
 
@@ -17,16 +17,17 @@ function FormCard({ form, onDelete }){
         // setLoading(false)
         // onDelete(form.id)
     }
+    console.log(form , "here")
 
     return (
         <div className="card">
             <h2 className="title mb-1">
-                <span>{form.title}</span>
-                <span className="card-date">{getDateFromMillis(form.createdAt)}</span>
+                <span>{form.name}</span>
+                <span className="card-date">{getDateFromMillis(form.created_at)}</span>
             </h2>
-            <a href={`${window.location.origin}/fill/${form.id}`} rel="noreferrer" className="link mb-1" target="_blank">{`${window.location.origin}/fill/${form.id}`}</a>
+            <a href={`${window.location.origin}/live/instance/${form.hash}`} rel="noreferrer" className="link mb-1" >Link</a>
             <p className="card-nav">
-                <span className="nav-item" onClick={() => setPreview(true)}>preview</span>
+                {/* <span className="nav-item" onClick={() => setPreview(true)}>preview</span> */}
                 <Link to={"/submissions/" + form.id} className="nav-item">submissions</Link>
                 <span className="nav-item" onClick={handleDelete}>{ loading ? <span className="spinner red"></span> : <span>delete</span>}</span>
             </p>

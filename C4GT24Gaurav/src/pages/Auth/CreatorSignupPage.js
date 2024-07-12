@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CreatorSignup from '../../components/Auth/CreatorSignup';
 import axios from 'axios';
 import { Button, Typography } from '@mui/material';
-
+import { signup , resendActivation} from '../../services/authService'
 const CreatorSignupPage = () => {
   const [formData, setFormData] = useState({
     first_name: '',
@@ -31,19 +31,17 @@ const CreatorSignupPage = () => {
       last_name: lastName,
       email: email,
       username: userName,
-      password: password
+      password: password,
     };
-    setFormData(filledFormData);
+    setFormData(filledFormData)
     try {
-      const response = await axios.post('http://127.0.0.1:8000/auth/users/', filledFormData, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      alert('Activation link sent to your email');
-      setFlag(true);
-      setResendTimer(30);
-      setShowResendButton(false);
+      const response = await signup(firstName, lastName, userName, email, password);
+      if (response === 201) {
+        alert('Activation link sent to your email');
+        setFlag(true);
+        setResendTimer(30);
+        setShowResendButton(false);
+      }
     } catch (error) {
       alert('Error in signup: password should be greater than 8 characters, email and username must be unique');
       console.error(error);
@@ -52,14 +50,12 @@ const CreatorSignupPage = () => {
 
   const handleResendActivation = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/auth/users/resend_activation/', { email: formData.email }, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      alert('Activation link resent to your email');
-      setResendTimer(30);
-      setShowResendButton(false);
+      const response = await resendActivation(formData.email);
+      if (response === 204) {
+        alert('Activation link resent to your email');
+        setResendTimer(30);
+        setShowResendButton(false);
+      }
     } catch (error) {
       alert('Error in resending activation link');
       console.error(error);

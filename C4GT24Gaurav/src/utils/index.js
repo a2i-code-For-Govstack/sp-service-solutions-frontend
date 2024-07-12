@@ -3,11 +3,11 @@ export const updateObjState = (setter, model, prop, val) => {
     _model[prop] = val
     setter(_model)
 }
-export const updateArrOfObjState = (setter, model, index, prop, val) => {
-    let _model = [...model]
-    _model[index] = Object.assign({}, _model[index], { [prop]: val })
-    setter(_model)
-}
+// export const updateArrOfObjState = (setter, model, index, prop, val) => {
+//     let _model = [...model]
+//     _model[index] = Object.assign({}, _model[index], { [prop]: val })
+//     setter(_model)
+// }
 
 //toggles an item in array
 export const arrayToggle = (arr, item) => {
@@ -35,50 +35,52 @@ export const expired = (createDateMillis, hours) => {
     let hoursMillis = parseInt(hours) * 60 * 60 * 1000
     return (currentDateMillis - createDateMillis) < hoursMillis
 }
-
 export const createFillableModel = model => {
-    let fillableModel = []
-    let fields = model.fields
-    for(let field in fields){
-        let fld = fields[field]
-        // let fieldModel = {
-        //     title: fld.title,
-        //     required: fld.required,
-        //     type: fld.type,
-        //     value: fld.type === "multioption-singleanswer" || fld.type === "multioption-multianswer" ? [] : ""
-        // }
-        // fillableModel.push(fieldModel)
-        fillableModel.push({...fld, value: fld.type === "multioption-singleanswer" || fld.type === "multioption-multianswer" ? [] : ""})
+    console.log("I start");
+    let fillableModel = [];
+
+    let fields = model.fields;
+    console.log("fields", fields);
+    for (let field in fields) {
+        let fld = fields[field];
+        fillableModel.push({ ...fld, value: fld.type === "multioption-singleanswer" || fld.type === "multioption-multianswer" ? [] : "" });
     }
-    return fillableModel
-}
+
+    return fillableModel;
+};
 
 export const createSubmitableModel = fields => {
-    let submitableModel = []
-    for(let field in fields){
-        let fld = fields[field]
+    let submitableModel = [];
+    for (let field in fields) {
+        let fld = fields[field];
 
-        if(!fld.value || fld.value.length < 1) continue
-        
+        if (!fld.value || fld.value.length < 1) continue;
+
         let fieldModel = {
             title: fld.title,
             value: fld.value,
             type: fld.type
-        }
-        submitableModel.push(fieldModel)
+        };
+        submitableModel.push(fieldModel);
     }
-    return submitableModel
-}
+    return submitableModel;
+};
 
 export const hasError = fields => {
-    for(let field of fields){
-        if(!field.required && !field.value.trim()) continue
+    for (let field of fields) {
+        if (!field.required && !field.value.trim()) continue;
 
-        if(["short-text", "long-text", "number", "file"].indexOf(field.type) > -1){
-            if(field.required && !field.value.trim()) return `'${field.title}' is a required field`
-        }else{
-            if(field.required && field.value.length < 1) return `'${field.title}' is a required field`
+        if (["short-text", "long-text", "number", "file"].indexOf(field.type) > -1) {
+            if (field.required && !field.value.trim()) return `'${field.title}' is a required field`;
+        } else {
+            if (field.required && field.value.length < 1) return `'${field.title}' is a required field`;
         }
     }
-    return false
-}
+    return false;
+};
+
+export const updateArrOfObjState = (setter, model, index, prop, val) => {
+    let _model = [...model];
+    _model[index] = Object.assign({}, _model[index], { [prop]: val });
+    setter(_model);
+};

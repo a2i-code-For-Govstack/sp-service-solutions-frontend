@@ -2,11 +2,19 @@ import { useState } from "react";
 // import { useHistory } from "react-router-dom"
 import AddFieldModal from "../../components/FormAdmin/AddFieldModal";
 import RenderPlainForm from "../../components/FormAdmin/RenderPlainForm";
-
+import { useParams } from 'react-router-dom';
 import { updateObjState } from "../../utils/index";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import { useEffect } from "react";
+import axios from 'axios';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import { updateInstance, fetchInstanceData } from '../../services/liveService';
 
+// import Button from '@mui/material/Button';
 // import { createForm as saveForm } from "../db"
 
 function Create() {
@@ -14,8 +22,22 @@ function Create() {
   const [inputType, setInputType] = useState("text");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
   // const history = useHistory()
+
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem('token');
+    if (storedToken) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  const handleLoginRedirect = () => {
+    window.location.href = '/creator-login';
+  };
+
 
   const openAddModal = (inputType) => {
     setShowAddModal(true);
@@ -50,7 +72,75 @@ function Create() {
     "multioption-multianswer",
     "file",
   ];
+  const { hash } = useParams();
+  const [instanceModel, setInstanceModel] = useState({
+    title: '',
+    description: '',
+    instanceAuthType: 0,
+    instanceStatus: 1,
+    createdAt: '',
+  });
+  const updateObjState = (setState, state, key, value) => {
+    setState({
+      ...state,
+      [key]: value,
+    });
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!sessionStorage.getItem('token')) {
+          alert('Please login');
+          return;
+        }
 
+        const data = await fetchInstanceData(hash);
+        setInstanceModel({
+          title: data.name,
+          description: data.description,
+          instanceAuthType: data.instance_auth_type,
+          instanceStatus: data.instance_status,
+          createdAt: data.created_at.split('T')[0], // Extract date part
+        });
+      } catch (error) {
+        console.error('Error fetching instance data:', error);
+      }
+    };
+
+    fetchData();
+  }, [hash]);
+ 
+
+  const handleChangeAuthType = (event) => {
+    updateObjState(setInstanceModel, instanceModel, 'instanceAuthType', event.target.value);
+  };
+
+  const handleChangeStatus = (event) => {
+    updateObjState(setInstanceModel, instanceModel,  'instanceStatus', event.target.value);
+  };
+
+  const handleupdateInstance = async () => {
+    try {
+      if (!sessionStorage.getItem('token')) {
+        alert('Please login');
+        return;
+      }
+
+      await updateInstance(hash, {
+        name: instanceModel.title,
+        description: instanceModel.description,
+        instance_auth_type: instanceModel.instanceAuthType,
+        instance_status: instanceModel.instanceStatus,
+      });
+
+      alert('Instance updated successfully');
+    } catch (error) {
+      console.error('Error updating instance:', error);
+      alert('Error updating instance');
+    }
+  };
+  
+  
   const createForm = async () => {
     if (loading) return;
     setErr("");
@@ -65,18 +155,9 @@ function Create() {
     if (formModel.fields.length < 2)
       return setErr("You need to add at least one field");
 
-    // setLoading(true)
-    // try{
-    //     await saveForm(formModel)
-    //     setLoading(false)
-    //     // history.push("/forms")
-    // }catch(e){
-    //     setErr(e.message)
-    //     setLoading(false)
-    // }
   };
 
-  return (
+  return (<>{isLoggedIn ? (
     <div
       style={{
         paddingLeft: "0vw",
@@ -96,18 +177,81 @@ function Create() {
           paddingLeft: "2vw",
         }}
       >
-        <h3>
+        <h3 >
           {/* <label>Title of the from</label> */}
           <TextField
-            type="text"
-            placeholder="Enter Title"
-            onChange={(e) =>
-              updateObjState(setFormModel, formModel, "title", e.target.value)
-            }
-            id="standard-basic"
-            label="EnterTitle"
-            variant="standard"
-          />
+          type="text"
+          placeholder="Enter Title"
+          value={instanceModel.title}
+          onChange={(e) => updateObjState(setInstanceModel, instanceModel, 'title', e.target.value)}
+          id="standard-basic"
+          label="Enter Title"
+          variant="standard"
+          
+          style={{ marginRight: '10px' }}
+          size="small"
+        />
+        <TextField
+          type="text"
+          placeholder="Enter Description"
+          value={instanceModel.description}
+          onChange={(e) => updateObjState(setInstanceModel, instanceModel, 'description', e.target.value)}
+          id="standard-basic"
+          label="Enter Description"
+          variant="standard"
+          style={{ marginRight: '10px' }}
+          size="small"
+        />
+        <TextField
+          type="text"
+          placeholder="Created At"
+          value={instanceModel.createdAt}
+          id="standard-basic"
+          label="Created At"
+          variant="standard"
+          size="small"
+          InputProps={{
+            readOnly: true,
+          }}
+          style={{ marginRight: '10px' }}
+          
+        />
+             <FormControl variant="standard" sx={{ mr: 1, minWidth: 120 }} size="small">
+          <InputLabel id="instanceAuthType-label">Auth Type</InputLabel>
+          <Select
+            labelId="instanceAuthType-label"
+            id="instanceAuthType"
+            value={instanceModel.instanceAuthType}
+            onChange={handleChangeAuthType}
+            label="Instance Auth Type"
+          >
+            <MenuItem value={0}>Open to all</MenuItem>
+            <MenuItem value={1}>Open in org</MenuItem>
+            <MenuItem value={2}>Specific users</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl variant="standard" sx={{ mr:1 , minWidth: 120 }} size="small">
+          <InputLabel id="instanceStatusLabel">Status</InputLabel>
+          <Select
+            labelId="instanceStatusLabel"
+            id="instanceStatus"
+            value={instanceModel.instanceStatus}
+            onChange={handleChangeStatus}
+            label="Instance Status"
+          >
+            <MenuItem value={1}>Closed</MenuItem>
+            <MenuItem value={2}>Open</MenuItem>
+          </Select>
+        </FormControl>
+        <button
+          variant="contained"
+          color="primary"
+          onClick={handleupdateInstance}
+          style={{ marginTop: '20px' }}
+          className="btn"
+        >
+          Update Instance
+        </button>
           {/* <input type="text" placeholder="Enter title" onChange={e => updateObjState(setFormModel, formModel ,"title", e.target.value)} /> */}
         </h3>
         <div>
@@ -235,7 +379,17 @@ function Create() {
           />
         )}
       </div>
-    </div>
+    </div> ) : (<div style ={{display:'flex' , alignItems:'center', justifyContent:'center' , flexDirection:'column' , height:'60vh'}}>
+            <h1 style={{fontWeight:'400'}}>Please login</h1>
+            <Button
+              type="button"
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={handleLoginRedirect}
+            >
+              Login
+            </Button>
+          </div>)}</>
   );
 }
 

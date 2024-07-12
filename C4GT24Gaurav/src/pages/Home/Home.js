@@ -3,7 +3,7 @@ import { Button, ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './Home.css';
-
+import axios from 'axios';
 import getLPTheme from './getLPTheme';
 import PropTypes from 'prop-types';
 
@@ -73,6 +73,31 @@ const Home = () => {
     setShowCustomTheme((prev) => !prev);
   };
 
+  const createInstance = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        alert('Please login');
+        return;
+      }
+      
+      const response = await axios.post('http://localhost:8000/api/v1/live/instance/', {
+        name: 'Untitled Form',
+        description: 'Description',
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const { hash } = response.data;
+      window.location.href = `/live/instance/${hash}`;
+    } catch (error) {
+      console.error('Error creating instance:', error);
+    }
+  };
+
+
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
   <CssBaseline />
@@ -83,7 +108,7 @@ const Home = () => {
       <p>This is the homepage of our survey platform.</p>
       <ButtonGroup variant="contained" aria-label="Large button group">
 
-        <Link to = "/creator-login"><Button value="create">CREATE</Button></Link>
+        <Button onClick={createInstance} value="create">CREATE</Button>
         <Link to = "/creator-login"><Button value="vote-email">   VOTE   </Button></Link>
         <Link to = "/org-login"><Button value="vote-oauth">VOTE BY OAUTH</Button></Link>
       </ButtonGroup>
