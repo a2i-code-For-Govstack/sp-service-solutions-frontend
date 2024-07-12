@@ -3,6 +3,7 @@ import { Button, Avatar, Typography, Container, CssBaseline, Grid, TextField, Bo
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
+import { updateProfile, deleteAccount } from '../../services/authService'
 
 const ProfilePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
@@ -44,26 +45,15 @@ const ProfilePage = () => {
   };
 
   const handleSaveChanges = async () => {
-    const updatedUserData = {
-      first_name: firstName,
-      last_name: lastName,
-    };
-
+    const token = sessionStorage.getItem('token');
     try {
-      const token = sessionStorage.getItem('token');
-      const response = await axios.patch('http://127.0.0.1:8000/auth/users/me/', updatedUserData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 200) {
+      const response = await updateProfile(firstName, lastName, token);
+      if (response === 200) {
         sessionStorage.setItem('first_name', firstName);
         sessionStorage.setItem('last_name', lastName);
         alert('Profile updated successfully');
         console.log('Profile updated successfully');
-        setEditable(false); // Disable edit mode after save
+        setEditable(false);
       } else {
         console.error('Failed to update profile');
       }
@@ -86,22 +76,13 @@ const ProfilePage = () => {
   };
 
   const handleDeleteAccount = async () => {
+    const token = sessionStorage.getItem('token');
     try {
-      const token = sessionStorage.getItem('token');
-      const response = await axios.delete('http://127.0.0.1:8000/auth/users/me/', {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        data: {
-          current_password: currentPassword,
-        },
-      });
-
-      if (response.status === 204) { // Assuming 204 No Content for successful delete
+      const response = await deleteAccount(currentPassword, token);
+      if (response === 204) {
         sessionStorage.clear();
         alert('Account deleted successfully');
-        window.location.href = '/creator-signup'; // Redirect to signup page
+        window.location.href = '/creator-signup';
       } else {
         console.error('Failed to delete account');
       }

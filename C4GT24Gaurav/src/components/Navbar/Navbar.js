@@ -14,6 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useNavigate} from "react-router-dom";
 
 
 const logoStyle = {
@@ -40,7 +41,10 @@ function Navbar({ mode, toggleColorMode }) {
     setLoggedIn(false);
   };
 
-
+ 
+  const handleBack = () => {
+    window.history.back(); // Navigate back to the previous page
+  };
   return (
     <div >
       <AppBar
@@ -103,17 +107,17 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='user-profile'
+                      onClick={handleBack}
                     //   target="_blank"
                       sx={{ width: '100%' , marginRight: '6%' }}
                     >
-                      Profile
+                      Back
                     </Button>
                     <Button
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='user-profile'
+                      href='/'
                     //   target="_blank"
                       sx={{ width: '100%' ,   marginRight: '6%' }}
                     >
@@ -133,11 +137,21 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='user-profile'
+                      href='/forms'
                     //   target="_blank"
                       sx={{ width: '100%'  , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
                     >
-                      Dashboard
+                      MyForms
+                    </Button>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      component="a"
+                      href='user-profile'
+                    //   target="_blank"
+                      sx={{ width: '100%' , marginRight: '6%' }}
+                    >
+                      Profile
                     </Button>
                
               </Box>

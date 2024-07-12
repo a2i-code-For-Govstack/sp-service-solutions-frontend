@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 
 // import { getForms } from "../db"
-import FormCard from "../../components/FormAdmin/FormCard"
+import FormCard from "../../components/FormAdmin/FormCard";
+import axios from 'axios';
+import FormTable from '../../components/FormAdmin/FormTable';
 
 function Forms(){
     const [forms, setForms] = useState([])
@@ -40,7 +42,8 @@ function Forms(){
                     "type": "short-text"
                 },
                 {
-                    "title": "this is long text",
+                    "title": "this lknlk ngfjdr kj esjkdfn srkj fkc redskjv erksg 34wlesfn lk wrjll r3wls efcwkrsj gk,n cwakej dj welkfd cwrl svdlke rsgk;l vetklis long text",
+                 
                     "required": false,
                     "type": "long-text"
                 },
@@ -106,7 +109,7 @@ function Forms(){
                     "type": "short-text"
                 },
                 {
-                    "title": "this is long text",
+                    "title": "this lknlk ngfjdr kj esjkdfn srkj fkc redskjv erksg 34wlesfn lk wrjll r3wls efcwkrsj gk,n cwakej dj welkfd cwrl svdlke rsgk;l vetklis long text",
                     "required": false,
                     "type": "long-text"
                 },
@@ -292,6 +295,35 @@ function Forms(){
         }])
        
     }, [])
+
+    const [instances, setInstances] = useState([]);
+
+    useEffect(() => {
+        const storedToken = sessionStorage.getItem('token');
+        if (!storedToken) {
+            alert('Please login to access this page.');
+            // You may want to redirect to login page or handle this case differently
+            return;
+        }
+
+        const config = {
+            headers: {
+                Authorization: `Bearer ${storedToken}`
+            }
+        };
+
+        axios.get('http://localhost:8000/api/v1/live/instance', config)
+            .then(response => {
+                setInstances(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching instances:', error);
+                // Handle error state if needed
+            });
+    }, []); // Empty dependency array ensures useEffect runs once on component mount
+
+
+
     const onFormDelete = id => {
         setForms(forms.filter(form => form.id !== id))
     }
@@ -313,11 +345,17 @@ function Forms(){
                 )
             } */}
             <div className="cards-container">
-                        { forms.length > 0 ? (
+                        {/* { forms.length > 0 ? (
                             forms.map(form => (
                                 <FormCard key={form.id} form={form} onDelete={onFormDelete} />
                             ))
+                        ) : <h3 className="msg mt-1">You haven't created any forms yet</h3> } */}
+                        { instances.length > 0 ? (
+                            instances.map(instance => (
+                                <FormCard key={instance.id} form={instance}  onDelete={onFormDelete} />
+                            ))
                         ) : <h3 className="msg mt-1">You haven't created any forms yet</h3> }
+                        <FormTable/>
                     </div>
         </div>
     )

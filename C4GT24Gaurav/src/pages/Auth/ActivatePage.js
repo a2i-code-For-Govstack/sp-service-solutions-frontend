@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { Box, Button, Link, Typography, Container, CssBaseline } from '@mui/material';
+import { activate } from '../../services/authService';
+
 const ActivatePage = () => {
   const location = useLocation();
 
@@ -10,20 +11,17 @@ const ActivatePage = () => {
       const searchParams = new URLSearchParams(location.search);
       const uid = searchParams.get('uid');
       const token = searchParams.get('token');
-      console.log(uid , token);
+
       if (uid && token) {
         try {
-          const response = await axios.post('http://127.0.0.1:8000/auth/users/activation/', {
-            "uid" : uid,
-            "token" : token
-          });
-          if (response.status === 204) {
+          const response = await activate(uid, token);
+          if (response === 204) {
             alert('Account activated successfully! You can now log in.');
-            window.location.href = '/creator-login'; 
+            window.location.href = '/creator-login';
           }
         } catch (error) {
           console.error('Error during account activation:', error);
-          alert('Account activation failed. Please try again.');
+          alert('Error or your account is already activated');
         }
       }
     };

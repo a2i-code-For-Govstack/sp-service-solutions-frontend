@@ -13,8 +13,8 @@ function Fill() {
 
     useEffect(() => {
         setForm({
-            "title": "trial FORM",
-            "createdAt": 1720218086247,
+            "title": "Health Survey ",
+            "createdAt": 1720720166108,
             "fields": [
                 {
                     "title": "Enter your email",
@@ -22,62 +22,57 @@ function Fill() {
                     "required": true
                 },
                 {
-                    "title": "this is short text req",
+                    "title": "what is your name write in short text",
                     "required": true,
                     "type": "short-text"
                 },
                 {
-                    "title": "this is long text",
+                    "title": "this is long test question ?",
                     "required": false,
                     "type": "long-text"
                 },
                 {
-                    "title": "what is your age ",
+                    "title": "this is for number ??",
                     "required": false,
                     "type": "number"
                 },
                 {
-                    "title": "choose one of the following ",
-                    "required": false,
+                    "title": "this is multioption single answer ",
+                    "required": true,
                     "options": [
-                        "arnav",
-                        "kriti",
-                        "yash",
-                        "aarav"
+                        "a",
+                        "b",
+                        "cat",
+                        "dog",
+                        "ban"
                     ],
                     "type": "multioption-singleanswer"
                 },
                 {
-                    "title": "this is multioption multianswer",
-                    "required": false,
+                    "title": "multioption multianswer ",
+                    "required": true,
                     "options": [
-                        "apple",
-                        "ball",
-                        "cat",
-                        "dog"
+                        "opt a",
+                        "opt b",
+                        "opt c"
                     ],
                     "type": "multioption-multianswer"
                 },
                 {
-                    "title": "what is age ?",
-                    "required": true,
-                    "type": "number"
-                },
-                {
-                    "title": "upload resume ",
+                    "title": "upload file of particular type ?",
                     "required": true,
                     "type": "file",
                     "accepted": [
-                        "png",
-                        "pdf",
-                        "jpeg",
                         "jpg",
+                        "png",
+                        "jpeg",
+                        "pdf",
                         "txt"
                     ]
                 }
             ],
-            "endMessage": "thanks for filling",
-            "expiration": "109"
+            "endMessage": "thanks for submitting ",
+            "expiration": "40"
         });
         setLoading(false);
     }, []);

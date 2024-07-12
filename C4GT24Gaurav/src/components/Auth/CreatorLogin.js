@@ -99,7 +99,7 @@ const CreatorLogin = ({ onLogin, onForgotPassword , onForgotUsername }) => {
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/creator-signup" variant="body2" onClick={handleForgotUsernameClick}>
+              <Link to="/creator-login" variant="body2" onClick={handleForgotUsernameClick}>
                 {"Forgot username?"}
               </Link>
             </Grid>

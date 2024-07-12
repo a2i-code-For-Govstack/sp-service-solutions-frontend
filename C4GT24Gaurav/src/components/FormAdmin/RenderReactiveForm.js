@@ -103,12 +103,13 @@ function RenderReactiveForm({ model, onSubmitted }) {
             await submitForm(submitableModel, model.id);
             setLoading(false);
             onSubmitted();
+            console.log(submitableModel  ,"in render reactive form at onSubmitted();")
         } catch (e) {
             setErr(e.message);
             setLoading(false);
         }
     };
-
+    // div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}
     return (
         <div className="grey-container mb-1">
             <h2 style={{color:'black', fontWeight: 300 }}>{model.title}</h2>
@@ -119,6 +120,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                         border: "1px solid grey",
                         display: "flex",
                         flexDirection: "column",
+                        justifyContent:'center',
                         width: "50%",
                         padding: "2.5em 2em 2.5em 2em",
                         background: "white",
