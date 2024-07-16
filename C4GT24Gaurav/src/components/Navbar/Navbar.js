@@ -111,7 +111,7 @@ function Navbar({ mode, toggleColorMode }) {
                     //   target="_blank"
                       sx={{ width: '100%' , marginRight: '6%' }}
                     >
-                      Back
+                      Back button
                     </Button>
                     <Button
                       color="primary"
