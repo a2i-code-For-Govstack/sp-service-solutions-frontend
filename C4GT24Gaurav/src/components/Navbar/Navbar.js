@@ -111,13 +111,13 @@ function Navbar({ mode, toggleColorMode }) {
                     //   target="_blank"
                       sx={{ width: '100%' , marginRight: '6%' }}
                     >
-                      Back button
+                      Back
                     </Button>
                     <Button
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='/'
+                      href='/creator-home'
                     //   target="_blank"
                       sx={{ width: '100%' ,   marginRight: '6%' }}
                     >

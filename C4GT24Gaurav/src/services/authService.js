@@ -28,7 +28,7 @@ export const login = async (username, password) => {
         sessionStorage.setItem('is_active',response.data.is_active);
         sessionStorage.setItem('is_deactivated',response.data.is_deactivated);
         alert("HAPPY JOURNEY , YOU ARE LOGGED IN");
-        window.location.href = '/'; 
+        window.location.href = '/creator-home'; 
       }
     return response.data;
   } catch (error) {
@@ -169,3 +169,5 @@ export const activate = async (uid, token) => {
       throw error;
     }
   };
+
+ 
