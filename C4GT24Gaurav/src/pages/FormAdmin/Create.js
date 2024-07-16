@@ -13,7 +13,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import { updateInstance, fetchInstanceData } from '../../services/liveService';
-
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import VotersTable from "../../components/FormAdmin/VotersTable";
+import UsersFileUpload from "../../components/FormAdmin/UsersFileUpload";
 // import Button from '@mui/material/Button';
 // import { createForm as saveForm } from "../db"
 
@@ -76,7 +79,7 @@ function Create() {
   const [instanceModel, setInstanceModel] = useState({
     title: '',
     description: '',
-    instanceAuthType: 0,
+    instanceAuthType: 1,
     instanceStatus: 1,
     createdAt: '',
   });
@@ -113,6 +116,7 @@ function Create() {
 
   const handleChangeAuthType = (event) => {
     updateObjState(setInstanceModel, instanceModel, 'instanceAuthType', event.target.value);
+    alert(event.target.value)
   };
 
   const handleChangeStatus = (event) => {
@@ -140,7 +144,16 @@ function Create() {
     }
   };
   
-  
+  // THIS CODE FOR USER LIST UPLOAD
+  const [openUserUpload, setUserUpload] = useState(false);
+
+  const handleUploadFileOpen = () => {
+    setUserUpload(true);
+  };
+
+  const handleUploadFileClose = () => {
+    setUserUpload(false);
+  };
   const createForm = async () => {
     if (loading) return;
     setErr("");
@@ -156,6 +169,14 @@ function Create() {
       return setErr("You need to add at least one field");
 
   };
+
+  const [alignment, setAlignment] = useState(1);
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
+    
+   
+  }; 
 
   return (<>{isLoggedIn ? (
     <div
@@ -177,6 +198,7 @@ function Create() {
           paddingLeft: "2vw",
         }}
       >
+      
         <h3 >
           {/* <label>Title of the from</label> */}
           <TextField
@@ -225,9 +247,9 @@ function Create() {
             onChange={handleChangeAuthType}
             label="Instance Auth Type"
           >
-            <MenuItem value={0}>Open to all</MenuItem>
-            <MenuItem value={1}>Open in org</MenuItem>
-            <MenuItem value={2}>Specific users</MenuItem>
+            <MenuItem value={1}>Open to all</MenuItem>
+            <MenuItem value={2}>Open in org</MenuItem>
+            <MenuItem value={4}>Specific users</MenuItem>
           </Select>
         </FormControl>
         <FormControl variant="standard" sx={{ mr:1 , minWidth: 120 }} size="small">
@@ -252,9 +274,29 @@ function Create() {
         >
           Update Instance
         </button>
+
+  <ToggleButtonGroup
+  color='standard'
+  value={alignment}
+  exclusive
+  onChange={handleChange}
+  aria-label="Platform"
+  size="small"
+  variant = "outlined"
+  style={{ fontsize:"14px"  , marginLeft:'1em' }}
+  className=".btn"
+  
+>
+  <ToggleButton  variant = "outlined" value={1} style={{fontWeight:'600'}} >Edit</ToggleButton>
+  <ToggleButton variant = "outlined" value={2} style={{fontWeight:'600'}} >Voters</ToggleButton>
+  <ToggleButton variant = "outlined" value={3} style={{fontWeight:'600'}} >Responses</ToggleButton>
+</ToggleButtonGroup>
           {/* <input type="text" placeholder="Enter title" onChange={e => updateObjState(setFormModel, formModel ,"title", e.target.value)} /> */}
         </h3>
         <div>
+        <div>
+  {alignment == 1 && (
+    <div>
           <span>Type Of que</span>
           {inputTypes.map((inputType, index) => (
             <Button
@@ -268,9 +310,20 @@ function Create() {
               {inputType.replace("-", " ")}
             </Button>
           ))}
+          </div>
+  )}
+  {alignment == 2 && <div><div>
+      <button className="btn"  onClick={handleUploadFileOpen}>
+        Upload Users
+      </button>
+      <UsersFileUpload open={openUserUpload} onClose={handleUploadFileClose} />
+    </div></div>}
+  {alignment == 3 && <div>This is alignment 3</div>}
+</div>
         </div>
       </div>
-      <div style={{ paddingTop: "14vh" }}>
+      {alignment == 1 && (
+        <div style={{ paddingTop: "14vh" }}>
         <div className="form" style={{ paddingLeft:'2vw'}}>
           {formModel.fields.length > 0 && <RenderPlainForm model={formModel} />}
 
@@ -379,6 +432,10 @@ function Create() {
           />
         )}
       </div>
+  )}
+  {alignment == 2 && <div style={{marginTop:'16vh'}}><VotersTable hash={hash}/></div> }
+  {alignment == 3 && <div>This is alignment 3</div>}
+      
     </div> ) : (<div style ={{display:'flex' , alignItems:'center', justifyContent:'center' , flexDirection:'column' , height:'60vh'}}>
             <h1 style={{fontWeight:'400'}}>Please login</h1>
             <Button

@@ -26,6 +26,7 @@ import Create from './pages/FormAdmin/Create'
 // import RenderReactiveForm from './components/FormAdmin/RenderReactiveForm';
 import Fill from './pages/FormAdmin/Fill';
 import FormTable from './components/FormAdmin/FormTable';
+import Voters from './pages/FormAdmin/Voters';
 function App() {
   const [mode, setMode] = React.useState('light');
   const LPtheme = createTheme(getLPTheme(mode));
@@ -84,21 +85,22 @@ function App() {
         {/* <Header /> */}
         
         <Routes>
-          <Route path="/" exact element={<Home/>} />
+          <Route path="/creator-home" exact element={<Home/>} />
           <Route path="/creator-login" element={<CreatorLoginPage/>} />
           <Route path="/creator-signup" element={<CreatorSignupPage/>} />
-          <Route path="/org-login" element={<OrgLoginPage/>} />
+          {/* <Route path="/org-login" element={<OrgLoginPage/>} /> */}
           <Route path="/selected-user-login" element={<SelectedUserLoginPage/>} />
           <Route path="/no-access" element={<NoAccessPage/>} />
           <Route path="/selected-user-signup" exact element={<SelecetdUserSignsupPage/>} />
           <Route path="/auth/activate" element={<ActivatePage/>} />
           <Route path="/auth/reset-password" element={<ResetPasswordPage/>} />
-          <Route path="/user-home" element={<UserHomePage/>} />
+          {/* <Route path="/user-home" element={<UserHomePage/>} /> */}
           <Route path="/user-profile" element={<ProfilePage />} />
           <Route path="/auth/reset-username" element={<ResetUsernamePage />} />
           <Route path="/forms" element={<FormTable/>} />
           <Route path="/live/instance/:hash" element={<Create />} />
-          <Route path="/fill-form" element={<Fill/>}/>
+          <Route path="/" element={<Fill/>}/>
+          <Route path="/voters" element={<Voters/>}/>
           {/* Add more routes as needed */}
         </Routes>
         {/* <Footer /> */}
