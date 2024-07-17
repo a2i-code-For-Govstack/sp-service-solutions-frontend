@@ -58,9 +58,9 @@ const SelectedUserLogin = ({ onLogin }) => {
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
+                    label="UserName"
                     name="email"
-                    autoComplete="email"
+                    autoComplete="username"
                     autoFocus
                   />
                   <TextField

@@ -99,6 +99,7 @@ function App() {
           <Route path="/auth/reset-username" element={<ResetUsernamePage />} />
           <Route path="/forms" element={<FormTable/>} />
           <Route path="/live/instance/:hash" element={<Create />} />
+          <Route path="/:hash" element={<Fill/>}/>
           <Route path="/" element={<Fill/>}/>
           <Route path="/voters" element={<Voters/>}/>
           {/* Add more routes as needed */}
