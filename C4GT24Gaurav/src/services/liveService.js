@@ -74,19 +74,28 @@ export const deleteInstance = async (hash) => {
    //for user list upload 
 
 export const uploadFile = async (file, fileType, hash) => {
+  if(!file){
+    alert("no file")
+  }
   
   const url = fileType === 'CSV' 
     ? `${BASE_URL}/instance/CSV/${hash}/` 
     : `${BASE_URL}/instance/JSON/${hash}/`;
 
   const formData = new FormData();
-  formData.append('file', file);
+    formData.append('first_name', 'firstname');
+    formData.append('last_name', 'lastname');
+    formData.append('username', 'email');
+    formData.append('password', 'password');
+    formData.append('file', file);
+  // const formData = new FormData();
+  
 
   const token = sessionStorage.getItem('token');
 
   const config = {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': `multipart/form-data`,
       'Authorization': `Bearer ${token}`,
     },
   };
@@ -100,6 +109,25 @@ export const uploadFile = async (file, fileType, hash) => {
 };
 
 const token = sessionStorage.getItem('token');
+
+export const updateUser = async (hash, username, userData) => {
+    const token = sessionStorage.getItem('token');
+    try {
+        const response = await axios.patch(`${BASE_URL}/instance/CSV/${hash}/${username}`, userData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        if (response.status === 200) {
+            alert('User updated successfully');
+        }
+    } catch (error) {
+        alert('Error in updating user');
+    }
+};
+
+
+
 
 export const getUsers = async (hash) => {
     try {
@@ -147,4 +175,50 @@ export const handleGoogleAuthResponse = async ( instanceHash, state, code) => {
   } catch (error) {
       throw new Error('Failed to handle Google auth response');
   }
+};
+
+
+
+// Function to fetch instance data by hash using POST request
+export const fetchInstanceInfo = async (hash) => {
+  const hashbody = {
+    hash: hash,
+  };
+  console.log(hash, "in fetch")
+  try {
+      const response = await axios.post(`${BASE_URL}/instance/info`, hashbody);
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching instance data:', error);
+      throw error;
+  }
+};
+
+
+//voter login
+
+
+
+// Function to handle voter login
+export const voterLogin = async (hash, username, password) => {
+    try {
+        const response = await axios.post(`${BASE_URL}/instance/${hash}/login`, {
+            username,
+            password
+        });
+        alert("now you can vote")
+        return response.data;
+        
+    } catch (error) {
+       
+        if (error.response) {
+            alert(`Error: ${error.response.data.detail}`);
+        } else if (error.request) {
+            alert('Network error. Please try again.');
+        } else {
+            alert('Error occurred while processing your request.');
+        }
+
+        // throw error; // Re-throw the error for any further handling
+    }
 };

@@ -1,13 +1,21 @@
 import React from 'react';
 import SelectedUserLogin from '../../components/Auth/SelectedUserLogin';
 import OrgLogin from '../../components/Auth/OrgLogin';
-import { initiateGoogleLogin, handleGoogleAuthResponse } from '../../services/liveService';
-
+import { initiateGoogleLogin , voterLogin } from '../../services/liveService';
+import { useParams } from 'react-router-dom';
 const SelectedUserLoginPage = () => {
-    const handleUserLogin = (email, password) => {
-        // login(email, password);
-        // login function
+    const { hash } = useParams();
+    const handleUserLogin = async (username, password) => {
+        try {
+            const { access } = await voterLogin(hash, username, password);
+            // Handle successful login (e.g., store token in local storage)
+            console.log('Login successful. Access token:', access);
+        } catch (error) {
+            // Handle login errors (e.g., display error message)
+            console.error('Login error:', error);
+        }
     };
+
 
     const handleGoogleLogin = async () => {
         const baseUrl = 'http://localhost:8000/api/v1/live';

@@ -316,6 +316,7 @@ function Create() {
       <button className="btn"  onClick={handleUploadFileOpen}>
         Upload Users
       </button>
+      <span>table for auth type specific users</span>
       <UsersFileUpload open={openUserUpload} onClose={handleUploadFileClose} />
     </div></div>}
   {alignment == 3 && <div>This is alignment 3</div>}
