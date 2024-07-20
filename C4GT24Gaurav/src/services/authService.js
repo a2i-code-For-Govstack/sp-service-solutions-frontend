@@ -19,6 +19,7 @@ export const login = async (username, password) => {
     });
     if (response.status === 200) {
         const token = response.data.access;
+        
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('username', response.data.username);
         sessionStorage.setItem('first_name', response.data.first_name);
@@ -27,8 +28,9 @@ export const login = async (username, password) => {
         sessionStorage.setItem('id', response.data.id);
         sessionStorage.setItem('is_active',response.data.is_active);
         sessionStorage.setItem('is_deactivated',response.data.is_deactivated);
-        alert("HAPPY JOURNEY , YOU ARE LOGGED IN");
+        
         window.location.href = '/creator-home'; 
+        window.showToast('success', 'Logged In');
       }
     return response.data;
   } catch (error) {

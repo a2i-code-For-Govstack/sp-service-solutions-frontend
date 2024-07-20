@@ -1,7 +1,7 @@
 // src/services/instanceService.js
 
 import axios from 'axios';
-
+import { saveAs } from 'file-saver';
 const BASE_URL = 'http://localhost:8000/api/v1/live';
 
 const api = axios.create({
@@ -74,10 +74,10 @@ export const deleteInstance = async (hash) => {
    //for user list upload 
 
 export const uploadFile = async (file, fileType, hash) => {
+ 
   if(!file){
     alert("no file")
   }
-  
   const url = fileType === 'CSV' 
     ? `${BASE_URL}/instance/CSV/${hash}/` 
     : `${BASE_URL}/instance/JSON/${hash}/`;
@@ -88,6 +88,7 @@ export const uploadFile = async (file, fileType, hash) => {
     formData.append('username', 'email');
     formData.append('password', 'password');
     formData.append('file', file);
+    console.log(formData)
   // const formData = new FormData();
   
 
@@ -108,6 +109,57 @@ export const uploadFile = async (file, fileType, hash) => {
   }
 };
 
+const createCSVFile = (data) => {
+  const csvHeader = ['firstname', 'lastname', 'email', 'password'];
+  const csvRows = [
+    [data.first_name, data.last_name, data.email, data.password]
+  ];
+
+  const csvContent = [csvHeader, ...csvRows]
+    .map(row => row.join(','))
+    .join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const file = new File([blob], 'userData.csv', { type: 'text/csv' });
+
+  // Save the file locally using file-saver
+  // saveAs(blob, 'userData.csv');
+
+  return file;
+};
+
+// Function to add a user
+export const addUser = async (first_name, last_name, email, password, hash) => {
+  const url = `${BASE_URL}/instance/CSV/${hash}/`;
+  
+  const file = createCSVFile({ first_name, last_name, email, password });
+
+  const formData = new FormData();
+    formData.append('first_name', 'firstname');
+    formData.append('last_name', 'lastname');
+    formData.append('username', 'email');
+    formData.append('password', 'password');
+    formData.append('file', file);
+
+  const token = sessionStorage.getItem('token');
+
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const response = await axios.post(url, formData, config);
+   
+    window.showToast('success','user added successfully');
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
 const token = sessionStorage.getItem('token');
 
 export const updateUser = async (hash, username, userData) => {
@@ -119,13 +171,41 @@ export const updateUser = async (hash, username, userData) => {
             }
         });
         if (response.status === 200) {
-            alert('User updated successfully');
+            
+            window.showToast('success','User updated successfully');
         }
     } catch (error) {
-        alert('Error in updating user');
+       
+         
+        window.showToast('success','Error in updating user');
     }
 };
 
+export const getGoogleAuthUrl = async (hash) => {
+  const url = `${BASE_URL}/${hash}/google-oauth2/?redirect_uri=http://localhost:3000`;
+  // /live/bb804ca12d754807/google-oauth2/?redirect_uri=http://localhost:3000
+  // http://localhost:8000/api/v1/live
+  try {
+    const response = await axios.get(url);
+    return response.data.authorization_url;
+  } catch (error) {
+    console.error("Error fetching Google auth URL:", error);
+    throw error;
+  }
+};
+
+export const handleGoogleCallback = async (hash, state, code) => {
+  
+  const url = `${BASE_URL}/${hash}/google-oauth2/?state=${state}&code=${code}`;
+  console.log(url,"asdbwhjef  wueh d weh fjhw echw ")
+  try {
+    const response = await axios.post(url);
+    return response.data;
+  } catch (error) {
+    console.error("Error handling Google callback:", error);
+    throw error;
+  }
+};
 
 
 

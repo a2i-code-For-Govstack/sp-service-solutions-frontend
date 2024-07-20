@@ -19,7 +19,7 @@ import VotersTable from "../../components/FormAdmin/VotersTable";
 import UsersFileUpload from "../../components/FormAdmin/UsersFileUpload";
 // import Button from '@mui/material/Button';
 // import { createForm as saveForm } from "../db"
-
+import UserAddModal from "../../components/FormAdmin/UserAddModal";
 function Create() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [inputType, setInputType] = useState("text");
@@ -177,7 +177,12 @@ function Create() {
     
    
   }; 
+  
+  const [openAddUser, setOpenAddUser] = useState(false);
+ 
 
+  const handleAddUserOpen = () => setOpenAddUser(true);
+  const handleAddUserClose = () => setOpenAddUser(false);
   return (<>{isLoggedIn ? (
     <div
       style={{
@@ -316,8 +321,14 @@ function Create() {
       <button className="btn"  onClick={handleUploadFileOpen}>
         Upload Users
       </button>
-      <span>table for auth type specific users</span>
+      
       <UsersFileUpload open={openUserUpload} onClose={handleUploadFileClose} />
+    
+      <button className="btn" onClick={handleAddUserOpen}>
+        Add User
+      </button>
+      <span>table for auth type specific users</span>
+      <UserAddModal open={openAddUser} onClose={handleAddUserClose} hash={hash} />
     </div></div>}
   {alignment == 3 && <div>This is alignment 3</div>}
 </div>

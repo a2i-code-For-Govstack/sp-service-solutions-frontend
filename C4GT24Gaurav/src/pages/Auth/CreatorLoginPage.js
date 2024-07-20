@@ -18,13 +18,18 @@ const CreatorLoginPage = () => {
     try {
       const response = await forgotPassword(email);
       if (response === 204) {
-        alert('Password reset link has been sent to your email');
+        window.showToast('success', 'Password reset link has been sent to your email');
+        // alert('Password reset link has been sent to your email');
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        alert(`Error in sending reset link: ${error.response.data.detail}`);
+        window.showToast('error', `Error in sending reset link: ${error.response.data.detail}`);
+        
+        // alert(`Error in sending reset link: ${error.response.data.detail}`);
       } else {
-        alert('Error in sending reset link, please check your email address');
+        window.showToast('error', 'Error in sending reset link, please check your email address');
+        
+        // alert('Error in sending reset link, please check your email address');
       }
       console.error('Error during password reset:', error);
     }
@@ -34,15 +39,19 @@ const CreatorLoginPage = () => {
     try {
       const response = await forgotUsername(email);
       if (response === 204) {
-        alert('UserName link has been sent to your email');
+        window.showToast('success', 'UserName link has been sent to your email');
+        
+        // alert('UserName link has been sent to your email');
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        alert(`Error in sending reset link: ${error.response.data.detail}`);
+        // alert(`Error in sending reset link: ${error.response.data.detail}`);
+        window.showToast('error', `Error in sending reset link: ${error.response.data.detail}`);
+        
       } else {
-        alert(
-          "Error in sending reset link, please check your email address"
-        );
+        // alert("Error in sending reset link, please check your email address");
+        window.showToast('error', 'Error in sending reset link, please check your email address');
+        
       }
     }
   };
