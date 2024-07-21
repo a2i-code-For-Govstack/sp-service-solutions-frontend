@@ -71,7 +71,7 @@ label.btn{
 .modal-content.preview{
   max-width: 600px;
 }
-.modal-content.preview .grey-container{
+.modal-content.preview {
   margin-bottom: 0;
   background-color: transparent;
   
@@ -170,13 +170,10 @@ label.btn{
 }
 
 
-.form{
-  margin: 2em 0;
-}
 
 
 .grey-container{
-  padding: 2em 2em 2em 2em;
+  /* padding: 2em 2em 2em 2em; */
   background-color:#b4abd8;
   
   display: flex;
@@ -186,6 +183,18 @@ label.btn{
   
   /* border: solid 2px green */
   /* justify-content: space-between; */
+}
+.surveyView{
+   /* padding: 2em 2em 2em 2em; */
+   background-color:#b4abd8;
+  
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   /* justify-content: center; */
+   padding-bottom: 15px;
+   /* border: solid 2px green */
+   /* justify-content: space-between; */
 }
 .add-field-container p{
   font-size: 1.2em;

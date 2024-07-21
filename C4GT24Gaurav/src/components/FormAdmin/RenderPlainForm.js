@@ -19,7 +19,7 @@ const VisuallyHiddenInput = styled("input")({
 
 function RenderPlainForm({ model }) {
   return (
-    <div className="grey-container mb-1">
+    <div className="surveyView">
       <h2 style={{color:'black' , fontWeight:400 }}>PREVIEW</h2>
       {model.fields.map((field, index) =>
         field.type === "short-text" || field.type === "number" ? (
@@ -30,7 +30,7 @@ function RenderPlainForm({ model }) {
               display: "flex",
               flexDirection: "column",
               width: "50%",
-              minWidth:500,
+              minWidth:300,
               padding: "2.5em 2em 2.5em 2em",
               background: "white",
               borderRadius: "7px",
@@ -57,7 +57,7 @@ function RenderPlainForm({ model }) {
               display: "flex",
               flexDirection: "column",
               width: "50%",
-              minWidth:500,
+              minWidth:300,
               padding: "2.5em 2em 2.5em 2em",
               background: "white",
               borderRadius: "7px",
@@ -85,7 +85,7 @@ function RenderPlainForm({ model }) {
               display: "flex",
               flexDirection: "column",
               width: "50%",
-              minWidth:500,
+              minWidth:300,
               padding: "2.5em 2em 2.5em 2em",
               background: "white",
               borderRadius: "7px",
@@ -119,7 +119,7 @@ function RenderPlainForm({ model }) {
               display: "flex",
               flexDirection: "column",
               width: "50%",
-              minWidth:500,
+              minWidth:300,
               padding: "2em 2em 2em 2em",
               background: "white",
               borderRadius: "7px",
@@ -163,7 +163,7 @@ function RenderPlainForm({ model }) {
           <p key={index}>Unknown fiel type.</p>
         )
       )}
-      <Button variant="contained" >submit</Button>
+      <Button variant="contained">submit</Button>
     </div>
   );
 }
