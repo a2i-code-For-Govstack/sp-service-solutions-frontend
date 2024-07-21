@@ -4,7 +4,7 @@ import RenderReactiveForm from '../../components/FormAdmin/RenderReactiveForm';
 import { expired } from '../../utils/index';
 import SelectedUserLoginPage from '../Auth/SelectedUserLoginPage';
 import { fetchInstanceInfo } from '../../services/liveService';
-
+import { handleGoogleCallback } from '../../services/liveService';
 function Fill() {
     const { hash } = useParams();
 
@@ -13,7 +13,6 @@ function Fill() {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(true);
     
- 
     
     const [instanceAuthType, setInstanceAuthType] = useState(null);
     const [instanceStatus, setInstanceStatus] = useState(null);
@@ -26,11 +25,6 @@ function Fill() {
                 setInstanceAuthType(instanceData.instance_auth_type);
                 setInstanceStatus(instanceData.instance_status);
 
-                // Prepare form data based on instance status or other conditions
-                // For instance_status === 2 and instance_auth_type === 1, prepare form
-                // if (instanceStatus === 2 && instanceAuthType === 1) {
-                
-                // }
             } catch (error) {
                 console.error('Error fetching instance data:', error);
             } finally {
@@ -107,17 +101,26 @@ function Fill() {
 
     console.log(form, "FORM IN FILL JS");
 
+    const voteAccessToken=sessionStorage.getItem('voting_token');
+
+   
+
+
     return (
         <div>
-        {instanceStatus === 2 ? (
-            instanceAuthType === 1 ? (
-                <RenderReactiveForm model={form} onSubmitted={() => setSubmitted(true)} />
+      {instanceStatus === 2 ? (
+                <>
+                    {instanceAuthType === 1 ? (
+                        <RenderReactiveForm model={form} onSubmitted={() => setSubmitted(true)} />
+                    ) : (instanceAuthType === 2 || instanceAuthType === 4) && voteAccessToken ? (
+                        <RenderReactiveForm model={form} onSubmitted={() => setSubmitted(true)} />
+                    ) : (instanceAuthType === 2 || instanceAuthType === 4) ? (
+                        <SelectedUserLoginPage />
+                    ) : null}
+                </>
             ) : (
-                <SelectedUserLoginPage />
-            )
-        ) : (
-            <p>Form is no longer accepting responses.</p>
-        )}
+                <p>Form is no longer accepting responses.</p>
+            )}
     </div>
     );
 }

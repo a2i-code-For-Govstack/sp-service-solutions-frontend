@@ -47,7 +47,9 @@ export default function FormTable() {
         const data = await getInstances();
         setInstances(data);
       } catch (error) {
-        alert(error.message);
+        
+        window.showToast('error',error.message);
+        
         // You may want to handle the error differently, e.g., redirect to login page
       }
     };
@@ -61,19 +63,22 @@ export default function FormTable() {
   const handleDeleteInstance = async (hash) => {
     try {
       if (!sessionStorage.getItem("token")) {
-        alert("Please login to access this page.");
+     
+        window.showToast('error','Please login to access this page.');
         // You may want to redirect to login page or handle this case differently
         return;
       }
 
       await deleteInstance(hash);
       console.log("Instance deleted successfully");
-      alert("Instance deleted successfully");
+      
      window.location.href = '/forms'
+     window.showToast('error','Instance deleted successfully');
       // Handle successful deletion (e.g., update state or UI)
     } catch (error) {
       console.error("Error deleting instance:", error);
-      alert(`Error deleting instance: ${error.message}`);
+  
+      window.showToast('error',`Error deleting instance: ${error.message}`);
       // Handle error state if needed
     }
   };
