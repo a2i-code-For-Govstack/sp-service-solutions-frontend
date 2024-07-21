@@ -58,7 +58,7 @@ function Navbar({ mode, toggleColorMode }) {
           pt:2,
           mb:0,
           width:1,
-          // border:'solid 2px red',
+          // border:'solid 2px blue',
           pb:2
         }}
       >
@@ -160,7 +160,7 @@ function Navbar({ mode, toggleColorMode }) {
               sx={{
                 display: { xs: 'none', md: 'flex' },
                 gap: 0.5,
-                alignItems: 'center',
+                // alignItems: 'center',
                 // border:'solid 20px red'
               }}
             >
@@ -214,26 +214,18 @@ function Navbar({ mode, toggleColorMode }) {
               <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
                 <Box
                   sx={{
-                    minWidth: '60dvw',
+                    width: '70vw',
                     p: 2,
                     backgroundColor: 'background.paper',
-                    flexGrow: 1,
+                    // flexGrow: 1,
+                    display:'flex',
+                    flexDirection:'column',
+                    // alignItems:'center',
+                    // justifyContent:'center'
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'end',
-                      flexGrow: 1,
-                    }}
-                  >
-                    <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
-                  </Box>
-                  <MenuItem 
                   
-                //   onClick={}
-                  >
+                  <MenuItem >
                     Profile
                   </MenuItem>
                  
@@ -261,20 +253,65 @@ function Navbar({ mode, toggleColorMode }) {
                 </Button>
               )}
                     
+              
+                  
+                  </MenuItem>
+                  <Divider />
+                  <Box style={{display:'flex', flexDirection:'column'}}>
+              <Button
+                      color="primary"
+                      variant="outlined"
+                      component="a"
+                      onClick={handleBack}
+                    //   target="_blank"
+                      sx={{ width: '100%' , marginRight: '6%' }}
+                    >
+                      Back
+                    </Button>
                     <Button
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href="/user-profile"
-                      
+                      href='/creator-home'
                     //   target="_blank"
-                      sx={{ width: '100%' }}
+                      sx={{ width: '100%' ,   marginRight: '6%' }}
+                    >
+                      Create
+                    </Button>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      component="a"
+                      href='user-profile'
+                    //   target="_blank"
+                      sx={{ width: '100%'  , marginRight: '6%' }}
+                    >
+                      Vote
+                    </Button>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      component="a"
+                      href='/forms'
+                    //   target="_blank"
+                      sx={{ width: '100%'  , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
+                    >
+                      MyForms
+                    </Button>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      component="a"
+                      href='user-profile'
+                    //   target="_blank"
+                      sx={{ width: '100%' , marginRight: '6%' }}
                     >
                       Profile
                     </Button>
-                  
-                  </MenuItem>
+               
+              </Box>
                 </Box>
+            
               </Drawer>
             </Box>
           </Toolbar>

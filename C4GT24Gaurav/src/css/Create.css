@@ -1,0 +1,68 @@
+.questypediv {
+    overflow-x: scroll;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For IE and Edge */
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+    margin: 10px;
+  }
+  
+  .questypediv::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+  }
+
+  .instanceinfodiv{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+  }
+  .formargin{
+   margin: 10px;
+   border: solid 2px red;
+  }
+ /* Base style */
+.renderView {
+   
+    width: 100%;
+  }
+
+  .instanceFixdiv {
+    padding-bottom: 1em;
+    width: 100%;
+    background: #CEE5FD;
+    z-index: 1001;
+    padding-left: 2vw;
+    padding-top: 10px;
+  }
+  
+  @media (min-width: 768px) {
+    .instanceFixdiv {
+      position: fixed;
+    }
+  }
+  
+  /* Media queries for different screen sizes */
+  
+  /* Mobile devices */
+  @media (max-width: 767px) {
+    .renderView {
+      padding-top: 10px;
+    }
+  }
+  
+  /* Tablets */
+  @media (min-width: 767px) and (max-width: 1028px) {
+    .renderView {
+      padding-top: 200px;
+    }
+  }
+  
+  /* Laptops and larger screens */
+  @media (min-width: 1029px) {
+    .renderView {
+      padding-top: 160px;
+    }
+  }
+  

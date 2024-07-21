@@ -183,8 +183,6 @@ export const updateUser = async (hash, username, userData) => {
 
 export const getGoogleAuthUrl = async (hash) => {
   const url = `${BASE_URL}/${hash}/google-oauth2/?redirect_uri=http://localhost:3000`;
-  // /live/bb804ca12d754807/google-oauth2/?redirect_uri=http://localhost:3000
-  // http://localhost:8000/api/v1/live
   try {
     const response = await axios.get(url);
     return response.data.authorization_url;
@@ -194,16 +192,20 @@ export const getGoogleAuthUrl = async (hash) => {
   }
 };
 
-export const handleGoogleCallback = async (hash, state, code) => {
-  
+export const handleGoogleCallback = async (state, code) => {
+  console.log(state , "  " , code , "in live service ")
+  // const hash = sessionStorage.getItem('hash');
+  const hash='cc7939ba5dc64120'
+  if (!hash) {
+    alert("No hash found in session storage");
+  }
   const url = `${BASE_URL}/${hash}/google-oauth2/?state=${state}&code=${code}`;
-  console.log(url,"asdbwhjef  wueh d weh fjhw echw ")
   try {
     const response = await axios.post(url);
     return response.data;
   } catch (error) {
     console.error("Error handling Google callback:", error);
-    throw error;
+    // throw error;
   }
 };
 

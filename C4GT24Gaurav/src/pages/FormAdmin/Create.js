@@ -17,6 +17,8 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import VotersTable from "../../components/FormAdmin/VotersTable";
 import UsersFileUpload from "../../components/FormAdmin/UsersFileUpload";
+import '../../css/Create.css';
+
 // import Button from '@mui/material/Button';
 // import { createForm as saveForm } from "../db"
 import UserAddModal from "../../components/FormAdmin/UserAddModal";
@@ -51,6 +53,16 @@ function Create() {
     title: "",
     createdAt: +new Date(),
     fields: [
+      {
+        title: "Enter your email",
+        type: "short-text",
+        required: true,
+      },
+      {
+        title: "Enter your email",
+        type: "short-text",
+        required: true,
+      },
       {
         title: "Enter your email",
         type: "short-text",
@@ -190,21 +202,16 @@ function Create() {
         paddingRight: "0vw",
         background: "#CEE5FD",
         opacity: "1",
-        border: "solid 1px green",
+        // border: "solid 1px red",
+        width:'100%',
+        // marginTop:'10px'
       }}
     >
       <div
-        style={{
-          position: "fixed",
-          paddingBottom: "1em",
-          width: "100%",
-          background: "#CEE5FD",
-          zIndex: "1001",
-          paddingLeft: "2vw",
-        }}
+        className="instanceFixdiv"
       >
       
-        <h3 >
+        <div className="instanceinfodiv">
           {/* <label>Title of the from</label> */}
           <TextField
           type="text"
@@ -215,7 +222,7 @@ function Create() {
           label="Enter Title"
           variant="standard"
           
-          style={{ marginRight: '10px' }}
+          style={{ margin: '10px' }}
           size="small"
         />
         <TextField
@@ -226,7 +233,8 @@ function Create() {
           id="standard-basic"
           label="Enter Description"
           variant="standard"
-          style={{ marginRight: '10px' }}
+          
+          style={{ margin: '10px' }}
           size="small"
         />
         <TextField
@@ -240,10 +248,11 @@ function Create() {
           InputProps={{
             readOnly: true,
           }}
-          style={{ marginRight: '10px' }}
+         
+          style={{ margin: '10px' }}
           
         />
-             <FormControl variant="standard" sx={{ mr: 1, minWidth: 120 }} size="small">
+             <FormControl variant="standard" sx={{ mr: 1, minWidth: 120 }}  style={{ margin: '10px' }}  size="small">
           <InputLabel id="instanceAuthType-label">Auth Type</InputLabel>
           <Select
             labelId="instanceAuthType-label"
@@ -257,7 +266,7 @@ function Create() {
             <MenuItem value={4}>Specific users</MenuItem>
           </Select>
         </FormControl>
-        <FormControl variant="standard" sx={{ mr:1 , minWidth: 120 }} size="small">
+        <FormControl variant="standard" sx={{ mr:1 , minWidth: 120 }} style={{ margin: '10px' }}  size="small">
           <InputLabel id="instanceStatusLabel">Status</InputLabel>
           <Select
             labelId="instanceStatusLabel"
@@ -274,7 +283,7 @@ function Create() {
           variant="contained"
           color="primary"
           onClick={handleupdateInstance}
-          style={{ marginTop: '20px' }}
+          style={{ margin: '10px' }}
           className="btn"
         >
           Update Instance
@@ -288,7 +297,7 @@ function Create() {
   aria-label="Platform"
   size="small"
   variant = "outlined"
-  style={{ fontsize:"14px"  , marginLeft:'1em' }}
+  style={{ fontsize:"14px"  , margin: '10px' }}
   className=".btn"
   
 >
@@ -297,12 +306,13 @@ function Create() {
   <ToggleButton variant = "outlined" value={3} style={{fontWeight:'600'}} >Responses</ToggleButton>
 </ToggleButtonGroup>
           {/* <input type="text" placeholder="Enter title" onChange={e => updateObjState(setFormModel, formModel ,"title", e.target.value)} /> */}
-        </h3>
+        </div>
         <div>
         <div>
   {alignment == 1 && (
-    <div>
-          <span>Type Of que</span>
+    <div className="questypediv">
+    <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center'}}> <span>Add</span></div>
+          
           {inputTypes.map((inputType, index) => (
             <Button
               class="btn"
@@ -312,22 +322,24 @@ function Create() {
               key={index}
               onClick={() => openAddModal(inputType)}
             >
-              {inputType.replace("-", " ")}
+            {/* {inputType} */}
+              {inputType.replace("-", "_")}
             </Button>
           ))}
           </div>
   )}
-  {alignment == 2 && <div><div>
-      <button className="btn"  onClick={handleUploadFileOpen}>
+  {alignment == 2 && <div className="questypediv"><div>
+      <button className="btn" style={{margin:'10px'}}  onClick={handleUploadFileOpen}>
         Upload Users
       </button>
       
       <UsersFileUpload open={openUserUpload} onClose={handleUploadFileClose} />
     
-      <button className="btn" onClick={handleAddUserOpen}>
+      <button className="btn" style={{margin:'10px'}}  onClick={handleAddUserOpen}>
         Add User
       </button>
-      <span>table for auth type specific users</span>
+      <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center'}}><span>table for auth type specific users</span></div>
+      
       <UserAddModal open={openAddUser} onClose={handleAddUserClose} hash={hash} />
     </div></div>}
   {alignment == 3 && <div>This is alignment 3</div>}
@@ -335,20 +347,21 @@ function Create() {
         </div>
       </div>
       {alignment == 1 && (
-        <div style={{ paddingTop: "14vh" }}>
-        <div className="form" style={{ paddingLeft:'2vw'}}>
+        <div className="renderView">
+        <div>
           {formModel.fields.length > 0 && <RenderPlainForm model={formModel} />}
 
           <div
-            style={{
+                style={{
               border: "1px solid grey",
               display: "flex",
               flexDirection: "column",
               width: "50%",
+              minWidth:300,
               padding: "2.5em 2em 2.5em 2em",
               background: "white",
               borderRadius: "7px",
-              margin: "1em 0em 1em 0em",
+              margin: "1em 0em 1em 1em",
             }}
           >
             <label style={{ fontWeight: "400", color: "black" }}>
@@ -356,7 +369,7 @@ function Create() {
             </label>
             {/* <input type="text" placeholder="What should user see after submitting the form" onChange={e => updateObjState(setFormModel, formModel ,"endMessage", e.target.value)} /> */}
             <TextField
-              style={{ marginTop: ".5em " }}
+              style={{ margin: ".5em 0em .5em 0em " }}
               type="text"
               id="standard-basic"
               //   label="answer here"
@@ -373,7 +386,7 @@ function Create() {
             />
           </div>
 
-          <div
+          {/* <div
             style={{
               border: "1px solid grey",
               display: "flex",
@@ -410,7 +423,7 @@ function Create() {
                 )
               }
             />
-          </div>
+          </div> */}
         </div>
 
         <p className="mb-2 text-right">
@@ -445,7 +458,7 @@ function Create() {
         )}
       </div>
   )}
-  {alignment == 2 && <div style={{marginTop:'16vh'}}><VotersTable hash={hash}/></div> }
+  {alignment == 2 && <div className="renderView"><VotersTable hash={hash}/></div> }
   {alignment == 3 && <div>This is alignment 3</div>}
       
     </div> ) : (<div style ={{display:'flex' , alignItems:'center', justifyContent:'center' , flexDirection:'column' , height:'60vh'}}>

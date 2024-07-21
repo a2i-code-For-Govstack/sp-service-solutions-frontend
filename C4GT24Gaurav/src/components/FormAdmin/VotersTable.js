@@ -81,7 +81,7 @@ const VotersTable = ({ hash }) => {
     );
 
     return ( 
-        <Paper sx={{ width: '100%', height: '70vh', padding: '1em'  , backgroundColor:'#cee5fd' }}>
+        <Paper sx={{ width: '100%', height: '70vh', padding: '0em  1em 1em 1em'  , backgroundColor:'#cee5fd' }}>
         
             <TextField
                 id="standard-helperText"

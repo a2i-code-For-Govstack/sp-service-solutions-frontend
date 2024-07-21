@@ -38,8 +38,8 @@ export default function UserHomePage() {
     
       <div className="home">
     
-    <h1>Welcome to the Survey Platform</h1>
-    <p>This is the homepage of our survey platform.</p>
+    <h1>Create Surveys & Polls</h1>
+    {/* <p>Create, fill, get the response & collect data</p> */}
     <ButtonGroup variant="contained" aria-label="Large button group">
 
       <Link to = "/creator-login"><Button value="create">CREATE</Button></Link>

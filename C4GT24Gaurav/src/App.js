@@ -71,7 +71,7 @@ function App() {
       > */}
       <div style={{ 
         // border:'solid 2px yellow' , 
-       
+        marginBottom:'0px',
         height:'13vh'  , background: '#CEE5FD',opacity:1, 
        }}>
       <Navbar mode={mode} toggleColorMode={toggleColorMode} />

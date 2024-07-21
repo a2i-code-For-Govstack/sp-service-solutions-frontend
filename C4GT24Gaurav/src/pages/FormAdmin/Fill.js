@@ -3,10 +3,12 @@ import { useParams } from 'react-router-dom';
 import RenderReactiveForm from '../../components/FormAdmin/RenderReactiveForm';
 import { expired } from '../../utils/index';
 import SelectedUserLoginPage from '../Auth/SelectedUserLoginPage';
+import {handleGoogleCallback} from '../../services/liveService';
+import {  useLocation } from 'react-router-dom';
 import { fetchInstanceInfo } from '../../services/liveService';
-import { handleGoogleCallback } from '../../services/liveService';
 function Fill() {
     const { hash } = useParams();
+    const location = useLocation();
 
     const [form, setForm] = useState(null);
    
@@ -16,7 +18,16 @@ function Fill() {
     
     const [instanceAuthType, setInstanceAuthType] = useState(null);
     const [instanceStatus, setInstanceStatus] = useState(null);
-
+    // const fun = () => {
+    //     const urlParams = new URLSearchParams(location.search);
+    //     const state = urlParams.get('state');
+    //     const code = urlParams.get('code');
+    //     alert("part1")
+    //     if (state && code) {
+    //         console.log(state , "  " , code , "fun ")
+    //         handleGoogleCallback(state, code);
+    //     }
+    // }
     useEffect(() => {
        
         const fetchData = async () => {
@@ -27,9 +38,12 @@ function Fill() {
 
             } catch (error) {
                 console.error('Error fetching instance data:', error);
+                // fun()
             } finally {
                 setLoading(false);
             }
+           
+           
         };
         fetchData();
         setForm({
