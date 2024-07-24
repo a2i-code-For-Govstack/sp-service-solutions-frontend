@@ -30,7 +30,7 @@ export const login = async (username, password) => {
         sessionStorage.setItem('is_deactivated',response.data.is_deactivated);
         
         window.location.href = '/creator-home'; 
-        window.showToast('success', 'Logged In');
+        
       }
     return response.data;
   } catch (error) {

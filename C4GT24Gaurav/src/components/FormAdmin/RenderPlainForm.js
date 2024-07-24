@@ -2,8 +2,9 @@ import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, Checkbox, FormGroup } from '@mui/material';
-
+import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, Checkbox, FormGroup,IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -17,11 +18,11 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function RenderPlainForm({ model }) {
+function RenderPlainForm({ model , deleteField  , editField}) {
   return (
     <div className="surveyView">
-      <h2 style={{color:'black' , fontWeight:400 }}>PREVIEW</h2>
-      {model.fields.map((field, index) =>
+      <h2 style={{color:'black' , fontWeight:300 }}>PREVIEW</h2>
+      {model.fields.map((field, index) => 
         field.type === "short-text" || field.type === "number" ? (
           <div
             key={index}
@@ -37,10 +38,30 @@ function RenderPlainForm({ model }) {
               margin: "1em 0em 1em 0em",
             }}
           >
+              <div style={{display:'flex' , flexDirection:'row' , alignItems:'center' , justifyContent:'space-between'}}>
             <label style={{ fontWeight: "400", color: "black" }}>
               {field.title}
               {field.required && <span className="err"> * </span>}
+              
             </label>
+            <div>
+            <IconButton
+              aria-label="delete"
+              style={{ float:'right' }}
+              onClick={() => deleteField(index)}
+            >
+             <DeleteIcon  />
+              
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              style={{ float:'right' }}
+              onClick={() => editField(index)}
+            >
+             <EditIcon  />
+            </IconButton>
+            </div>
+            </div>
             <TextField
               style={{ marginTop: ".5em " }}
               type={field.type}
@@ -64,10 +85,30 @@ function RenderPlainForm({ model }) {
               margin: "1em 0em 1em 0em",
             }}
           >
+            <div style={{display:'flex' , flexDirection:'row' , alignItems:'center' , justifyContent:'space-between'}}>
             <label style={{ fontWeight: "400", color: "black" }}>
               {field.title}
               {field.required && <span className="err">*</span>}
+             
             </label>
+            <div>
+            <IconButton
+              aria-label="delete"
+              style={{ float:'right' }}
+              onClick={() => deleteField(index)}
+            >
+             <DeleteIcon  />
+              
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              style={{ float:'right' }}
+              onClick={() => editField(index)}
+            >
+             <EditIcon  />
+            </IconButton>
+            </div>
+           </div>
             <TextField
               style={{ marginTop: ".5em " }}
               id="standard-textarea"
@@ -92,12 +133,32 @@ function RenderPlainForm({ model }) {
               margin: "1em 0em 1em 0em",
             }}
           >
+            <div style={{display:'flex' , flexDirection:'row' , alignItems:'center' , justifyContent:'space-between'}}>
             <label
               style={{ fontWeight: "400", color: "black", marginBottom: "1em" }}
             >
               {field.title}
               {field.required && <span className="err">*</span>}
+             
             </label>
+            <div>
+            <IconButton
+              aria-label="delete"
+              style={{ float:'right' }}
+              onClick={() => deleteField(index)}
+            >
+             <DeleteIcon  />
+              
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              style={{ float:'right' }}
+              onClick={() => editField(index)}
+            >
+             <EditIcon  />
+            </IconButton>
+            </div>
+            </div>
             {/* <input type="file" /> */}
             <Button
               component="label"
@@ -126,12 +187,32 @@ function RenderPlainForm({ model }) {
               margin: "1em 0em 1em 0em",
             }}
           >
+            <div style={{display:'flex' , flexDirection:'row' , alignItems:'center' , justifyContent:'space-between'}}>
             <label
               style={{ fontWeight: "400", color: "black", marginBottom: "1em" }}
             >
               {field.title}
               {field.required && <span className="err">*</span>}
+           
             </label>
+            <div>
+            <IconButton
+              aria-label="delete"
+              style={{ float:'right' }}
+              onClick={() => deleteField(index)}
+            >
+             <DeleteIcon  />
+              
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              style={{ float:'right' }}
+              onClick={() => editField(index)}
+            >
+             <EditIcon  />
+            </IconButton>
+            </div>
+            </div>
             {field.type === "multioption-singleanswer" ? (
               <FormControl component="fieldset">
                 <RadioGroup name={field.title.replace(" ", "")}>

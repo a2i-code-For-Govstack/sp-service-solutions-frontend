@@ -4,7 +4,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { updateProfile, deleteAccount } from '../../services/authService'
-
+import Blank from '../../components/Common/Blank';
 const ProfilePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
   const [userData, setUserData] = useState({}); // Store user data
@@ -253,17 +253,8 @@ const ProfilePage = () => {
               </Box>
             </Modal>
           </>
-        ) : (
-          <>
-            <h1>Please login to see profile</h1>
-            <Button
-              type="button"
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={handleLoginRedirect}
-            >
-              Login
-            </Button>
+        ) : (<>
+          <Blank/>
           </>
         )}
       </div>
@@ -272,3 +263,14 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+{/* <>
+<h1>Please login to see profile</h1>
+<Button
+  type="button"
+  variant="contained"
+  sx={{ mt: 3, mb: 2 }}
+  onClick={handleLoginRedirect}
+>
+  Login
+</Button>
+</> */}

@@ -17,6 +17,7 @@ import { blue } from "@mui/material/colors";
 import { useParams } from "react-router-dom";
 import { getInstances } from "../../services/liveService";
 import { deleteInstance } from "../../services/liveService";
+import Blank from "../Common/Blank";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#9fb3e3",
@@ -64,7 +65,7 @@ export default function FormTable() {
     try {
       if (!sessionStorage.getItem("token")) {
      
-        window.showToast('error','Please login to access this page.');
+        // window.showToast('error','Please login to access this page.');
         // You may want to redirect to login page or handle this case differently
         return;
       }
@@ -82,8 +83,16 @@ export default function FormTable() {
       // Handle error state if needed
     }
   };
-
-  return (
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem('token');
+    
+    if (storedToken) {
+      setIsLoggedIn(true);}
+  
+  }, [])
+  
+  return (<>{isLoggedIn ? (
     <div style={{ margin: "1em 1em 1em 1em" }}>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -121,7 +130,8 @@ export default function FormTable() {
                   }
                 </StyledTableCell>
                 <StyledTableCell align="center" className="nav-item">
-                  <Button size="small" variant="contained" color="success">
+                
+                  <Button size="small" variant="contained" color="success" onClick={() => {window.location.href=`${window.location.origin}/live/instance/${instance.hash}`}}>
                     RESPONSES
                   </Button>
                 </StyledTableCell>
@@ -140,7 +150,12 @@ export default function FormTable() {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </div>) :  (
+          <>
+           <Blank/>
+          </>
+        )}
+        </>
   );
 }
 

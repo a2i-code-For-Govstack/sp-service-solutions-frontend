@@ -36,39 +36,36 @@ export const expired = (createDateMillis, hours) => {
     return (currentDateMillis - createDateMillis) < hoursMillis
 }
 export const createFillableModel = model => {
+    console.log(model)
     console.log("I start");
     let fillableModel = [];
 
     let fields = model.fields;
     console.log("fields", fields);
-    for (let field in fields) {
-        let fld = fields[field];
-        fillableModel.push({ ...fld, value: fld.type === "multioption-singleanswer" || fld.type === "multioption-multianswer" ? [] : "" });
-    }
+    fields.forEach(field => {
+        fillableModel.push({ 
+            ...field, 
+            value: field.type === "multioption-singleanswer" || field.type === "multioption-multianswer" ? [] : "" 
+        });
+    });
 
     return fillableModel;
 };
-
 export const createSubmitableModel = fields => {
-    let submitableModel = [];
-    for (let field in fields) {
-        let fld = fields[field];
+    let submitableModel = fields
+        .filter(field => field.value && (Array.isArray(field.value) ? field.value.length > 0 : field.value.length > 0))
+        .map(field => ({
+            id: field.id,
+            value: field.type === "multioption-singleanswer" ? [field.value] : field.value
+        }));
 
-        if (!fld.value || fld.value.length < 1) continue;
-
-        let fieldModel = {
-            title: fld.title,
-            value: fld.value,
-            type: fld.type
-        };
-        submitableModel.push(fieldModel);
-    }
-    return submitableModel;
+    return { answers: submitableModel };
 };
+
 
 export const hasError = fields => {
     for (let field of fields) {
-        if (!field.required && !field.value.trim()) continue;
+        if (!field.required ) continue;
 
         if (["short-text", "long-text", "number", "file"].indexOf(field.type) > -1) {
             if (field.required && !field.value.trim()) return `'${field.title}' is a required field`;
