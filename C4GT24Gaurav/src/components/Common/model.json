@@ -1,0 +1,147 @@
+{
+    "id": 1,
+    "title": "Health Survey 2",
+    "created_at": "2024-07-21T10:51:55.764362Z",
+    "fields": [
+        {
+            "id": 37,
+            "title": "que1",
+            "type": "short-text",
+            "required": true,
+            "options": null,
+            "accepted": null
+        },
+        {
+            "id": 38,
+            "title": "que 2",
+            "type": "short-text",
+            "required": false,
+            "options": null,
+            "accepted": null
+        }
+    ],
+    "endMessage": "thanks for submitting"
+}
+
+
+
+
+
+{
+    "answers": [
+        {
+            "id": "37",
+            "value": "crypto"
+        },
+        {
+            "id": "38",
+            "value": "crypto"
+        },
+        {
+                "id": 44,
+                "value": [
+                    "a",
+                    "b",
+                    "c",
+                    "d"
+                ]
+               
+            },
+            {
+                "id": 46,
+                "value": [
+                    "a"
+                ]
+            }
+    ]
+}
+
+
+[
+    {
+        "id": 37,
+        "title": "que1",
+        "type": "short-text",
+        "required": true,
+        "options": null,
+        "accepted": null,
+        "value": "heyyymle rsfvdl kwe f"
+    },
+    {
+        "id": 38,
+        "title": "que 2",
+        "type": "short-text",
+        "required": false,
+        "options": null,
+        "accepted": null,
+        "value": "beyyyy"
+    },
+    {
+        "id": 44,
+        "title": "multioption multianswer",
+        "type": "multioption-multianswer",
+        "required": true,
+        "options": [
+            "a",
+            "b",
+            "c",
+            "d"
+        ],
+        "accepted": null,
+        "value": [
+            "a",
+            "b"
+        ]
+    },
+    {
+        "id": 45,
+        "title": "file upload",
+        "type": "file",
+        "required": false,
+        "options": null,
+        "accepted": [
+            "jpg"
+        ],
+        "value": {}
+    },
+    {
+        "id": 46,
+        "title": "one answer",
+        "type": "multioption-singleanswer",
+        "required": false,
+        "options": [
+            "a",
+            "b",
+            "c",
+            "d"
+        ],
+        "accepted": null,
+        "value": "a"
+    }
+]
+
+{
+    "answers": [
+        {
+            "id": 37,
+            "value": "heyyymle rsfvdl kwe f"
+        },
+        {
+            "id": 38,
+            "value": "beyyyy"
+        },
+        {
+            "id": 44,
+            "value": [
+                "a",
+                "b"
+            ]
+        },
+        {
+            "id": 46,
+            "value": [
+                "a"
+            ]
+        }
+    ]
+}

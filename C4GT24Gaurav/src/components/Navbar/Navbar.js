@@ -241,7 +241,7 @@ function Navbar({ mode, toggleColorMode }) {
                 >
                   Logout
                 </Button>
-              ) : (
+              ) : (<>
                 <Button
                   color="primary"
                   variant="text"
@@ -251,6 +251,16 @@ function Navbar({ mode, toggleColorMode }) {
                 >
                   Sign in
                 </Button>
+                <Button
+                      color="primary"
+                  variant="text"
+                  size="small"
+                  component="a"
+                  href="/creator-signup"
+                    >
+                      Sign up
+                    </Button>
+                </>
               )}
                     
               

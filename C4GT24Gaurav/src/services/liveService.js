@@ -288,17 +288,21 @@ export const voterLogin = async (hash, username, password) => {
             username,
             password
         });
-        alert("now you can vote")
+        window.showToast('success', '"now you can vote"');
+        // alert("now you can vote")
         return response.data;
         
     } catch (error) {
        
         if (error.response) {
-            alert(`Error: ${error.response.data.detail}`);
+          window.showToast('error', 'Invalid Credentials');
+            // alert(`Error: ${error.response.data.detail}`);
         } else if (error.request) {
-            alert('Network error. Please try again.');
+            // alert('Network error. Please try again.');
+            window.showToast('error', 'Network error. Please try again');
         } else {
-            alert('Error occurred while processing your request.');
+            // alert('Error occurred while processing your request.');
+            window.showToast('error', 'Error occurred while processing your request');
         }
 
         // throw error; // Re-throw the error for any further handling
