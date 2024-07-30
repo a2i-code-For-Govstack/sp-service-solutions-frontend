@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import { getInstances } from "../../services/liveService";
 import { deleteInstance } from "../../services/liveService";
 import Blank from "../Common/Blank";
+import ShareModal from "../Common/ShareModal";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#9fb3e3",
@@ -41,12 +42,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function FormTable() {
   const [instances, setInstances] = useState([]);
+  const [openShareModal, setOpenShareModal] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
+  // const shareUrl = 'https://example.com/form-url'; // Replace with your form URL
+
+  const handleOpenShareModal = () => setOpenShareModal(true);
+  const handleCloseShareModal = () => setOpenShareModal(false);
 
   useEffect(() => {
     const fetchInstances = async () => {
       try {
         const data = await getInstances();
         setInstances(data);
+      
       } catch (error) {
         
         window.showToast('error',error.message);
@@ -102,6 +110,7 @@ export default function FormTable() {
               <StyledTableCell align="center">Created At</StyledTableCell>
               <StyledTableCell align="center">Link</StyledTableCell>
               <StyledTableCell align="center">Submissions</StyledTableCell>
+              <StyledTableCell align="center">Share</StyledTableCell>
               <StyledTableCell align="center">Delete</StyledTableCell>
             </StyledTableRow>
           </TableHead>
@@ -120,19 +129,25 @@ export default function FormTable() {
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   {
-                    <a
-                      href={`${window.location.origin}/live/instance/${instance.hash}`}
-                      rel="noreferrer"
-                      className="link mb-1"
-                    >
-                      Open Form
-                    </a>
+                    <Button size="small" variant="contained" color="success" onClick={() => {if(sessionStorage.getItem('token')){window.location.href=`${window.location.origin}/live/instance/${instance.hash}`} }}>
+                    OpenForm
+                  </Button>
                   }
                 </StyledTableCell>
                 <StyledTableCell align="center" className="nav-item">
                 
-                  <Button size="small" variant="contained" color="success" onClick={() => {window.location.href=`${window.location.origin}/live/instance/${instance.hash}`}}>
+                  <Button size="small" variant="contained" color="success" onClick={() => {if(sessionStorage.getItem('token')){window.location.href=`${window.location.origin}/live/instance/${instance.hash}`} }}>
                     RESPONSES
+                  </Button>
+                </StyledTableCell>
+                <StyledTableCell align="center" className="nav-item">
+                
+                  <Button size="small" variant="contained" color="success" 
+                  // onClick={() => {if(sessionStorage.getItem('token')){window.location.href=`${window.location.origin}/${instance.hash}`} }}
+                  onClick={() => {if(sessionStorage.getItem('token')){  setShareUrl(`${window.location.origin}/${instance.hash}`); handleOpenShareModal()} }}
+                 
+                  >
+                    SHARE
                   </Button>
                 </StyledTableCell>
                 <StyledTableCell align="center" className="nav-item">
@@ -147,6 +162,11 @@ export default function FormTable() {
                 </StyledTableCell>
               </StyledTableRow>
             ))}
+            <ShareModal
+        open={openShareModal}
+        handleClose={handleCloseShareModal}
+        shareUrl={shareUrl}
+      />
           </TableBody>
         </Table>
       </TableContainer>

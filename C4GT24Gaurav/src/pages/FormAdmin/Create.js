@@ -24,6 +24,7 @@ import ResponsesTable from "../../components/FormAdmin/ResponseTable";
 // import { createForm as saveForm } from "../db"
 import UserAddModal from "../../components/FormAdmin/UserAddModal";
 import { downloadCSV } from '../../components/Common/downloadCSV'
+import InputTypeMenu from "../../components/Common/InputTypeMenu";
 function Create() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -110,18 +111,50 @@ function Create() {
   };
 
   
-  const updateFieldToFormModel = async (field) => {
-    // alert("in updateFieldToFormModel");
-    if (formModel.id) {
-      try {
-        await updateQuestion(hash, formModel.id, formModel.fields[updateQueIndex].id, field);
-      } catch (error) {
-        // alert('Error updating question:', error);
-      }
-    }
-    setRefresh(1);
+//   const updateFieldToFormModel = async (field) => {
+//     // alert("in updateFieldToFormModel");
+//     if (formModel.id) {
+//       try {
+//         await updateQuestion(hash, formModel.id, formModel.fields[updateQueIndex].id, field);
+//       } catch (error) {
+//         // alert('Error updating question:', error);
+//       }
+//     }
+//     else{
+//       setFormModel({
+//     /// do somthing with this formModel.fields[index]
+//       });
+      
+//     }
+//     setRefresh(1);
     
+// };
+
+const updateFieldToFormModel = async (field) => {
+  // Check if the form is published (has an ID)
+  if (formModel.id) {
+    try {
+      await updateQuestion(hash, formModel.id, formModel.fields[updateQueIndex].id, field);
+    } catch (error) {
+      console.error('Error updating question:', error);
+    }
+  } else {
+    // If the form is not published, update the frontend model
+    const updatedFields = [...formModel.fields];
+    updatedFields[updateQueIndex] = {
+      ...updatedFields[updateQueIndex],
+      ...field,
+    };
+
+    setFormModel({
+      ...formModel,
+      fields: updatedFields,
+    });
+  }
+  
+  setRefresh(1); // Trigger a refresh
 };
+
   
 
 
@@ -285,6 +318,7 @@ function Create() {
 
   // };
   const createOrUpdateForm = async () => {
+    if( formModel.id) window.showToast('error', 'Already Published'); return; 
     if (loading) return;
     setErr("");
     if (!formModel.title.trim()) return window.showToast('error', 'Title is required');
@@ -344,17 +378,24 @@ function Create() {
         window.showToast('error', 'error in deleting question');
       }
     }
+   
     let _model = Object.assign({}, formModel);
     _model.fields.splice(index, 1);
     setFormModel(_model);
   };
 
   const editFieldFromFormModel = async (index) => {
+    console.log(formModel.fields[index].type)
     // alert(index , "in edit")
     if (formModel.id) {
       setupdateQueIndex(index) 
       openUpdateModal(formModel.fields[index].type)
       // {alert("ineditFieldFromFormModel" )}
+    }
+    else{
+      // deleteFieldFromFormModel(index)
+      setupdateQueIndex(index) 
+      openUpdateModal(formModel.fields[index].type)
     }
 
   };
@@ -620,7 +661,9 @@ function Create() {
             <Button
               variant="contained"
               color="primary"
-              onClick={createOrUpdateForm}
+              // disabled={formModel.id} 
+              onClick={ createOrUpdateForm}
+              
               // disabled={loading}
               // style={{ width: "70vw", margin: "10px" }}
             >

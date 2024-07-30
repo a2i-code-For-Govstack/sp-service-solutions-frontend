@@ -117,27 +117,34 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='/creator-home'
+                      onClick={()=>{
+                        window.location.href = '/creator-home';
+                      }}
+                      // href='/creator-home'
                     //   target="_blank"
                       sx={{ width: '100%' ,   marginRight: '6%' }}
                     >
                       Create
                     </Button>
-                    <Button
+                    {/* <Button
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='user-profile'
+                      href='/user-profile'
                     //   target="_blank"
                       sx={{ width: '100%'  , marginRight: '6%' }}
                     >
                       Vote
-                    </Button>
+                    </Button> */}
                     <Button
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='/forms'
+                      onClick={()=>{
+                        window.location.href = '/forms';
+                      }}
+                      
+                      // href='/forms'
                     //   target="_blank"
                       sx={{ width: '100%'  , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
                     >
@@ -147,7 +154,10 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='user-profile'
+                      // href='user-profile'
+                      onClick={()=>{
+                        window.location.href = '/user-profile';
+                      }}
                     //   target="_blank"
                       sx={{ width: '100%' , marginRight: '6%' }}
                     >
@@ -247,7 +257,10 @@ function Navbar({ mode, toggleColorMode }) {
                   variant="text"
                   size="small"
                   component="a"
-                  href="/creator-login"
+                  onClick={()=>{
+                        window.location.href = "/creator-login";
+                      }}
+                  // href="/creator-login"
                 >
                   Sign in
                 </Button>
@@ -256,7 +269,10 @@ function Navbar({ mode, toggleColorMode }) {
                   variant="text"
                   size="small"
                   component="a"
-                  href="/creator-signup"
+                  onClick={()=>{
+                        window.location.href = "/creator-signup";
+                      }}
+                  // href="/creator-signup"
                     >
                       Sign up
                     </Button>
@@ -282,7 +298,10 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='/creator-home'
+                      onClick={()=>{
+                        window.location.href = '/creator-home';
+                      }}
+                      // href='/creator-home'
                     //   target="_blank"
                       sx={{ width: '100%' ,   marginRight: '6%' }}
                     >
@@ -292,7 +311,10 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='user-profile'
+                      onClick={()=>{
+                        window.location.href = "/user-profile";
+                      }}
+                      // href='user-profile'
                     //   target="_blank"
                       sx={{ width: '100%'  , marginRight: '6%' }}
                     >
@@ -302,7 +324,10 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='/forms'
+                      onClick={()=>{
+                        window.location.href = "/forms";
+                      }}
+                      // href='/forms'
                     //   target="_blank"
                       sx={{ width: '100%'  , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
                     >
@@ -312,7 +337,10 @@ function Navbar({ mode, toggleColorMode }) {
                       color="primary"
                       variant="outlined"
                       component="a"
-                      href='user-profile'
+                      onClick={()=>{
+                        window.location.href = 'user-profile';
+                      }}
+                      // href='user-profile'
                     //   target="_blank"
                       sx={{ width: '100%' , marginRight: '6%' }}
                     >

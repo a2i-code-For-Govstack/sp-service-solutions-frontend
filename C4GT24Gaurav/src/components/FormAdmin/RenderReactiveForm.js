@@ -52,7 +52,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
             setLoading(false);
             onSubmitted();
             window.showToast('success', 'Successfully submitted');
-        } catch (e) {
+    } catch (e) {
             setErr(e.message);
             setLoading(false);
         }

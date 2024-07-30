@@ -44,7 +44,8 @@ const ResponsesTable = ({ hash }) => {
 
     const handleDelete = async (id) => {
         await deleteResponse(hash, id);
-        alert("Response deleted successfully");
+        window.showToast('success', "Response deleted successfully");
+        // alert("Response deleted successfully");
         setResponses(responses.filter(response => response.id !== id));
     };
 
