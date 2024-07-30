@@ -77,7 +77,7 @@ const Home = () => {
     try {
       const token = sessionStorage.getItem('token');
       if (!token) {
-        alert('Please login');
+        window.showToast('error', 'Please Login');
         return;
       }
       
