@@ -14,7 +14,7 @@ import ResetPasswordPage from './pages/Auth/ResetPasswordPage';
 import UserHomePage from './pages/Landing/UserHomePage';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import getLPTheme from './pages/Home/getLPTheme';
+
 import Navbar from './components/Navbar/Navbar';
 import { alpha } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -28,49 +28,21 @@ import Fill from './pages/FormAdmin/Fill';
 import FormTable from './components/FormAdmin/FormTable';
 import Voters from './pages/FormAdmin/Voters';
 import ToastNotification from './components/Common/ToastNotification';
+import theme from './components/Theme/theme';
 function App() {
   const [mode, setMode] = React.useState('light');
-  const LPtheme = createTheme(getLPTheme(mode));
-
+  // const LPtheme = createTheme(getLPTheme(mode));
+  
 
   const toggleColorMode = () => {
     setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
   return (<>
-    <ThemeProvider theme={LPtheme}>
+    <ThemeProvider theme={theme}>
     <CssBaseline />
-    {/* <Box
-      id="hero"
-      sx={(theme) => ({
-        width: '100%',
-        // height: '100%',
-        backgroundImage:
-          theme.palette.mode === 'light'
-            ? 'linear-gradient(180deg, #CEE5FD, #CEE5FD)'
-            : `linear-gradient(#02294F, ${alpha('#090E10', 0.0)})`,
-        backgroundSize: '100% 100%',
-        backgroundRepeat: 'no-repeat',
-        border:'solid 10px green',
-        height: '10vh', 
-        // position:'fixed',
-        // zIndex:'100'
-        
-
-      
-      })}
-    > */}
-      {/* <Container
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          pt: { xs: 14, sm: 20 },
-          pb: { xs: 8, sm: 12 },
-         
-        }}
-      > */}
+   
       <div style={{ 
-        // border:'solid 2px yellow' , 
+        border:'solid 2px yellow' , 
         marginBottom:'0px',
         height:'13vh'  , background: '#CEE5FD',opacity:1, 
        }}>

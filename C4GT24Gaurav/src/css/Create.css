@@ -31,7 +31,7 @@
   .instanceFixdiv {
     padding-bottom: 1em;
     width: 100%;
-    background: #CEE5FD;
+    background-color:var(--first-color);
     z-index: 1001;
     padding-left: 2vw;
     padding-top: 10px;

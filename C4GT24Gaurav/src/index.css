@@ -5,7 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(180deg, #CEE5FD, #FFF);
+  background: linear-gradient(180deg, var(--second-color), #FFF);
+  /* background-color:var(--second-color); */
   /* Additional properties to cover the full container */
   height: 100%;
   background-repeat: no-repeat;
@@ -173,9 +174,11 @@ label.btn{
 
 
 .grey-container{
+  /* this css for the inner box during adding option in mcq type questioin */
   /* padding: 2em 2em 2em 2em; */
-  background-color:#b4abd8;
-  
+  background-color:var(--second-color);
+  /* background-color:#CEE5FD; */
+  /* old blue background code */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -186,7 +189,7 @@ label.btn{
 }
 .surveyView{
    /* padding: 2em 2em 2em 2em; */
-   background-color:#b4abd8;
+   background-color:var(--second-color);
   
    display: flex;
    flex-direction: column;

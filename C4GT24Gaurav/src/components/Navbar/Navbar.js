@@ -15,6 +15,7 @@ import ToggleColorMode from './ToggleColorMode';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useNavigate} from "react-router-dom";
+import { useTheme } from '@mui/material/styles';
 
 
 const logoStyle = {
@@ -29,6 +30,8 @@ function Navbar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(!!sessionStorage.getItem('token'));
   console.log(loggedIn , "here")
+
+
  
 
   const toggleDrawer = (newOpen) => () => {
@@ -45,6 +48,8 @@ function Navbar({ mode, toggleColorMode }) {
   const handleBack = () => {
     window.history.back(); // Navigate back to the previous page
   };
+  const theme = useTheme();
+  console.log(theme)
   return (
     <div >
       <AppBar
@@ -53,7 +58,7 @@ function Navbar({ mode, toggleColorMode }) {
           boxShadow: 0,
           // bgcolor: 'transparent',
           backgroundImage: 'none',
-          background: '#CEE5FD',
+          backgroundColor: theme.palette.firstColor.main,
           mt: 0,
           pt:2,
           mb:0,
@@ -122,7 +127,7 @@ function Navbar({ mode, toggleColorMode }) {
                       }}
                       // href='/creator-home'
                     //   target="_blank"
-                      sx={{ width: '100%' ,   marginRight: '6%' }}
+                      sx={{ width: '100%' ,   marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
                     >
                       Create
                     </Button>
@@ -159,7 +164,7 @@ function Navbar({ mode, toggleColorMode }) {
                         window.location.href = '/user-profile';
                       }}
                     //   target="_blank"
-                      sx={{ width: '100%' , marginRight: '6%' }}
+                      sx={{ width: '100%' , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%'}}
                     >
                       Profile
                     </Button>
@@ -174,7 +179,7 @@ function Navbar({ mode, toggleColorMode }) {
                 // border:'solid 20px red'
               }}
             >
-              <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+              {/* <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} /> */}
 
               {loggedIn ? (
                 <Button

@@ -25,6 +25,7 @@ import ResponsesTable from "../../components/FormAdmin/ResponseTable";
 import UserAddModal from "../../components/FormAdmin/UserAddModal";
 import { downloadCSV } from '../../components/Common/downloadCSV'
 import InputTypeMenu from "../../components/Common/InputTypeMenu";
+import { useTheme } from '@mui/material/styles';
 function Create() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -318,7 +319,7 @@ const updateFieldToFormModel = async (field) => {
 
   // };
   const createOrUpdateForm = async () => {
-    if( formModel.id) window.showToast('error', 'Already Published'); return; 
+    // if( formModel.id) window.showToast('error', 'Already Published'); return; 
     if (loading) return;
     setErr("");
     if (!formModel.title.trim()) return window.showToast('error', 'Title is required');
@@ -410,13 +411,13 @@ const updateFieldToFormModel = async (field) => {
       fetchResponseData();
   }, [hash]);
 
-
+  const theme = useTheme();
   return (<>{isLoggedIn ? (
     <div
       style={{
         paddingLeft: "0vw",
         paddingRight: "0vw",
-        background: "#CEE5FD",
+        backgroundColor: theme.palette.firstColor.main,
         opacity: "1",
         // border: "solid 1px red",
         width:'100%',
@@ -662,7 +663,7 @@ const updateFieldToFormModel = async (field) => {
               variant="contained"
               color="primary"
               // disabled={formModel.id} 
-              onClick={ createOrUpdateForm}
+              onClick={createOrUpdateForm}
               
               // disabled={loading}
               // style={{ width: "70vw", margin: "10px" }}

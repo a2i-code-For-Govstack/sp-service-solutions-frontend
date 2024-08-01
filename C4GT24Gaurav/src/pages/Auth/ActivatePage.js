@@ -21,7 +21,7 @@ const ActivatePage = () => {
           }
         } catch (error) {
           console.error('Error during account activation:', error);
-          alert('Error or your account is already activated');
+          // alert('Error or your account is already activated');
         }
       }
     };
