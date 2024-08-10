@@ -16,12 +16,15 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useNavigate} from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
-
+import logo from "../Theme/a2i-logo-lottie.gif"
 
 const logoStyle = {
-  width: '140px',
+  width: '90px',
   height: 'auto',
   cursor: 'pointer',
+  // border:'solid 2px black',
+  marginBottom:'28px',
+  marginLeft:'5px'
 };
 
 
@@ -76,10 +79,11 @@ function Navbar({ mode, toggleColorMode }) {
               justifyContent: 'space-between',
               flexShrink: 0,
               borderRadius: '999px',
-              bgcolor:
-                theme.palette.mode === 'light'
-                  ? 'rgba(255, 255, 255, 0.4)'
-                  : 'rgba(0, 0, 0, 0.4)',
+              // bgcolor:
+              //   theme.palette.mode === 'light'
+              //     ? 'rgba(255, 255, 255, 0.4)'
+              //     : 'rgba(0, 0, 0, 0.4)',
+              bgcolor:'white',
               backdropFilter: 'blur(24px)',
               maxHeight: 40,
             //   border: '1px solid',
@@ -101,25 +105,29 @@ function Navbar({ mode, toggleColorMode }) {
               }}
             >
               <img
-                src={
-                  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
-                }
+                // src={
+                //   'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
+                // }
+                src={logo}
                 style={logoStyle}
                 alt="logo of sitemark"
               />
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button
-                      color="primary"
+                      color="secondary"
                       variant="outlined"
                       component="a"
                       onClick={handleBack}
+                      
                     //   target="_blank"
-                      sx={{ width: '100%' , marginRight: '6%' }}
+                      sx={{ width: '100%' , marginRight: '6%' , 
+                        fontWeight: 550, 
+                     borderColor:theme.palette.secondColor.main }}
                     >
                       Back
                     </Button>
                     <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       onClick={()=>{
@@ -127,12 +135,17 @@ function Navbar({ mode, toggleColorMode }) {
                       }}
                       // href='/creator-home'
                     //   target="_blank"
-                      sx={{ width: '100%' ,   marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
+                      sx={{ width: '100%' ,   marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' ,
+                      
+                      fontWeight: 550, 
+                      borderColor:theme.palette.secondColor.main 
+                      // fontSize: '0.8em', 
+                       }}
                     >
                       Create
                     </Button>
                     {/* <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       href='/user-profile'
@@ -142,7 +155,7 @@ function Navbar({ mode, toggleColorMode }) {
                       Vote
                     </Button> */}
                     <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       onClick={()=>{
@@ -151,12 +164,13 @@ function Navbar({ mode, toggleColorMode }) {
                       
                       // href='/forms'
                     //   target="_blank"
-                      sx={{ width: '100%'  , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
+                      sx={{ width: '100%'  , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%'  , 
+                        fontWeight: 550, borderColor:theme.palette.secondColor.main }}
                     >
                       MyForms
                     </Button>
                     <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       // href='user-profile'
@@ -164,7 +178,8 @@ function Navbar({ mode, toggleColorMode }) {
                         window.location.href = '/user-profile';
                       }}
                     //   target="_blank"
-                      sx={{ width: '100%' , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%'}}
+                      sx={{ width: '100%' , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' , 
+                        fontWeight: 550, borderColor:theme.palette.secondColor.main  }}
                     >
                       Profile
                     </Button>
@@ -183,7 +198,7 @@ function Navbar({ mode, toggleColorMode }) {
 
               {loggedIn ? (
                 <Button
-                  color="primary"
+                   color="secondary"
                   variant="text"
                   size="small"
                   onClick={handleLogout}
@@ -192,7 +207,7 @@ function Navbar({ mode, toggleColorMode }) {
                 </Button>
               ) : (<>
                 <Button
-                  color="primary"
+                   color="secondary"
                   variant="text"
                   size="small"
                   component="a"
@@ -201,7 +216,7 @@ function Navbar({ mode, toggleColorMode }) {
                   Sign in
                 </Button>
                 <Button
-                      color="primary"
+                       color="secondary"
                   variant="text"
                   size="small"
                   component="a"
@@ -219,7 +234,7 @@ function Navbar({ mode, toggleColorMode }) {
             <Box sx={{ display: { sm: '', md: 'none' } }}>
               <Button
                 variant="text"
-                color="primary"
+                 color="secondary"
                 aria-label="menu"
                 onClick={toggleDrawer(true)}
                 sx={{ minWidth: '30px', p: '4px' }}
@@ -249,7 +264,7 @@ function Navbar({ mode, toggleColorMode }) {
                   <MenuItem>
                   {loggedIn ? (
                 <Button
-                  color="primary"
+                   color="secondary"
                   variant="text"
                   size="small"
                   onClick={handleLogout}
@@ -258,7 +273,7 @@ function Navbar({ mode, toggleColorMode }) {
                 </Button>
               ) : (<>
                 <Button
-                  color="primary"
+                   color="secondary"
                   variant="text"
                   size="small"
                   component="a"
@@ -270,7 +285,7 @@ function Navbar({ mode, toggleColorMode }) {
                   Sign in
                 </Button>
                 <Button
-                      color="primary"
+                       color="secondary"
                   variant="text"
                   size="small"
                   component="a"
@@ -290,7 +305,7 @@ function Navbar({ mode, toggleColorMode }) {
                   <Divider />
                   <Box style={{display:'flex', flexDirection:'column'}}>
               <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       onClick={handleBack}
@@ -300,7 +315,7 @@ function Navbar({ mode, toggleColorMode }) {
                       Back
                     </Button>
                     <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       onClick={()=>{
@@ -313,7 +328,7 @@ function Navbar({ mode, toggleColorMode }) {
                       Create
                     </Button>
                     <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       onClick={()=>{
@@ -326,7 +341,7 @@ function Navbar({ mode, toggleColorMode }) {
                       Vote
                     </Button>
                     <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       onClick={()=>{
@@ -339,7 +354,7 @@ function Navbar({ mode, toggleColorMode }) {
                       MyForms
                     </Button>
                     <Button
-                      color="primary"
+                       color="secondary"
                       variant="outlined"
                       component="a"
                       onClick={()=>{

@@ -107,3 +107,13 @@ export const deleteResponse = async (hash, id) => {
       }
   });
 };
+
+//individual respone 
+export const getIndividualResponses = async (hash, id, token) => {
+  const response = await axios.get(`${BASE_URL}/${hash}/responses/${id}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  return response.data;
+};
