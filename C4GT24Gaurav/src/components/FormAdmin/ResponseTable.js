@@ -6,11 +6,13 @@ import {
 import { getResponses, deleteResponse } from '../../services/dataService';
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
-
+import { useTheme } from '@mui/material/styles';
+import { downloadCSV } from '../Common/downloadCSV';
+import Dashboard from '../Dashboard/Dashboard';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-        backgroundColor: "#9fb3e3",
-        color: theme.palette.common.white,
+        backgroundColor: theme.palette.firstColor.main,
+        color: theme.palette.secondColor.main,
         fontSize: 16,
     },
     [`&.${tableCellClasses.body}`]: {
@@ -22,17 +24,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
         backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
     "&:last-child td, &:last-child th": {
         border: 0,
     },
 }));
 
+
+
+
 const ResponsesTable = ({ hash }) => {
+    const theme = useTheme();
     const [responses, setResponses] = useState([]);
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [dashboard , setDashboard] = useState(0)
+
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,7 +53,6 @@ const ResponsesTable = ({ hash }) => {
     const handleDelete = async (id) => {
         await deleteResponse(hash, id);
         window.showToast('success', "Response deleted successfully");
-        // alert("Response deleted successfully");
         setResponses(responses.filter(response => response.id !== id));
     };
 
@@ -62,17 +69,60 @@ const ResponsesTable = ({ hash }) => {
         (response.user || 'Anonymous').toLowerCase().includes(search.toLowerCase())
     );
 
+    const openAnswers = (id) => {
+        // const hash = hash; // Replace with your actual survey hash
+        // /response/:hash/answers/:id
+        const url = `/response/${hash}/answers/${id}`;
+        const newWindow = window.open(url);
+        if (newWindow) newWindow.opener = null;
+      };
+
     return (
-        <Paper sx={{ width: '100%', height: '70vh', padding: '0em 1em 1em 1em', backgroundColor: '#cee5fd' }}>
-            <TextField
-                label="Search by Username"
-                value={search}
-                onChange={handleSearchChange}
-                variant="standard"
-                fullWidth
-                margin="normal"
-                size='small'
-            />
+        <Paper sx={{ width: '100%', height: '70vh', padding: '0em 1em 1em 1em', backgroundColor: theme.palette.secondColor.main, }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                { ! dashboard && <><TextField
+                    label="Search by Username"
+                    value={search}
+                    onChange={handleSearchChange}
+                    variant="standard"
+                    fullWidth
+                    margin="normal"
+                    color="firstColor"
+                    size='small'
+                />
+                <Button
+                 variant="contained" 
+                 color="secondary" 
+                 size="small"
+                 style={{ margin: '0 10px' }}
+                    onClick={() => downloadCSV(responses)}
+                    // size="small"
+                >
+                    Download_CSV
+                </Button></>}
+                { dashboard ?  <Button
+                 variant="contained" 
+                 color="secondary" 
+                 size="small"
+                 style={{ margin: '0 10px' }}
+                    onClick={() => {setDashboard(0)}}
+                    // size="small"
+                >
+                 Individual
+                </Button> : 
+                <Button
+                 variant="contained" 
+                 color="secondary" 
+                 size="small"
+                 style={{ margin: '0 10px' }}
+                    onClick={() =>{setDashboard(1)}}
+                    // size="small"
+                >
+                  Dashboard
+                </Button>}
+            </div>
+            {!dashboard ? <>
+
             <TableContainer sx={{ maxHeight: 440, height: '70%' }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -91,7 +141,7 @@ const ResponsesTable = ({ hash }) => {
                                     <StyledTableCell align='center'>{response.user || 'Anonymous'}</StyledTableCell>
                                     <StyledTableCell align='center'>{formatDate(response.submitted_at)}</StyledTableCell>
                                     <StyledTableCell align='center'>
-                                        <Button variant="contained" color="success" size='small'>View Answers</Button>
+                                        <Button variant="contained" color="success" size='small' onClick={() => openAnswers(response.id)}>View Answers</Button>
                                     </StyledTableCell>
                                     <StyledTableCell align='center'>
                                         <Button
@@ -117,6 +167,7 @@ const ResponsesTable = ({ hash }) => {
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
             />
+            </> : <>  <Dashboard/></>}
         </Paper>
     );
 };

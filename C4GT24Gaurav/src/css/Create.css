@@ -6,6 +6,22 @@
     flex-direction: row;
     height: fit-content;
     margin: 10px;
+    margin-bottom: 50px;
+    padding:10px;
+    border-radius: 4px;
+    background-color:var(--first-color);
+  }
+  .newquestypediv{
+    /* border: solid , 2px yellow; */
+    overflow-x: scroll;
+    display: flex;
+    background-color:var(--first-color);
+    justify-content: center;
+    /* width: 60%; */
+    padding:7px;
+    border-radius: 10px;
+    margin: 15px;
+  
   }
   
   .questypediv::-webkit-scrollbar {
@@ -20,11 +36,12 @@
   }
   .formargin{
    margin: 10px;
-   border: solid 2px red;
+   /* border: solid 2px red; */
   }
  /* Base style */
 .renderView {
-   
+  /* border: solid 1px red; */
+   overflow-y: hidden;
     width: 100%;
   }
 
@@ -62,7 +79,7 @@
   /* Laptops and larger screens */
   @media (min-width: 1029px) {
     .renderView {
-      padding-top: 160px;
+      padding-top: 100px;
     }
   }
   

@@ -21,8 +21,8 @@ import Blank from "../Common/Blank";
 import ShareModal from "../Common/ShareModal";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#9fb3e3",
-    color: theme.palette.common.white,
+    backgroundColor:  theme.palette.firstColor.main,
+    color:theme.palette.secondColor.main,
     fontSize: 16,
   },
   [`&.${tableCellClasses.body}`]: {

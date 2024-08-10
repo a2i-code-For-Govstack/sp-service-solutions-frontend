@@ -29,6 +29,7 @@ import FormTable from './components/FormAdmin/FormTable';
 import Voters from './pages/FormAdmin/Voters';
 import ToastNotification from './components/Common/ToastNotification';
 import theme from './components/Theme/theme';
+import IndividualResponse from './components/Response/IndividualResponse';
 function App() {
   const [mode, setMode] = React.useState('light');
   // const LPtheme = createTheme(getLPTheme(mode));
@@ -48,9 +49,7 @@ function App() {
        }}>
       <Navbar mode={mode} toggleColorMode={toggleColorMode} />
       </div>
-      
-      {/* </Container> */}
-      {/* </Box> */}
+  
       </ThemeProvider>
    
     <Router>
@@ -75,6 +74,7 @@ function App() {
           <Route path="/:hash" element={<Fill/>}/>
           <Route path="/" exact element={<Home/>} />
           <Route path="/voters" element={<Voters/>}/>
+          <Route path="/response/:hash/answers/:id" element={<IndividualResponse/>} />
           {/* Add more routes as needed */}
         </Routes>
         {/* <Footer /> */}

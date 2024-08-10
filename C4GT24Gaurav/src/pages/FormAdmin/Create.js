@@ -26,6 +26,7 @@ import UserAddModal from "../../components/FormAdmin/UserAddModal";
 import { downloadCSV } from '../../components/Common/downloadCSV'
 import InputTypeMenu from "../../components/Common/InputTypeMenu";
 import { useTheme } from '@mui/material/styles';
+
 function Create() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -36,9 +37,10 @@ function Create() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
   const [refresh, setRefresh] = useState(0); 
   const [responses, setResponses] = useState([]);
+  const { hash } = useParams();
   // Track login status
   // const history = useHistory()
-
+  const theme = useTheme(); // Hook to access the theme
   useEffect(() => {
     const storedToken = sessionStorage.getItem('token');
     if (storedToken) {
@@ -93,7 +95,22 @@ function Create() {
     expiration: "",
   });
 
+// Save form data to localStorage
+const saveFormDataToLocal = (data) => {
+  localStorage.setItem(`formData_${hash}`, JSON.stringify(data));
+};
 
+// Load form data from localStorage
+const loadFormDataFromLocal = () => {
+  const savedData = localStorage.getItem(`formData_${hash}`);
+  if (savedData) {
+    setFormModel(JSON.parse(savedData));
+  }
+};
+
+useEffect(() => {
+  loadFormDataFromLocal();
+}, [hash]);
 
   const addFieldToFormModel = async (field) => {
     // {alert("inaddFieldToFormModel" )}
@@ -109,6 +126,7 @@ function Create() {
     let _model = Object.assign({}, formModel);
     _model.fields.push(field);
     setFormModel(_model);
+    saveFormDataToLocal(_model);
   };
 
   
@@ -147,10 +165,13 @@ const updateFieldToFormModel = async (field) => {
       ...field,
     };
 
-    setFormModel({
+    const updatedFormModel = {
       ...formModel,
       fields: updatedFields,
-    });
+    };
+
+    setFormModel(updatedFormModel);
+    saveFormDataToLocal(updatedFormModel);
   }
   
   setRefresh(1); // Trigger a refresh
@@ -167,7 +188,7 @@ const updateFieldToFormModel = async (field) => {
     "multioption-multianswer",
     "file",
   ];
-  const { hash } = useParams();
+  
   const [instanceModel, setInstanceModel] = useState({
     title: '',
     description: '',
@@ -336,6 +357,7 @@ const updateFieldToFormModel = async (field) => {
       const response = await createForm(hash, formModel, token);
       setFormModel(response);
       handleupdateInstance()
+      localStorage.removeItem(`formData_${hash}`);
       window.showToast('success', 'Instance & Survey Published');
       // alert('Form published');
     } catch (error) {
@@ -355,6 +377,8 @@ const updateFieldToFormModel = async (field) => {
    
   }; 
   
+
+
   const [openAddUser, setOpenAddUser] = useState(false);
  
 
@@ -383,6 +407,7 @@ const updateFieldToFormModel = async (field) => {
     let _model = Object.assign({}, formModel);
     _model.fields.splice(index, 1);
     setFormModel(_model);
+    saveFormDataToLocal(_model);
   };
 
   const editFieldFromFormModel = async (index) => {
@@ -411,7 +436,6 @@ const updateFieldToFormModel = async (field) => {
       fetchResponseData();
   }, [hash]);
 
-  const theme = useTheme();
   return (<>{isLoggedIn ? (
     <div
       style={{
@@ -444,7 +468,10 @@ const updateFieldToFormModel = async (field) => {
   id="standard-basic"
   label="Enter Title"
   variant="standard"
-  style={{ margin: '10px' }}
+    InputProps={{
+        style: { color: theme.palette.secondColor.main }, // Use theme to access the color
+      }}
+ color="secondColor"   style={{ margin: '10px' }}
   size="small"
 />
 
@@ -456,9 +483,12 @@ const updateFieldToFormModel = async (field) => {
           id="standard-basic"
           label="Enter Description"
           variant="standard"
-          
-          style={{ margin: '10px' }}
+            InputProps={{
+        style: { color: theme.palette.secondColor.main }, // Use theme to access the color
+      }}
+         color="secondColor"   style={{ margin: '10px'}}
           size="small"
+
         />
         <TextField
           type="text"
@@ -468,14 +498,16 @@ const updateFieldToFormModel = async (field) => {
           label="Created At"
           variant="standard"
           size="small"
+         color="secondColor"
           InputProps={{
             readOnly: true,
+            style: { color: theme.palette.secondColor.main }, 
           }}
          
-          style={{ margin: '10px' }}
+         style={{ margin: '10px' }}
           
         />
-             <FormControl variant="standard" sx={{ mr: 1, minWidth: 120 }}  style={{ margin: '10px' }}  size="small">
+             <FormControl variant="standard" sx={{ mr: 1, minWidth: 120 }} color="secondColor"   style={{ margin: '10px' }}  size="small">
           <InputLabel id="instanceAuthType-label">Auth Type</InputLabel>
           <Select
             labelId="instanceAuthType-label"
@@ -483,13 +515,19 @@ const updateFieldToFormModel = async (field) => {
             value={instanceModel.instanceAuthType}
             onChange={handleChangeAuthType}
             label="Instance Auth Type"
+            // he & symbol in the sx prop is a way to reference the current component within the styles.
+            sx={{
+      '& .MuiSelect-select': {
+        color: theme.palette.secondColor.main,
+      },
+    }}
           >
             <MenuItem value={1}>Open to all</MenuItem>
             <MenuItem value={2}>Open in org</MenuItem>
             <MenuItem value={4}>Specific users</MenuItem>
           </Select>
         </FormControl>
-        <FormControl variant="standard" sx={{ mr:1 , minWidth: 120 }} style={{ margin: '10px' }}  size="small">
+        <FormControl variant="standard" sx={{ mr:1 , minWidth: 120 }}color="secondColor"   style={{ margin: '10px' }}  size="small">
           <InputLabel id="instanceStatusLabel">Status</InputLabel>
           <Select
             labelId="instanceStatusLabel"
@@ -497,6 +535,11 @@ const updateFieldToFormModel = async (field) => {
             value={instanceModel.instanceStatus}
             onChange={handleChangeStatus}
             label="Instance Status"
+            sx={{
+      '& .MuiSelect-select': {
+        color: theme.palette.secondColor.main,
+      },
+    }}
           >
             <MenuItem value={1}>Close</MenuItem>
             <MenuItem value={2}>Open</MenuItem>
@@ -509,7 +552,7 @@ const updateFieldToFormModel = async (field) => {
           style={{ margin: '10px' }}
           className="btn"
         >
-          Update Instance
+          Update Form Settings
         </button>
 
   <ToggleButtonGroup
@@ -524,34 +567,35 @@ const updateFieldToFormModel = async (field) => {
   className=".btn"
   
 >
-  <ToggleButton  variant = "outlined" value={1} style={{fontWeight:'600'}} >Edit</ToggleButton>
-  <ToggleButton variant = "outlined" value={2} style={{fontWeight:'600'}} >Voters</ToggleButton>
-  <ToggleButton variant = "outlined" value={3} style={{fontWeight:'600'}} >Responses</ToggleButton>
+  <ToggleButton  variant = "outlined" value={1} style={{fontWeight:'600', color: theme.palette.secondColor.main}} >Edit</ToggleButton>
+  <ToggleButton variant = "outlined" value={2} style={{fontWeight:'600' , color: theme.palette.secondColor.main}} >Voters</ToggleButton>
+  <ToggleButton variant = "outlined" value={3} style={{fontWeight:'600' , color: theme.palette.secondColor.main}} >Responses</ToggleButton>
 </ToggleButtonGroup>
           {/* <input type="text" placeholder="Enter title" onChange={e => updateObjState(setFormModel, formModel ,"title", e.target.value)} /> */}
         </div>
-        <div>
-        <div>
-  {alignment == 1 && (
+        {/* <div> */}
+        {/* <div> */}
+  {/* {alignment == 1 && (
     <div className="questypediv">
-    <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center'}}> <span>Add</span></div>
+    
+    <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center' , color: theme.palette.secondColor.main}}> <span>Add</span></div>
           
           {inputTypes.map((inputType, index) => (
             <Button
               class="btn"
               variant="outlined"
               size="small"
-              HO
+              
               key={index}
               onClick={() => openAddModal(inputType)}
             >
-            {/* {inputType} */}
+           
               {inputType.replace("-", "_")}
             </Button>
           ))}
           </div>
-  )}
-  {alignment == 2 && <div className="questypediv"><div>
+  )} */}
+  {/* {alignment == 2 && <div className="questypediv"><div>
       <button className="btn" style={{margin:'10px'}}  onClick={handleUploadFileOpen}>
         Upload Users
       </button>
@@ -561,93 +605,45 @@ const updateFieldToFormModel = async (field) => {
       <button className="btn" style={{margin:'10px'}}  onClick={handleAddUserOpen}>
         Add User
       </button>
-      <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center'}}><span>table for auth type specific users</span></div>
+      <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center' , color: theme.palette.secondColor.main}}><span>table for auth type specific users</span></div>
       
       <UserAddModal open={openAddUser} onClose={handleAddUserClose} hash={hash} />
-    </div></div>}
-  {alignment == 3 && <div><button className="btn" style={{margin:'10px'}}  onClick={() => downloadCSV(responses)}>
+    </div></div>} */}
+  {/* {alignment == 3 && <div><button className="btn" style={{margin:'10px'}}  onClick={() => downloadCSV(responses)}>
         Download_CSV
-      </button></div>}
-</div>
-        </div>
+      </button></div>} */}
+{/* // </div> */}
+        {/* </div> */}
       </div>
-      {alignment == 1 && (
+      {alignment == 1 && (<div>
         <div className="renderView">
         <div>
           {formModel.fields.length > 0 && <RenderPlainForm model={formModel} deleteField={deleteFieldFromFormModel} editField={editFieldFromFormModel} />}
+       </div>
+       </div>
 
-          {/* <div
-                style={{
-              border: "1px solid grey",
-              display: "flex",
-              flexDirection: "column",
-              width: "50%",
-              minWidth:300,
-              padding: "2.5em 2em 2.5em 2em",
-              background: "white",
-              borderRadius: "7px",
-              margin: "1em 0em 1em 1em",
-            }}
-          >
-            <label style={{ fontWeight: "400", color: "black" }}>
-              End message
-            </label>
-            <TextField
-              style={{ margin: ".5em 0em .5em 0em " }}
-              type="text"
-              id="standard-basic"
-              
-              variant="standard"
-              placeholder="What should user see after submitting the form"
-              onChange={(e) => {
+        {/* the next div is added for getting adding question at bottom */}
+<div style={{width:'100vw',  background:'white' , display:"flex" , justifyContent:'center'}}>
+
+          {alignment == 1 && (
+    <div className="questypediv">
     
-    setFormModel((prevModel) => ({
-      ...prevModel,
-      "endMessage": e.target.value,
-    }));
-  }}
-            />
-          </div> */}
-
-          {/* <div
-            style={{
-              border: "1px solid grey",
-              display: "flex",
-              flexDirection: "column",
-              width: "50%",
-              padding: "2.5em 2em 2.5em 2em",
-              background: "white",
-              borderRadius: "7px",
-              margin: "1em 0em 1em 0em",
-            }}
-          >
-            <label style={{ fontWeight: "400", color: "black" }}>
-              Validity(Optonal)
-            </label>
-            <TextField
-              style={{ marginTop: ".5em " }}
-              //  type="text"
-              id="standard-basic"
-              //   label="answer here"
-              variant="standard"
-              type="number"
-              placeholder="For how many hours the form should be fillable"
-              onKeyDown={(e) => {
-                if (e.key === "." || e.key === "-") {
-                  e.preventDefault();
-                }
-              }}
-              onChange={(e) =>
-                updateObjState(
-                  setFormModel,
-                  formModel,
-                  "expiration",
-                  e.target.value
-                )
-              }
-            />
-          </div> */}
-        </div>
+         {inputTypes.map((inputType, index) => (
+            <Button
+              class="btn"
+              variant="outlined"
+              size="small"
+              key={index}
+              onClick={() => openAddModal(inputType)}
+            >
+            {/* {inputType} */}
+              {inputType.replace("-", "_")}
+            </Button>
+          ))}
+          </div>
+  )}
+  </div>
+  {/* new added div ends */}
 
         <p className="mb-2 text-right">
           {err && <p className="err text-right mb-1">{err}</p>}
@@ -688,10 +684,42 @@ const updateFieldToFormModel = async (field) => {
             add={updateFieldToFormModel}
           />
         )}
-      </div>
+     </div>
   )}
-  {alignment == 2 && <div className="renderView"><VotersTable hash={hash}/></div> }
-  {alignment == 3 && <div className="renderView"><ResponsesTable hash={hash}/></div>}
+  {alignment == 2 && 
+   <div>
+    {/* <div className="questypediv">
+    <div>
+      <button className="btn" style={{margin:'10px'}}  onClick={handleUploadFileOpen}>
+        Upload Users
+      </button>
+      
+      <UsersFileUpload open={openUserUpload} onClose={handleUploadFileClose} />
+    
+      <button className="btn" style={{margin:'10px'}}  onClick={handleAddUserOpen}>
+        Add User
+      </button>
+      <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center' , color: theme.palette.secondColor.main}}><span>table for auth type specific users</span></div>
+
+    
+      
+      <UserAddModal open={openAddUser} onClose={handleAddUserClose} hash={hash} />
+    </div></div> */}
+    <div className="renderView"> 
+   <VotersTable hash={hash}/></div></div>}
+
+
+
+
+
+
+  {alignment == 3 && <div>
+  
+  {/* <div><button className="btn" style={{margin:'10px'}}  onClick={() => downloadCSV(responses)}>
+        Download_CSV
+      </button></div> */}
+      
+      <div className="renderView"><ResponsesTable hash={hash}/></div></div>}
       
     </div> ) : (<div style ={{display:'flex' , alignItems:'center', justifyContent:'center' , flexDirection:'column' , height:'60vh'}}>
             <h1 style={{fontWeight:'400'}}>Please login</h1>

@@ -8,12 +8,17 @@
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
+    "@mui/x-charts": "^7.12.1",
+    "@shadcn/ui": "^0.0.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "file-saver": "^2.0.5",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.427.0",
     "material-ui-search-bar": "^1.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -21,8 +26,11 @@
     "react-router-dom": "^6.24.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.5",
+    "recharts": "^2.12.7",
     "survey-creator-react": "^1.11.5",
     "survey-react-ui": "^1.11.5",
+    "tailwind-merge": "^2.4.0",
+    "tailwindcss-animate": "^1.0.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -48,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.9"
   }
 }
