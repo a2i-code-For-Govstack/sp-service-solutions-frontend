@@ -8,14 +8,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from  "./components/ui/card";
+} from './components/ui/card';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from  "./components/ui/chart";
+} from './components/ui/chart';
+import './MultiCorrectChart.css'; // Ensure you create and import this CSS file
 
-const SingleCorrectChart = ({ question, data }) => {
+const MultiCorrectChart = ({ question, data }) => {
   const chartData = question.options.map(option => ({
     option,
     count: data.filter(answer => answer.includes(option)).length,
@@ -32,34 +33,36 @@ const SingleCorrectChart = ({ question, data }) => {
     },
   };
 
+  const totalResponses = chartData.reduce((acc, curr) => acc + curr.count, 0);
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{question.title}</CardTitle>
+    <Card className="boxx">
+      <CardHeader >
+        <CardTitle className="title">{question.title}</CardTitle>
         <CardDescription>Survey Results</CardDescription>
-        <CardDescription>Type: Single Correct</CardDescription>
+        <CardDescription>Question Type: Multiple Correct</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
+      <CardContent className="flex-1 pb-0">
+        <ChartContainer className="graph" config={chartConfig} >
           <BarChart width={500} height={300} data={chartData}>
-            <CartesianGrid vertical={false} stroke="#f5f5f5" />
+            <CartesianGrid vertical={false} stroke="green" />
             <XAxis dataKey="option" tickLine={false} tickMargin={10} axisLine={false} />
             <YAxis />
             <Tooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-            <Bar dataKey="count" fill="var(--color-desktop)" radius={4} />
+            <Bar dataKey="count" fill="#2ab65e" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
+        {/* <div className="flex gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total survey responses for the current period
-        </div>
+        </div> */}
+        <div className="flex gap-2 font-medium leading-none">
+           Showing total survey responses for the current period: {totalResponses}
+        </div> 
       </CardFooter>
     </Card>
   );
 };
 
-export default SingleCorrectChart;
+export default MultiCorrectChart;

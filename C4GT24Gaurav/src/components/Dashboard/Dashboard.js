@@ -1,93 +1,84 @@
-// src/pages/Dashboard.js
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
-import { getResponses , getForm } from '../../services/dataService';
-// import { getResponses, getForm } from '../api'; // Assume the API functions are correctly imported
-// import SingleCorrectChart from '../components/SingleCorrectChart';
+import React, { useState, useEffect } from 'react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./components/ui/card"
+import MultiCorrectChart from './MultiCorrectChart';
 import SingleCorrectChart from './SingleCorrectChart';
-import MultipleCorrectChart from './MultipleCorrectChart';
-// import MultipleCorrectChart from '../components/MultipleCorrectChart';
+import { useParams } from 'react-router-dom';
+import { getResponses , getForm} from '../../services/dataService';
 
 export default function Dashboard() {
   const [responses, setResponses] = useState([]);
-  const [form, setForm] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [form, setForm] = useState(null);
+  const { hash } = useParams(); // You should get this from the URL.
+  const token = sessionStorage.getItem('token');
 
   useEffect(() => {
     const fetchData = async () => {
-      const hash = window.location.pathname.split('/')[2]; // Get hash from URL
-      const token = sessionStorage.getItem('token'); // Get token from session storage
-
       try {
-        const responsesData = await getResponses(hash);
-        setResponses(responsesData);
-
+        const response = await getResponses(hash);
+        setResponses(response);
         const formData = await getForm(hash, token);
-        setForm(formData);
+        setForm(formData[0]);
       } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [hash, token]);
 
-  const calculateVotingPercentage = () => {
-    // Placeholder function for voting percentage calculation
-    return (responses.length / 100) * 100; // Example calculation
-  };
+  useEffect(() => {
+    console.log("form Data", form);
+    console.log("response", responses);
+  }, [form, responses]);
 
-  if (loading) return <Typography>Loading...</Typography>;
+  const totalResponses = responses.length;
+  const votingPercentage = (totalResponses / 100) * 100; // Assuming 100 is the total number of possible responses.
+
+  if (!form) return null;
 
   return (
     <div>
-      <Card>
-        <CardContent>
-          <Typography variant="h5">Dashboard</Typography>
-          <Typography>Date: {date}</Typography>
-          <Typography>Total Responses: {responses.length}</Typography>
-          <Typography>Voting Percentage: {calculateVotingPercentage()}%</Typography>
-        </CardContent>
-      </Card>
-      
-      {form.map(question => {
-        const questionResponses = responses
-          .filter(response => response.answers.some(answer => answer.field === question.id))
-          .flatMap(response => response.answers.filter(answer => answer.field === question.id));
-        
-        const groupedResponses = questionResponses.reduce((acc, { value }) => {
-          acc[value] = (acc[value] || 0) + 1;
-          return acc;
-        }, {});
-
-        const chartData = Object.entries(groupedResponses).map(([value, count]) => ({
-          value,
-          count,
-        }));
-
-        return (
-          <div key={question.id}>
-          <SingleCorrectChart question={question.text} data={chartData} />
-            {question.type === 'multioption-singleanswer' ? (
-              <SingleCorrectChart question={question.text} data={chartData} />
-            ) : (
-              <MultipleCorrectChart question={question.text} data={chartData} />
-            )}
-          </div>
-        );
-      })}
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: "100%", justifyContent: 'space-evenly' }}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Total Responses</CardTitle>
+          </CardHeader>
+          <CardContent>{totalResponses}</CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Voting Percentage</CardTitle>
+          </CardHeader>
+          <CardContent>{votingPercentage}%</CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Today's Date</CardTitle>
+          </CardHeader>
+          <CardContent>{new Date().toLocaleDateString()}</CardContent>
+        </Card>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: "100%", justifyContent: 'space-evenly' }}>
+        {form.fields.map(question => {
+          const answers = responses.map(response => {
+            const answer = response.answers.find(a => a.field === question.id);
+            return answer ? answer.value : [];
+          });
+          if (question.type === 'multioption-singleanswer') {
+            return <MultiCorrectChart key={question.id} question={question} data={answers} />;
+          } else if (question.type === 'multioption-multianswer') {
+            return <MultiCorrectChart key={question.id} question={question} data={answers} />;
+          }
+          return null;
+        })}
+      </div>
     </div>
   );
 }
-
-// import React from 'react'
-
-// export default function Dashboard() {
-//   return (
-//     <div>Dashboard</div>
-//   )
-// }
-

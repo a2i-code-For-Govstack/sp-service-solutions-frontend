@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import RenderReactiveForm from '../../components/FormAdmin/RenderReactiveForm';
 import SelectedUserLoginPage from '../Auth/SelectedUserLoginPage';
-import { fetchInstanceInfo } from '../../services/liveService';
+import { fetchInstanceData, fetchInstanceInfo } from '../../services/liveService';
 import { fetchFormData } from '../../services/dataService';
 
 function Fill() {
@@ -13,6 +13,7 @@ function Fill() {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(true);
     const [instanceAuthType, setInstanceAuthType] = useState(null);
+    const [instanceInfo, setInstanceInfo] = useState(null);
     const [instanceStatus, setInstanceStatus] = useState(null);
     const voteAccessToken = sessionStorage.getItem('voting_token');
 
@@ -22,6 +23,10 @@ function Fill() {
                 const instanceData = await fetchInstanceInfo(hash);
                 setInstanceAuthType(instanceData.instance_auth_type);
                 setInstanceStatus(instanceData.instance_status);
+                const instanceFullInfo = await fetchInstanceData(hash);
+                // console.log( instanceFullInfo  , "in fil .js")
+                setInstanceInfo( instanceFullInfo )
+                // console.log( instanceFullInfo  , "here instance info")
 
                 if (instanceData.instance_status === 2) {
                     const formData = await fetchFormData(hash, voteAccessToken);
@@ -49,9 +54,9 @@ function Fill() {
            {instanceStatus === 2 ? (
               <>  
                   {instanceAuthType === 1 ? (
-                      <RenderReactiveForm model={form} onSubmitted={() => setSubmitted(true)} />
+                      <RenderReactiveForm model={form} instance={instanceInfo} onSubmitted={() => setSubmitted(true)} />
                   ) : (instanceAuthType === 2 || instanceAuthType === 4) && voteAccessToken ? (
-                      <RenderReactiveForm model={form} onSubmitted={() => setSubmitted(true)} />
+                      <RenderReactiveForm model={form} instance={instanceInfo} onSubmitted={() => setSubmitted(true)} />
                   ) : (instanceAuthType === 2 || instanceAuthType === 4) ? (
                       <SelectedUserLoginPage />
                   ) : null}
