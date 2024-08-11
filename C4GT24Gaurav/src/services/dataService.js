@@ -90,6 +90,7 @@ export const submitForm = async (formData, hash) => {
 };
 
 export const getResponses = async (hash) => {
+  // alert("working")
   const token = sessionStorage.getItem('token');
   const response = await axios.get(`${BASE_URL}/${hash}/responses`, {
       headers: {

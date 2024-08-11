@@ -192,20 +192,18 @@ export const getGoogleAuthUrl = async (hash) => {
   }
 };
 
-export const handleGoogleCallback = async (state, code) => {
-  console.log(state , "  " , code , "in live service ")
-  // const hash = sessionStorage.getItem('hash');
-  const hash='cc7939ba5dc64120'
-  if (!hash) {
-    alert("No hash found in session storage");
-  }
-  const url = `${BASE_URL}/${hash}/google-oauth2/?state=${state}&code=${code}`;
+export const handleGoogleCallback = async (hash, state, code) => {
   try {
-    const response = await axios.post(url);
+    const response = await axios.post(`${BASE_URL}/${hash}/google-oauth2`, null, {
+      params: {
+        state,
+        code
+      }
+    });
     return response.data;
   } catch (error) {
     console.error("Error handling Google callback:", error);
-    // throw error;
+    throw error;
   }
 };
 

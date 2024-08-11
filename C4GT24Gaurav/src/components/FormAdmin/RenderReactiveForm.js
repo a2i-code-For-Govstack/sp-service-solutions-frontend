@@ -25,8 +25,8 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function RenderReactiveForm({ model, onSubmitted }) {
-    console.log("model in render reactive form", model);
+function RenderReactiveForm({ model, instance , onSubmitted }) {
+    // console.log("instanceInfo in render reactive form", instance);
     const [fillableModel, setFillableModel] = useState(createFillableModel(model));
     const [loading, setLoading] = useState(false);
     const [err, setErr] = useState("");
@@ -68,7 +68,32 @@ function RenderReactiveForm({ model, onSubmitted }) {
 
     return (
         <div className="surveyView">
-            <h2 style={{color:'black', fontWeight: 300 }}>{model.title}</h2>
+            <h2 style={{color:'black', fontSize:"25px" }}>{instance.name}</h2>
+            <div
+                 
+                    style={{
+                        border: "1px solid grey",
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "50%",
+                        minWidth:300,
+                        padding: "2.5em 2em 2.5em 2em",
+                        background: "white",
+                        borderRadius: "7px",
+                        margin: "1em 0em 1em 0em",
+                    }}
+                >
+                    <label style={{ fontWeight: "400", color: "black" }}>
+                      Description
+                    </label>
+                    <TextField
+                        style={{ marginTop: ".5em " }}
+                         variant="standard"
+                        multiline
+                        value={instance.description}
+                        // placeholder=
+                    />
+                </div>
             {fillableModel.map((field, index) => ["short-text", "number"].indexOf(field.type) > -1 ? (
                 <div
                     key={index}

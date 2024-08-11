@@ -64,7 +64,9 @@ const CreatorSignupPage = () => {
 
   return (
     <div>
-      
+        <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
       <CreatorSignup onSignup={handleSignup} />
       {flag && !showResendButton && resendTimer > 0 && (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>

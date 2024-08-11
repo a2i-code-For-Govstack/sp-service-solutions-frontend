@@ -30,16 +30,15 @@ const SelectedUserLoginPage = () => {
 //       handleGoogleOAuthCallback(state, code);
 //     }
 //   }, [location.search]);
-
-  const handleGoogleLogin = async () => {
-    try {
-      const authUrl = await getGoogleAuthUrl(hash);
-      sessionStorage.setItem('hash', hash); // Save hash to session storage
-      window.location.href = authUrl;
-    } catch (error) {
-      console.error("Google login error:", error);
-    }
-  };
+const handleGoogleLogin = async () => {
+  try {
+    const authUrl = await getGoogleAuthUrl(hash);
+    sessionStorage.setItem('hash', hash); // Save hash to session storage
+    window.location.href = authUrl;
+  } catch (error) {
+    console.error("Google login error:", error);
+  }
+};
 
 //   const handleGoogleOAuthCallback = async (state, code) => {
 //     const storedHash = sessionStorage.getItem('hash');

@@ -21,7 +21,7 @@ const VisuallyHiddenInput = styled("input")({
 function RenderPlainForm({ model , deleteField  , editField}) {
   return (
     <div className="surveyView">
-      <h2 style={{color:'black' , fontWeight:300 }}>PREVIEW</h2>
+      <h2 style={{color:'black' , fontSize:"25px" }}>PREVIEW</h2>
       {model.fields.map((field, index) => 
         field.type === "short-text" || field.type === "number" ? (
           <div

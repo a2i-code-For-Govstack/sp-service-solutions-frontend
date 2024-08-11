@@ -78,7 +78,8 @@ const ResponsesTable = ({ hash }) => {
       };
 
     return (
-        <Paper sx={{ width: '100%', height: '70vh', padding: '0em 1em 1em 1em', backgroundColor: theme.palette.secondColor.main, }}>
+        
+        <Paper sx={{ width: '100%', padding: '0em 1em 1em 1em', backgroundColor: theme.palette.secondColor.main, }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 { ! dashboard && <><TextField
                     label="Search by Username"
@@ -100,7 +101,7 @@ const ResponsesTable = ({ hash }) => {
                 >
                     Download_CSV
                 </Button></>}
-                { dashboard ?  <Button
+                { dashboard ?  <div style={{width:'100%' , margin:"5px 0px 15px 0px" , border:'solid 1px green' ,padding:'5px' , borderRadius:'4px'}}><Button
                  variant="contained" 
                  color="secondary" 
                  size="small"
@@ -109,7 +110,7 @@ const ResponsesTable = ({ hash }) => {
                     // size="small"
                 >
                  Individual
-                </Button> : 
+                </Button> </div> : 
                 <Button
                  variant="contained" 
                  color="secondary" 
@@ -167,7 +168,7 @@ const ResponsesTable = ({ hash }) => {
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
             />
-            </> : <>  <Dashboard/></>}
+            </> : <div >  <Dashboard/></div>}
         </Paper>
     );
 };

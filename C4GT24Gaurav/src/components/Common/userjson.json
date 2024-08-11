@@ -1,0 +1,30 @@
+[
+    {
+      "firstname": "Divij",
+      "lastname": "Sharma",
+      "email": "temp@gmail.com",
+      "password": "something",
+      "temp": "sdkljs"
+    },
+    {
+      "firstname": "",
+      "lastname": "Sharma",
+      "email": "ter@gmail.com",
+      "password": "something",
+      "temp": "dss"
+    },
+    {
+      "firstname": "Divij",
+      "lastname": "",
+      "email": "test@gmail.com",
+      "password": "something",
+      "temp": "des"
+    },
+    {
+      "firstname": "",
+      "lastname": "",
+      "email": "tempp@gmail.com",
+      "password": "something",
+      "temp": "pesciso"
+    }
+  ]
