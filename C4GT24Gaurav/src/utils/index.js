@@ -52,12 +52,10 @@ export const createFillableModel = model => {
     return fillableModel;
 };
 export const createSubmitableModel = fields => {
-    let submitableModel = fields
-        .filter(field => field.value && (Array.isArray(field.value) ? field.value.length > 0 : field.value.length > 0))
-        .map(field => ({
-            id: field.id,
-            value: field.type === "multioption-singleanswer" ? [field.value] : field.value
-        }));
+    let submitableModel = fields.map(field => ({
+        id: field.id,
+        value: field.value || (field.type === "multioption-singleanswer" || field.type === "multioption-multianswer" ? [] : "")
+    }));
 
     return { answers: submitableModel };
 };

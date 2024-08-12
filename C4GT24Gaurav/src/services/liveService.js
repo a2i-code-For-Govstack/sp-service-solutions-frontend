@@ -38,6 +38,17 @@ export const fetchInstanceData = async (hash) => {
 };
 
 
+export const fetchVotingStatus = async (hash) => {
+  try {
+    const response = await api.get(`/instance/${hash}/`, {
+      headers: getAuthHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 
 export const getInstances = async () => {

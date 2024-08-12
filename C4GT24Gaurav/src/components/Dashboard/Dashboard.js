@@ -52,12 +52,12 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>{totalResponses}</CardContent>
         </Card>
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Voting Percentage</CardTitle>
           </CardHeader>
           <CardContent>{votingPercentage}%</CardContent>
-        </Card>
+        </Card> */}
         <Card>
           <CardHeader>
             <CardTitle>Today's Date</CardTitle>

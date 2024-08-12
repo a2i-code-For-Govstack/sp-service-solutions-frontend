@@ -35,25 +35,30 @@ function RenderReactiveForm({ model, onSubmitted }) {
     const handleSubmit = async () => {
         setErr("");
         if (loading) return;
-
+    
         let error = hasError(fillableModel);
         if (error) {
             window.showToast('error', 'Please fill all required fields');
             return setErr(error);
         }
-
+    
         setLoading(true);
         console.log(fillableModel, "fillable model in submit handle")
         let submitableModel = createSubmitableModel(fillableModel);
         console.log(submitableModel, "submittable  model in submit handle");
-
+    
         try {
             await submitForm(submitableModel, hash);
             setLoading(false);
             onSubmitted();
             window.showToast('success', 'Successfully submitted');
-    } catch (e) {
-            setErr(e.message);
+            // logoutUser();
+        } catch (e) {
+            if (e.response && e.response.data && e.response.data.detail) {
+                setErr(e.response.data.detail);
+            } else {
+                setErr(e.message);
+            }
             setLoading(false);
         }
     };
@@ -245,6 +250,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                     )}
                 </div>
             ) : null)}
+            {err && <p style={{ color: "red" }}>{err}</p>}
             <Button
                 onClick={handleSubmit}
                 variant="contained"
@@ -264,7 +270,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
             >
                 LogOut
             </Button>
-            {err && <p style={{ color: "red" }}>{err}</p>}
+ 
         </div>
     );
 }
