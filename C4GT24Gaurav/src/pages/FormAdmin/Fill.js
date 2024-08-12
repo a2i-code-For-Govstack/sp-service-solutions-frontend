@@ -23,9 +23,9 @@ function Fill() {
                 const instanceData = await fetchInstanceInfo(hash);
                 setInstanceAuthType(instanceData.instance_auth_type);
                 setInstanceStatus(instanceData.instance_status);
-                const instanceFullInfo = await fetchInstanceData(hash);
+                // const instanceFullInfo = await fetchInstanceData(hash);
                 // console.log( instanceFullInfo  , "in fil .js")
-                setInstanceInfo( instanceFullInfo )
+                // setInstanceInfo( instanceFullInfo )
                 // console.log( instanceFullInfo  , "here instance info")
 
                 if (instanceData.instance_status === 2) {
@@ -54,9 +54,9 @@ function Fill() {
            {instanceStatus === 2 ? (
               <>  
                   {instanceAuthType === 1 ? (
-                      <RenderReactiveForm model={form} instance={instanceInfo} onSubmitted={() => setSubmitted(true)} />
+                      <RenderReactiveForm model={form}  onSubmitted={() => setSubmitted(true)} />
                   ) : (instanceAuthType === 2 || instanceAuthType === 4) && voteAccessToken ? (
-                      <RenderReactiveForm model={form} instance={instanceInfo} onSubmitted={() => setSubmitted(true)} />
+                      <RenderReactiveForm model={form}  onSubmitted={() => setSubmitted(true)} />
                   ) : (instanceAuthType === 2 || instanceAuthType === 4) ? (
                       <SelectedUserLoginPage />
                   ) : null}

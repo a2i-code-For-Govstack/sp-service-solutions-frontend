@@ -39,7 +39,8 @@ const theme = createTheme({
           // padding: 0,
           // boxSizing: 'border-box',
           // color:'#FFFFFF'
-        },
+        }
+       
       },
     },
   },

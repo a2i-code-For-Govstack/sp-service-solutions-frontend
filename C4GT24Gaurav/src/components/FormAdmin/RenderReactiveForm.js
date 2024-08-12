@@ -25,7 +25,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function RenderReactiveForm({ model, instance , onSubmitted }) {
+function RenderReactiveForm({ model, onSubmitted }) {
     // console.log("instanceInfo in render reactive form", instance);
     const [fillableModel, setFillableModel] = useState(createFillableModel(model));
     const [loading, setLoading] = useState(false);
@@ -68,7 +68,7 @@ function RenderReactiveForm({ model, instance , onSubmitted }) {
 
     return (
         <div className="surveyView">
-            <h2 style={{color:'black', fontSize:"25px" }}>{instance.name}</h2>
+            <h2 style={{color:'black', fontSize:"25px" }}>{model.title}</h2>
             <div
                  
                     style={{
@@ -90,7 +90,7 @@ function RenderReactiveForm({ model, instance , onSubmitted }) {
                         style={{ marginTop: ".5em " }}
                          variant="standard"
                         multiline
-                        value={instance.description}
+                        value={model.description}
                         // placeholder=
                     />
                 </div>
