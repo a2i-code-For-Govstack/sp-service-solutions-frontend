@@ -39,7 +39,7 @@ const IndividualResponse = () => {
 
   return (
     <div className="surveyView">
-      <h2 style={{ color: 'black', fontWeight: 300 }}>Survey Answers</h2>
+      <h2 style={{color:'black', fontSize:"25px" }}>Survey Answers</h2>
       {loading ? (
         <p>Loading...</p>
       ) : (

@@ -100,14 +100,20 @@ export const addQuestionToForm = async (hash, formId, questionData) => {
 };
 
 export const submitForm = async (formData, hash) => {
-   console.log(formData , "in api submit fomr")
-    const socialToken = sessionStorage.getItem('voting_token');
-    const response = await axios.post(`${BASE_URL}/${hash}/voter/post-data`, formData, {
-        params: { access: socialToken }
-    });
-    return response.data;
+  console.log(formData , "in api submit form")
+  const socialToken = sessionStorage.getItem('voting_token');
+  try {
+      const response = await axios.post(`${BASE_URL}/${hash}/voter/post-data`, formData, {
+          params: { access: socialToken }
+      });
+      return response.data;
+  } catch (error) {
+      if (error.response) {
+          throw new Error(error.response.data.detail || 'An error occurred');
+      }
+      throw error;
+  }
 };
-
 export const getResponses = async (hash) => {
   // alert("working")
   const token = sessionStorage.getItem('token');
