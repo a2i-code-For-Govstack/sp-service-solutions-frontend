@@ -15,6 +15,25 @@ export const createForm = async (hash, formData, token) => {
   return response.data;
 };
 
+export const updateform = async (hash, formData, formId, token) => {
+  console.log("form data is ", formData);
+  try {
+    const response = await axios.patch(
+      `${BASE_URL}/${hash}/form/${formId}`, 
+      formData, 
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const deleteQuestion = async (hash, formId, questionId, token) => {
   await axios.delete(`${BASE_URL}/${hash}/form/${formId}/question/${questionId}`, {
     headers: {
