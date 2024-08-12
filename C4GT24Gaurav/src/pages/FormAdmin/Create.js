@@ -18,7 +18,8 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import VotersTable from "../../components/FormAdmin/VotersTable";
 import UsersFileUpload from "../../components/FormAdmin/UsersFileUpload";
 import '../../css/Create.css';
-import { createForm, deleteQuestion, getForm , addQuestionToForm , updateQuestion , getResponses} from '../../services/dataService';
+import { createForm, deleteQuestion, getForm , addQuestionToForm , updateQuestion , getResponses , updateform} from '../../services/dataService';
+
 import ResponsesTable from "../../components/FormAdmin/ResponseTable";
 // import Button from '@mui/material/Button';
 // import { createForm as saveForm } from "../db"
@@ -238,26 +239,51 @@ const updateFieldToFormModel = async (field) => {
 
   const handleupdateInstance = async () => {
     try {
-      if (!sessionStorage.getItem('token')) {
+      // Check for the presence of a token in sessionStorage
+      const token = sessionStorage.getItem('token');
+      if (!token) {
         window.showToast('error', 'Please login');
         return;
       }
-
+  
+      // Update the instance with the provided data
       await updateInstance(hash, {
         name: instanceModel.title,
         description: instanceModel.description,
         instance_auth_type: instanceModel.instanceAuthType,
         instance_status: instanceModel.instanceStatus,
       });
+  
+  
+      // Show success message upon successful update
       window.showToast('success', 'Instance updated successfully');
-      // alert('Instance updated successfully');
     } catch (error) {
       console.error('Error updating instance:', error);
-      // alert('Error updating instance');
+      // Show error message if update fails
       window.showToast('error', 'Error in updating instance');
     }
   };
-
+  
+  const handleupdateFormMeta = async () => {
+    const token = sessionStorage.getItem('token');
+    try {
+      if (formModel.id) {
+        await updateform(
+          hash, 
+          {
+            title: instanceModel.title,
+            description: instanceModel.description,
+          }, 
+          formModel.id, 
+          token
+        );
+        window.showToast('success', 'Title and description updated successfully');
+      }
+    } catch (error) {
+      console.error('Error in updating form title and description:', error);
+      window.showToast('error', 'Error in updating title and description');
+    }
+  };
   //THIS CODE FOR DATA SERVICES 
   useEffect(() => {
     const fetchData = async () => {
@@ -357,6 +383,7 @@ const updateFieldToFormModel = async (field) => {
       const response = await createForm(hash, formModel, token);
       setFormModel(response);
       handleupdateInstance()
+      handleupdateFormMeta()
       localStorage.removeItem(`formData_${hash}`);
       window.showToast('success', 'Instance & Survey Published');
       // alert('Form published');
@@ -546,14 +573,17 @@ const updateFieldToFormModel = async (field) => {
           </Select>
         </FormControl>
         <button
-          variant="contained"
-          color="primary"
-          onClick={handleupdateInstance}
-          style={{ margin: '10px' }}
-          className="btn"
-        >
-          Update Form Settings
-        </button>
+  variant="contained"
+  color="primary"
+  onClick={() => {
+    handleupdateInstance();
+    handleupdateFormMeta();
+  }}
+  style={{ margin: '10px' }}
+  className="btn"
+>
+  Update Form Settings
+</button>
 
   <ToggleButtonGroup
   color='standard'

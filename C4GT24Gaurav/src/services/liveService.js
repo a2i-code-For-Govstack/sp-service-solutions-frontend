@@ -24,6 +24,8 @@ export const updateInstance = async (hash, instanceData) => {
   }
 };
 
+
+
 export const fetchInstanceData = async (hash) => {
   try {
     const response = await api.get(`/instance/${hash}/`, {
