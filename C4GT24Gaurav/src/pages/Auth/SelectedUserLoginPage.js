@@ -58,7 +58,7 @@ const handleGoogleLogin = async () => {
    
     return (
         <div>
-            <h3>User Login</h3>
+            {/* <h3>User Login</h3> */}
             <SelectedUserLogin onLogin={handleUserLogin} />
             <OrgLogin onGoogleLogin={handleGoogleLogin} />
            

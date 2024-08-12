@@ -74,7 +74,7 @@ function App() {
           <Route path="/auth/reset-username" element={<ResetUsernamePage />} />
           <Route path="/forms" element={<FormTable/>} />
           <Route path="/live/instance/:hash" element={<Create />} />
-          <Route path="/" element={<OAuthCallbackHandler />} />
+          {/* <Route path="/" element={<OAuthCallbackHandler />} /> */}
           <Route path="/:hash" element={<Fill/>}/>
           <Route path="/" exact element={<Home/>} />
           <Route path="/voters" element={<Voters/>}/>

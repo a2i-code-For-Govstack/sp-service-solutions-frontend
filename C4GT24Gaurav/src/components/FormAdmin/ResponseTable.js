@@ -95,11 +95,11 @@ const ResponsesTable = ({ hash }) => {
                  variant="contained" 
                  color="secondary" 
                  size="small"
-                 style={{ margin: '0 10px' }}
+                 style={{ margin: '0 10px'   , border:'solid 2px green' , width: '140px' }}
                     onClick={() => downloadCSV(responses)}
                     // size="small"
                 >
-                    Download_CSV
+                    DownloadCSV
                 </Button></>}
                 { dashboard ?  <div style={{width:'100%' , margin:"5px 0px 15px 0px" , border:'solid 1px green' ,padding:'5px' , borderRadius:'4px'}}><Button
                  variant="contained" 
@@ -115,7 +115,7 @@ const ResponsesTable = ({ hash }) => {
                  variant="contained" 
                  color="secondary" 
                  size="small"
-                 style={{ margin: '0 10px' }}
+                 style={{ margin: '0 10px' ,  border:'solid 2px green' , width: '140px' }}
                     onClick={() =>{setDashboard(1)}}
                     // size="small"
                 >
