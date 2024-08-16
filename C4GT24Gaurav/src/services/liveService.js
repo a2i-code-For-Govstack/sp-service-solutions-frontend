@@ -8,6 +8,31 @@ const api = axios.create({
   baseURL: BASE_URL,
 });
 
+export const createInstance = async () => {
+  try {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      window.showToast('error', 'Please Login');
+      return;
+    }
+    
+    const response = await api.post('/instance/', {
+      name: 'Untitled Form',
+      description: 'Description',
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const { hash } = response.data;
+    window.location.href = `/live/instance/${hash}`;
+  } catch (error) {
+    console.error('Error creating instance:', error);
+    window.showToast('error', 'Failed to create instance. Please try again later.');
+  }
+};
+
 const getAuthHeader = () => {
   const token = sessionStorage.getItem('token');
   return token ? { Authorization: `Bearer ${token}` } : {};

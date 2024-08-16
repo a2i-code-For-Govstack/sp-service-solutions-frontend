@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { useTheme } from '@mui/material/styles';
+import { createInstance } from '../../services/liveService'
 
 const Home = () => {
   
@@ -18,29 +19,6 @@ const Home = () => {
   
 
 
-  const createInstance = async () => {
-    try {
-      const token = sessionStorage.getItem('token');
-      if (!token) {
-        window.showToast('error', 'Please Login');
-        return;
-      }
-      
-      const response = await axios.post('http://localhost:8000/api/v1/live/instance/', {
-        name: 'Untitled Form',
-        description: 'Description',
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const { hash } = response.data;
-      window.location.href = `/live/instance/${hash}`;
-    } catch (error) {
-      console.error('Error creating instance:', error);
-    }
-  };
 
   const theme = useTheme()
   return (

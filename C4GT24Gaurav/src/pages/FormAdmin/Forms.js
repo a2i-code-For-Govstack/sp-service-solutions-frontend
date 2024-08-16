@@ -4,295 +4,16 @@ import { useState, useEffect } from 'react'
 import FormCard from "../../components/FormAdmin/FormCard";
 import axios from 'axios';
 import FormTable from '../../components/FormAdmin/FormTable';
-
+import {getInstances} from '../../services/liveService'
 function Forms(){
     const [forms, setForms] = useState([])
     const [msg, setMsg] = useState('')
     const [loading, setLoading] = useState(true)
 
-    // useEffect(() => {
-    //     if(!localStorage.getItem('gfc-user')) return
-    //     const fetchData = async () => {
-    //         try{
-    //             let frms = await getForms()
-                
-    //             setForms(frms)
-    //             setLoading(false)
-//         }catch(e){
-    //             setLoading(false)
-    //             setMsg(e.message)
-    //         }
-    //     }
-    //     fetchData()
-    // }, [])
+
 
     useEffect(() => {
-        setForms([{
-            "title": "trial FORM",
-            "createdAt": 1720218086247,
-            "fields": [
-                {
-                    "title": "Enter your email",
-                    "type": "short-text",
-                    "required": true
-                },
-                {
-                    "title": "this is short text req",
-                    "required": true,
-                    "type": "short-text"
-                },
-                {
-                    "title": "this lknlk ngfjdr kj esjkdfn srkj fkc redskjv erksg 34wlesfn lk wrjll r3wls efcwkrsj gk,n cwakej dj welkfd cwrl svdlke rsgk;l vetklis long text",
-                 
-                    "required": false,
-                    "type": "long-text"
-                },
-                {
-                    "title": "what is your age ",
-                    "required": false,
-                    "type": "number"
-                },
-                {
-                    "title": "choose one of the following ",
-                    "required": false,
-                    "options": [
-                        "arnav",
-                        "kriti",
-                        "yash",
-                        "aarav"
-                    ],
-                    "type": "multioption-singleanswer"
-                },
-                {
-                    "title": "this is multioption multianswer",
-                    "required": false,
-                    "options": [
-                        "apple",
-                        "ball",
-                        "cat",
-                        "dog"
-                    ],
-                    "type": "multioption-multianswer"
-                },
-                {
-                    "title": "what is age ?",
-                    "required": true,
-                    "type": "number"
-                },
-                {
-                    "title": "upload resume ",
-                    "required": true,
-                    "type": "file",
-                    "accepted": [
-                        "png",
-                        "pdf",
-                        "jpeg",
-                        "jpg",
-                        "txt"
-                    ]
-                }
-            ],
-            "endMessage": "thanks for filling",
-            "expiration": "109"
-        },{
-            "title": "trial FORM",
-            "createdAt": 1720218086247,
-            "fields": [
-                {
-                    "title": "Enter your email",
-                    "type": "short-text",
-                    "required": true
-                },
-                {
-                    "title": "this is short text req",
-                    "required": true,
-                    "type": "short-text"
-                },
-                {
-                    "title": "this lknlk ngfjdr kj esjkdfn srkj fkc redskjv erksg 34wlesfn lk wrjll r3wls efcwkrsj gk,n cwakej dj welkfd cwrl svdlke rsgk;l vetklis long text",
-                    "required": false,
-                    "type": "long-text"
-                },
-                {
-                    "title": "what is your age ",
-                    "required": false,
-                    "type": "number"
-                },
-                {
-                    "title": "choose one of the following ",
-                    "required": false,
-                    "options": [
-                        "arnav",
-                        "kriti",
-                        "yash",
-                        "aarav"
-                    ],
-                    "type": "multioption-singleanswer"
-                },
-                {
-                    "title": "this is multioption multianswer",
-                    "required": false,
-                    "options": [
-                        "apple",
-                        "ball",
-                        "cat",
-                        "dog"
-                    ],
-                    "type": "multioption-multianswer"
-                },
-                {
-                    "title": "what is age ?",
-                    "required": true,
-                    "type": "number"
-                },
-                {
-                    "title": "upload resume ",
-                    "required": true,
-                    "type": "file",
-                    "accepted": [
-                        "png",
-                        "pdf",
-                        "jpeg",
-                        "jpg",
-                        "txt"
-                    ]
-                }
-            ],
-            "endMessage": "thanks for filling",
-            "expiration": "109"
-        },{
-            "title": "trial FORM",
-            "createdAt": 1720218086247,
-            "fields": [
-                {
-                    "title": "Enter your email",
-                    "type": "short-text",
-                    "required": true
-                },
-                {
-                    "title": "this is short text req",
-                    "required": true,
-                    "type": "short-text"
-                },
-                {
-                    "title": "this is long text",
-                    "required": false,
-                    "type": "long-text"
-                },
-                {
-                    "title": "what is your age ",
-                    "required": false,
-                    "type": "number"
-                },
-                {
-                    "title": "choose one of the following ",
-                    "required": false,
-                    "options": [
-                        "arnav",
-                        "kriti",
-                        "yash",
-                        "aarav"
-                    ],
-                    "type": "multioption-singleanswer"
-                },
-                {
-                    "title": "this is multioption multianswer",
-                    "required": false,
-                    "options": [
-                        "apple",
-                        "ball",
-                        "cat",
-                        "dog"
-                    ],
-                    "type": "multioption-multianswer"
-                },
-                {
-                    "title": "what is age ?",
-                    "required": true,
-                    "type": "number"
-                },
-                {
-                    "title": "upload resume ",
-                    "required": true,
-                    "type": "file",
-                    "accepted": [
-                        "png",
-                        "pdf",
-                        "jpeg",
-                        "jpg",
-                        "txt"
-                    ]
-                }
-            ],
-            "endMessage": "thanks for filling",
-            "expiration": "109"
-        },{
-            "title": "trial FORM",
-            "createdAt": 1720218086247,
-            "fields": [
-                {
-                    "title": "Enter your email",
-                    "type": "short-text",
-                    "required": true
-                },
-                {
-                    "title": "this is short text req",
-                    "required": true,
-                    "type": "short-text"
-                },
-                {
-                    "title": "this is long text",
-                    "required": false,
-                    "type": "long-text"
-                },
-                {
-                    "title": "what is your age ",
-                    "required": false,
-                    "type": "number"
-                },
-                {
-                    "title": "choose one of the following ",
-                    "required": false,
-                    "options": [
-                        "arnav",
-                        "kriti",
-                        "yash",
-                        "aarav"
-                    ],
-                    "type": "multioption-singleanswer"
-                },
-                {
-                    "title": "this is multioption multianswer",
-                    "required": false,
-                    "options": [
-                        "apple",
-                        "ball",
-                        "cat",
-                        "dog"
-                    ],
-                    "type": "multioption-multianswer"
-                },
-                {
-                    "title": "what is age ?",
-                    "required": true,
-                    "type": "number"
-                },
-                {
-                    "title": "upload resume ",
-                    "required": true,
-                    "type": "file",
-                    "accepted": [
-                        "png",
-                        "pdf",
-                        "jpeg",
-                        "jpg",
-                        "txt"
-                    ]
-                }
-            ],
-            "endMessage": "thanks for filling",
-            "expiration": "109"
-        }])
+        setForms([])
        
     }, [])
 
@@ -306,20 +27,18 @@ function Forms(){
             return;
         }
 
-        const config = {
-            headers: {
-                Authorization: `Bearer ${storedToken}`
+     
+
+        const fetchInstances = async () => {
+            try {
+                const data = await getInstances();
+                setInstances(data);
+            } catch (error) {
+                // Handle error state if needed
             }
         };
 
-        axios.get('http://localhost:8000/api/v1/live/instance', config)
-            .then(response => {
-                setInstances(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching instances:', error);
-                // Handle error state if needed
-            });
+        fetchInstances();
     }, []); // Empty dependency array ensures useEffect runs once on component mount
 
 
