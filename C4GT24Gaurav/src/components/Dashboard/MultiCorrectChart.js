@@ -44,7 +44,7 @@ const MultiCorrectChart = ({ question, data }) => {
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer className="graph" config={chartConfig} >
-          <BarChart width={500} height={300} data={chartData}>
+          <BarChart className='barChart' data={chartData}>
             <CartesianGrid vertical={false} stroke="green" />
             <XAxis dataKey="option" tickLine={false} tickMargin={10} axisLine={false} />
             <YAxis />

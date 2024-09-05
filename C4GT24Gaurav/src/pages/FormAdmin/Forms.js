@@ -35,6 +35,8 @@ function Forms(){
                 setInstances(data);
             } catch (error) {
                 // Handle error state if needed
+            }finally {
+                setLoading(false);
             }
         };
 
@@ -45,6 +47,18 @@ function Forms(){
 
     const onFormDelete = id => {
         setForms(forms.filter(form => form.id !== id))
+    }
+
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <img 
+                    src={`${process.env.PUBLIC_URL}/loader.gif`} 
+                    alt="Loading..." 
+                    style={{ width: '50px', height: '50px' }} 
+                />
+            </div>
+        );
     }
   
     return (

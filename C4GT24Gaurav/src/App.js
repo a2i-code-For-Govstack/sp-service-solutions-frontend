@@ -34,23 +34,16 @@ import IndividualResponse from './components/Response/IndividualResponse';
 import OAuthCallbackHandler from './pages/Auth/OAuthCallbackHandler';
 import ProcessGAuth from './pages/Auth/ProcessGAuth';
 function App() {
-  const [mode, setMode] = React.useState('light');
-  // const LPtheme = createTheme(getLPTheme(mode));
-  
-
-  const toggleColorMode = () => {
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
   return (<>
     <ThemeProvider theme={theme}>
     <CssBaseline />
    
       <div style={{ 
-        border:'solid 2px yellow' , 
+        // border:'solid 2px yellow' , 
         marginBottom:'0px',
-        height:'12.8vh'  , background: '#CEE5FD',opacity:1, 
+        height:'12.8vh'  , background: theme.palette.primary.main,opacity:1, 
        }}>
-      <Navbar mode={mode} toggleColorMode={toggleColorMode} />
+      <Navbar />
       </div>
   
       </ThemeProvider>

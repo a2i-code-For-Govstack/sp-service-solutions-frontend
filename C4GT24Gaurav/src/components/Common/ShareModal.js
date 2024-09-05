@@ -1,11 +1,12 @@
 import React from 'react';
-import { Modal, Box, Button, IconButton, Typography } from '@mui/material';
+import { Modal, Box, Button, IconButton, Typography, TextField } from '@mui/material';
 import {
   Facebook as FacebookIcon,
   Twitter as TwitterIcon,
   LinkedIn as LinkedInIcon,
   Email as EmailIcon,
-  WhatsApp as WhatsAppIcon
+  WhatsApp as WhatsAppIcon,
+  ContentCopy as ContentCopyIcon
 } from '@mui/icons-material';
 
 const style = {
@@ -21,11 +22,17 @@ const style = {
 
 const ShareModal = ({ open, handleClose, shareUrl }) => {
   const shareLinks = {
-    facebook: `https://www.facebook.com`,
-    twitter: `https://twitter.com`,
-    linkedin: `https://www.linkedin.com`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
+    twitter: `https://twitter.com/intent/tweet?url=${shareUrl}`,
+    linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}`,
     email: `mailto:?subject=Check%20this%20out&body=${shareUrl}`,
-    whatsapp: `https://api.whatsapp.com`
+    whatsapp: `https://api.whatsapp.com/send?text=${shareUrl}`,
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shareUrl);
+
+    window.showToast('success','Link copied to clipboard!');
   };
 
   return (
@@ -34,6 +41,22 @@ const ShareModal = ({ open, handleClose, shareUrl }) => {
         <Typography id="share-modal-title" variant="h6" component="h2">
           Share this Form
         </Typography>
+        <Box mt={2}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            label="Shareable Link"
+            value={shareUrl}
+            InputProps={{
+              endAdornment: (
+                <IconButton onClick={copyToClipboard} edge="end">
+                  <ContentCopyIcon />
+                </IconButton>
+              ),
+              readOnly: true,
+            }}
+          />
+        </Box>
         <Box mt={2} display="flex" justifyContent="space-around">
           <IconButton
             color="primary"

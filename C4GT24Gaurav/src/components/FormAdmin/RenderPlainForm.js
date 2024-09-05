@@ -38,30 +38,29 @@ function RenderPlainForm({ model , deleteField  , editField}) {
               margin: "1em 0em 1em 0em",
             }}
           >
-              <div style={{display:'flex' , flexDirection:'row' , alignItems:'center' , justifyContent:'space-between'}}>
-            <label style={{ fontWeight: "400", color: "black" }}>
-              {field.title}
-              {field.required && <span className="err"> * </span>}
-              
-            </label>
-            <div>
-            <IconButton
-              aria-label="delete"
-              style={{ float:'right' }}
-              onClick={() => deleteField(index)}
-            >
-             <DeleteIcon  />
-              
-            </IconButton>
-            <IconButton
-              aria-label="delete"
-              style={{ float:'right' }}
-              onClick={() => editField(index)}
-            >
-             <EditIcon  />
-            </IconButton>
-            </div>
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+  <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
+    {field.title}
+    {field.required && <span className="err"> * </span>}
+  </label>
+  <div>
+    <IconButton
+      aria-label="delete"
+      style={{ float: 'right' }}
+      onClick={() => deleteField(index)}
+    >
+      <DeleteIcon />
+    </IconButton>
+    <IconButton
+      aria-label="edit"
+      style={{ float: 'right' }}
+      onClick={() => editField(index)}
+    >
+      <EditIcon />
+    </IconButton>
+  </div>
+</div>
+
             <TextField
               style={{ marginTop: ".5em " }}
               type={field.type}
@@ -86,7 +85,7 @@ function RenderPlainForm({ model , deleteField  , editField}) {
             }}
           >
             <div style={{display:'flex' , flexDirection:'row' , alignItems:'center' , justifyContent:'space-between'}}>
-            <label style={{ fontWeight: "400", color: "black" }}>
+            <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
               {field.title}
               {field.required && <span className="err">*</span>}
              
@@ -188,9 +187,7 @@ function RenderPlainForm({ model , deleteField  , editField}) {
             }}
           >
             <div style={{display:'flex' , flexDirection:'row' , alignItems:'center' , justifyContent:'space-between'}}>
-            <label
-              style={{ fontWeight: "400", color: "black", marginBottom: "1em" }}
-            >
+            <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
               {field.title}
               {field.required && <span className="err">*</span>}
            
@@ -222,6 +219,8 @@ function RenderPlainForm({ model , deleteField  , editField}) {
                       value={option}
                       control={<Radio />}
                       label={option}
+                      
+                      
                     />
                   ))}
                 </RadioGroup>

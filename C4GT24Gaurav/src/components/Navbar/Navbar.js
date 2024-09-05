@@ -29,7 +29,7 @@ const logoStyle = {
 
 
 
-function Navbar({ mode, toggleColorMode }) {
+function Navbar() {
   const [open, setOpen] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(!!sessionStorage.getItem('token'));
   console.log(loggedIn , "here")
