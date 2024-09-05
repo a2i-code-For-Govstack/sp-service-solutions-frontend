@@ -6,7 +6,7 @@ import { getForm, getIndividualResponses } from '../../services/dataService';  /
 const IndividualResponse = () => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { hash , id } = useParams();
   const [responseId, setId] = useState(0);
   const token = sessionStorage.getItem('token');
@@ -37,6 +37,18 @@ const IndividualResponse = () => {
     return answer ? answer.value : '';
   };
 
+  if (loading) {
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <img 
+                src={`${process.env.PUBLIC_URL}/loader.gif`} 
+                alt="Loading..." 
+                style={{ width: '50px', height: '50px' }} 
+            />
+        </div>
+    );
+}
+
   return (
     <div className="surveyView">
       <h2 style={{color:'black', fontSize:"25px" }}>Survey Answers</h2>
@@ -59,13 +71,13 @@ const IndividualResponse = () => {
               margin: '1em 0em 1em 0em',
             }}
           >
-            <label style={{ fontWeight: '400', color: 'black' }}>
+            <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
               {field.title}
               {field.required && <span className="err"> * </span>}
             </label>
             {field.type === 'short-text' || field.type === 'number' ? (
               <TextField
-                style={{ marginTop: '.5em ' }}
+                style={{ marginTop: '.5em ' , whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}
                 type={field.type === 'number' ? 'number' : 'text'}
                 value={getAnswerForField(field.id)}
                 variant="standard"
@@ -73,7 +85,7 @@ const IndividualResponse = () => {
               />
             ) : field.type === 'long-text' ? (
               <TextField
-                style={{ marginTop: '.5em ' }}
+                style={{ marginTop: '.5em ' ,whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}
                 value={getAnswerForField(field.id)}
                 variant="standard"
                 multiline

@@ -19,7 +19,7 @@ import VotersTable from "../../components/FormAdmin/VotersTable";
 import UsersFileUpload from "../../components/FormAdmin/UsersFileUpload";
 import '../../css/Create.css';
 import { createForm, deleteQuestion, getForm , addQuestionToForm , updateQuestion , getResponses , updateform} from '../../services/dataService';
-
+import ShareModal from "../../components/Common/ShareModal";
 import ResponsesTable from "../../components/FormAdmin/ResponseTable";
 // import Button from '@mui/material/Button';
 // import { createForm as saveForm } from "../db"
@@ -34,14 +34,18 @@ function Create() {
   const [inputType, setInputType] = useState("text");
   const [updateQueIndex, setupdateQueIndex] = useState(0);
   const [err, setErr] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
   const [refresh, setRefresh] = useState(0); 
   const [responses, setResponses] = useState([]);
+  const [openShareModal, setOpenShareModal] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
   const { hash } = useParams();
   // Track login status
   // const history = useHistory()
   const theme = useTheme(); // Hook to access the theme
+  const handleOpenShareModal = () => setOpenShareModal(true);
+  const handleCloseShareModal = () => setOpenShareModal(false);
   useEffect(() => {
     const storedToken = sessionStorage.getItem('token');
     if (storedToken) {
@@ -222,6 +226,9 @@ const updateFieldToFormModel = async (field) => {
       } catch (error) {
         console.error('Error fetching instance data:', error);
       }
+      finally {
+        setLoading(false);
+       }
     };
 
     fetchData();
@@ -462,6 +469,18 @@ const updateFieldToFormModel = async (field) => {
       };
       fetchResponseData();
   }, [hash]);
+  
+  if (loading) {
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <img 
+                src={`${process.env.PUBLIC_URL}/loader.gif`} 
+                alt="Loading..." 
+                style={{ width: '50px', height: '50px' }} 
+            />
+        </div>
+    );
+}
 
   return (<>{isLoggedIn ? (
     <div
@@ -492,6 +511,7 @@ const updateFieldToFormModel = async (field) => {
       title: e.target.value,
     }));
   }}
+  
   id="standard-basic"
   label="Enter Title"
   variant="standard"
@@ -688,7 +708,7 @@ const updateFieldToFormModel = async (field) => {
             <Button
               variant="contained"
               color="primary"
-              // disabled={formModel.id} 
+              disabled={formModel.id} 
               onClick={createOrUpdateForm}
               
               // disabled={loading}
@@ -697,6 +717,16 @@ const updateFieldToFormModel = async (field) => {
               {formModel.id ? "Published" : "Publish Form"}
               {/* Publish Form */}
             </Button>
+            <span style={{  width:'100px' , color:'white' }}>...</span>
+            {
+              formModel.id && <Button size="small" variant="contained" color="success" 
+                  // onClick={() => {if(sessionStorage.getItem('token')){window.location.href=`${window.location.origin}/${instance.hash}`} }}
+                  onClick={() => {if(sessionStorage.getItem('token')){  setShareUrl(`${window.location.origin}/${hash}`); handleOpenShareModal()} }}
+                 
+                  >
+                    SHARE
+                  </Button>
+            }
           </div>
         </p>
 
@@ -714,6 +744,11 @@ const updateFieldToFormModel = async (field) => {
             add={updateFieldToFormModel}
           />
         )}
+        <ShareModal
+        open={openShareModal}
+        handleClose={handleCloseShareModal}
+        shareUrl={shareUrl}
+      />
      </div>
   )}
   {alignment == 2 && 

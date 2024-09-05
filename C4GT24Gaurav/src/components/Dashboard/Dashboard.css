@@ -1,0 +1,28 @@
+.dashboard {
+    padding: 20px;
+  }
+  
+  .cards-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 15px; /* Add gap between cards */
+  }
+  
+  .charts-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 15px; /* Add gap between charts */
+  }
+  
+  @media (max-width: 768px) {
+    .cards-container,
+    .charts-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  

@@ -88,7 +88,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                         margin: "1em 0em 1em 0em",
                     }}
                 >
-                    <label style={{ fontWeight: "400", color: "black" }}>
+                    <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
                       Description
                     </label>
                     <TextField
@@ -115,7 +115,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                         margin: "1em 0em 1em 0em",
                     }}
                 >
-                    <label style={{ fontWeight: "400", color: "black" }}>
+                     <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
                         {field.title}
                         {field.required && <span className="err"> * </span>}
                     </label>
@@ -141,7 +141,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                         margin: "1em 0em 1em 0em",
                     }}
                 >
-                    <label style={{ fontWeight: "400", color: "black" }}>
+                  <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
                         {field.title}
                         {field.required && <span className="err">*</span>}
                     </label>
@@ -168,9 +168,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                         margin: "1em 0em 1em 0em",
                     }}
                 >
-                    <label
-                        style={{ fontWeight: "400", color: "black", marginBottom: "1em" }}
-                    >
+                    <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
                         {field.title}
                         {field.required && <span className="err">*</span>}
                     </label>
@@ -227,9 +225,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                         margin: "1em 0em 1em 0em",
                     }}
                 >
-                    <label
-                        style={{ fontWeight: "400", color: "black", marginBottom: "1em" }}
-                    >
+                   <label style={{ fontWeight: "400", color: "black",  whiteSpace: 'normal', wordWrap: 'break-word', maxWidth: '100%' }}>
                         {field.title}
                         {field.required && <span className="err">*</span>}
                     </label>

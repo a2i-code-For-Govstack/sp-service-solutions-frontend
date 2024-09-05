@@ -45,9 +45,20 @@ function Fill() {
         fetchData();
     }, [hash, voteAccessToken]);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+   
+        if (loading) {
+            return (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                    <img 
+                        src={`${process.env.PUBLIC_URL}/loader.gif`} 
+                        alt="Loading..." 
+                        style={{ width: '50px', height: '50px' }} 
+                    />
+                </div>
+            );
+        }
+        
+    
 
     return (
         <div >

@@ -4,11 +4,11 @@ import CreatorLoginPage from './pages/Auth/CreatorLoginPage';
 import CreatorSignupPage from './pages/Auth/CreatorSignupPage';
 import OrgLoginPage from './pages/Auth/OrgLoginPage';
 import SelectedUserLoginPage from './pages/Auth/SelectedUserLoginPage';
-import NoAccessPage from './pages/Auth/NoAccessPage';
+
 import Home from './pages/Home/Home';
 import Header from './components/Common/Header';
 import Footer from './components/Common/Footer';
-import SelecetdUserSignsupPage from './pages/Auth/SelectedUserSignsupPage'
+
 import ActivatePage from './pages/Auth/ActivatePage';
 import ResetPasswordPage from './pages/Auth/ResetPasswordPage';
 import UserHomePage from './pages/Landing/UserHomePage';
@@ -34,23 +34,16 @@ import IndividualResponse from './components/Response/IndividualResponse';
 import OAuthCallbackHandler from './pages/Auth/OAuthCallbackHandler';
 import ProcessGAuth from './pages/Auth/ProcessGAuth';
 function App() {
-  const [mode, setMode] = React.useState('light');
-  // const LPtheme = createTheme(getLPTheme(mode));
-  
-
-  const toggleColorMode = () => {
-    setMode((prev) => (prev === 'dark' ? 'light' : 'dark'));
-  };
   return (<>
     <ThemeProvider theme={theme}>
     <CssBaseline />
    
       <div style={{ 
-        border:'solid 2px yellow' , 
+        // border:'solid 2px yellow' , 
         marginBottom:'0px',
-        height:'12.8vh'  , background: '#CEE5FD',opacity:1, 
+        height:'12.8vh'  , background: theme.palette.primary.main,opacity:1, 
        }}>
-      <Navbar mode={mode} toggleColorMode={toggleColorMode} />
+      <Navbar />
       </div>
   
       </ThemeProvider>
@@ -65,8 +58,8 @@ function App() {
           <Route path="/creator-signup" element={<CreatorSignupPage/>} />
           {/* <Route path="/org-login" element={<OrgLoginPage/>} /> */}
           <Route path="/selected-user-login" element={<SelectedUserLoginPage/>} />
-          <Route path="/no-access" element={<NoAccessPage/>} />
-          <Route path="/selected-user-signup" exact element={<SelecetdUserSignsupPage/>} />
+         
+
           <Route path="/auth/activate" element={<ActivatePage/>} />
           <Route path="/auth/reset-password" element={<ResetPasswordPage/>} />
           {/* <Route path="/user-home" element={<UserHomePage/>} /> */}
