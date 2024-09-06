@@ -40,6 +40,7 @@ function Create() {
   const [responses, setResponses] = useState([]);
   const [openShareModal, setOpenShareModal] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
+  const [shareHash, setShareHash] = useState('');
   const { hash } = useParams();
   // Track login status
   // const history = useHistory()
@@ -721,7 +722,7 @@ const updateFieldToFormModel = async (field) => {
             {
               formModel.id && <Button size="small" variant="contained" color="success" 
                   // onClick={() => {if(sessionStorage.getItem('token')){window.location.href=`${window.location.origin}/${instance.hash}`} }}
-                  onClick={() => {if(sessionStorage.getItem('token')){  setShareUrl(`${window.location.origin}/${hash}`); handleOpenShareModal()} }}
+                  onClick={() => {if(sessionStorage.getItem('token')){  setShareUrl(`${window.location.origin}/${hash}`); setShareHash(hash); handleOpenShareModal()} }}
                  
                   >
                     SHARE
@@ -748,6 +749,8 @@ const updateFieldToFormModel = async (field) => {
         open={openShareModal}
         handleClose={handleCloseShareModal}
         shareUrl={shareUrl}
+        hash = {shareHash}
+        
       />
      </div>
   )}

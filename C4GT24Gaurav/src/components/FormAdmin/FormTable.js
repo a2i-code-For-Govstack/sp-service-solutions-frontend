@@ -44,6 +44,7 @@ export default function FormTable() {
   const [instances, setInstances] = useState([]);
   const [openShareModal, setOpenShareModal] = useState(false);
   const [shareUrl, setShareUrl] = useState('');
+  const [shareHash, setShareHash] = useState('');
   // const shareUrl = 'https://example.com/form-url'; // Replace with your form URL
 
   const handleOpenShareModal = () => setOpenShareModal(true);
@@ -144,7 +145,7 @@ export default function FormTable() {
                 
                   <Button size="small" variant="contained" color="success" 
                   // onClick={() => {if(sessionStorage.getItem('token')){window.location.href=`${window.location.origin}/${instance.hash}`} }}
-                  onClick={() => {if(sessionStorage.getItem('token')){  setShareUrl(`${window.location.origin}/${instance.hash}`); handleOpenShareModal()} }}
+                  onClick={() => {if(sessionStorage.getItem('token')){  setShareUrl(`${window.location.origin}/${instance.hash}`); setShareHash(instance.hash); handleOpenShareModal()} }}
                  
                   >
                     SHARE
@@ -166,6 +167,7 @@ export default function FormTable() {
         open={openShareModal}
         handleClose={handleCloseShareModal}
         shareUrl={shareUrl}
+        hash = {shareHash}
       />
           </TableBody>
         </Table>
