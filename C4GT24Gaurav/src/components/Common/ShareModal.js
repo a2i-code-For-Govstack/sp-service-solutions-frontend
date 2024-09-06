@@ -20,18 +20,24 @@ const style = {
   p: 4,
 };
 
-const ShareModal = ({ open, handleClose, shareUrl }) => {
-  const shareLinks = {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`,
-    twitter: `https://twitter.com/intent/tweet?url=${shareUrl}`,
-    linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}`,
-    email: `mailto:?subject=Check%20this%20out&body=${shareUrl}`,
-    whatsapp: `https://api.whatsapp.com/send?text=${shareUrl}`,
-  };
+const ShareModal = ({ open, handleClose, shareUrl , hash }) => {
+  const readyToPostMessage = "Check this out: ";
 
+  const encodedUrl = encodeURIComponent(shareUrl);
+  const encodedMessage = encodeURIComponent(readyToPostMessage + shareUrl);
+  const encoded_hash = encodeURIComponent(hash);
+  //  const hash = "aldskdsfkmm"
+  const shareLinks = {
+    facebook: `https://facebook.com/sharer.php?u=https://sp.lsb.gov.bd}`,
+    // https://facebook.com/sharer.php?u=http://www.google.com/${encodedMessage}
+    twitter: `https://twitter.com/intent/tweet?text=${encodedMessage}`,
+   linkedin: `https://www.linkedin.com/feed/?shareActive=true&text=${encodedMessage}`,
+    email: `mailto:?subject=${encodeURIComponent("Check this out")}&body=${encodedMessage}`,
+    whatsapp: `https://api.whatsapp.com/send?text=${encodedMessage}`,
+  };
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareUrl);
-
+    alert(shareLinks.facebook)
     window.showToast('success','Link copied to clipboard!');
   };
 
