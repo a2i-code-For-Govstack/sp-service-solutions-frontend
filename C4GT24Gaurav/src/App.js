@@ -39,9 +39,11 @@ function App() {
     <CssBaseline />
    
       <div style={{ 
-        // border:'solid 2px yellow' , 
+        // border:'solid 2px red' , 
+ 
         marginBottom:'0px',
         height:'12.8vh'  , background: theme.palette.primary.main,opacity:1, 
+        // top:'12.8vh' 
        }}>
       <Navbar />
       </div>

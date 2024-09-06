@@ -40,7 +40,7 @@ const MultiCorrectChart = ({ question, data }) => {
       <CardHeader >
         <CardTitle className="title">{question.title}</CardTitle>
         <CardDescription>Survey Results</CardDescription>
-        <CardDescription>Question Type: Multiple Correct</CardDescription>
+        <CardDescription>Question Type: {question.type == "multioption-multianswer" ? <span>Multiple Correct</span> : <span>Single Correct</span>  }</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer className="graph" config={chartConfig} >
@@ -51,15 +51,16 @@ const MultiCorrectChart = ({ question, data }) => {
             <Tooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
             <Bar dataKey="count" fill="#2ab65e" radius={4} />
           </BarChart>
+          <div className="flex gap-2 font-medium leading-none">
+           Showing total survey responses for this question: {totalResponses}
+        </div> 
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         {/* <div className="flex gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div> */}
-        <div className="flex gap-2 font-medium leading-none">
-           Showing total survey responses for this question: {totalResponses}
-        </div> 
+      
       </CardFooter>
     </Card>
   );

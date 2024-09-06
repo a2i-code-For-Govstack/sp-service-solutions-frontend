@@ -95,7 +95,7 @@ const ResponsesTable = ({ hash }) => {
                  variant="contained" 
                  color="secondary" 
                  size="small"
-                 style={{ margin: '0 10px'   , border:'solid 2px green' , width: '140px' }}
+                 style={{ margin: '0 10px'   , border:'solid 2px green' , width: '175px' }}
                     onClick={() => downloadCSV(responses)}
                     // size="small"
                 >

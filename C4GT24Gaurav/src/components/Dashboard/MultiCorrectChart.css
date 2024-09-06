@@ -18,7 +18,7 @@
 }
 .boxx{
   margin: 15px;
-  border: solid 2px red;
+  /* border: solid 2px red; */
 
 }
 /* .barChart{
@@ -29,12 +29,13 @@
 
 @media (max-width: 768px) {
   .boxx{
-    width: 70vw !important;
+    width: 85vw !important;
     height: 40vh !important;
   }
   .barChart{
-    border: solid 2px red;
+    /* border: solid 2px GREEN; */
     width: 70vw !important;
-    height: 40vh !important;
+    height: 20vh !important;
+    padding: 0px !important;
   }
 }
