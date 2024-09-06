@@ -70,29 +70,7 @@ function Create() {
     setInputType(inputType);
   };
 
-  // const [formModel, setFormModel] = useState({
-  //   title: "",
-  //   createdAt: +new Date(),
-  //   fields: [
-  //     {
-  //       title: "Enter your email",
-  //       type: "short-text",
-  //       required: true,
-  //     },
-  //     {
-  //       title: "Enter your email",
-  //       type: "short-text",
-  //       required: true,
-  //     },
-  //     {
-  //       title: "Enter your email",
-  //       type: "short-text",
-  //       required: true,
-  //     },
-  //   ],
-  //   endMessage: "",
-  //   expiration: "",
-  // });
+ 
   const [formModel, setFormModel] = useState({
     title: "",
     createdAt: +new Date(),
@@ -136,24 +114,7 @@ useEffect(() => {
   };
 
   
-//   const updateFieldToFormModel = async (field) => {
-//     // alert("in updateFieldToFormModel");
-//     if (formModel.id) {
-//       try {
-//         await updateQuestion(hash, formModel.id, formModel.fields[updateQueIndex].id, field);
-//       } catch (error) {
-//         // alert('Error updating question:', error);
-//       }
-//     }
-//     else{
-//       setFormModel({
-//     /// do somthing with this formModel.fields[index]
-//       });
-      
-//     }
-//     setRefresh(1);
-    
-// };
+
 
 const updateFieldToFormModel = async (field) => {
   // Check if the form is published (has an ID)
@@ -358,21 +319,7 @@ const updateFieldToFormModel = async (field) => {
   const handleUploadFileClose = () => {
     setUserUpload(false);
   };
-  // const createForm = async () => {
-  //   if (loading) return;
-  //   setErr("");
-
-  //   if (!formModel.title.trim()) return setErr("Title is required");
-  //   if (formModel.title.trim().length < 5 || formModel.title.trim().length > 50)
-  //     return setErr("Title should be 5 - 50 characters long");
-
-  //   if (formModel.expiration.trim() && formModel.expiration < 1)
-  //     return setErr("Validity should be at least an hour");
-
-  //   if (formModel.fields.length < 2)
-  //     return setErr("You need to add at least one field");
-
-  // };
+  
   const createOrUpdateForm = async () => {
     // if( formModel.id) window.showToast('error', 'Already Published'); return; 
     if (loading) return;
@@ -388,6 +335,7 @@ const updateFieldToFormModel = async (field) => {
     try {
       setLoading(true);
       const token = sessionStorage.getItem('token');
+      
       const response = await createForm(hash, formModel, token);
       setFormModel(response);
       handleupdateInstance()
@@ -402,6 +350,7 @@ const updateFieldToFormModel = async (field) => {
     } finally {
       setLoading(false);
     }
+   
   };
 
   const [alignment, setAlignment] = useState(1);
@@ -420,11 +369,7 @@ const updateFieldToFormModel = async (field) => {
   const handleAddUserOpen = () => setOpenAddUser(true);
   const handleAddUserClose = () => setOpenAddUser(false);
 
-  // const deleteFieldFromFormModel = (index) => {
-  //   let _model = Object.assign({}, formModel);
-  //   _model.fields.splice(index, 1);
-  //   setFormModel(_model);
-  // };
+
 
   const deleteFieldFromFormModel = async (index) => {
     // alert(index , "in delete")
@@ -624,47 +569,7 @@ const updateFieldToFormModel = async (field) => {
 </ToggleButtonGroup>
           {/* <input type="text" placeholder="Enter title" onChange={e => updateObjState(setFormModel, formModel ,"title", e.target.value)} /> */}
         </div>
-        {/* <div> */}
-        {/* <div> */}
-  {/* {alignment == 1 && (
-    <div className="questypediv">
     
-    <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center' , color: theme.palette.secondColor.main}}> <span>Add</span></div>
-          
-          {inputTypes.map((inputType, index) => (
-            <Button
-              class="btn"
-              variant="outlined"
-              size="small"
-              
-              key={index}
-              onClick={() => openAddModal(inputType)}
-            >
-           
-              {inputType.replace("-", "_")}
-            </Button>
-          ))}
-          </div>
-  )} */}
-  {/* {alignment == 2 && <div className="questypediv"><div>
-      <button className="btn" style={{margin:'10px'}}  onClick={handleUploadFileOpen}>
-        Upload Users
-      </button>
-      
-      <UsersFileUpload open={openUserUpload} onClose={handleUploadFileClose} />
-    
-      <button className="btn" style={{margin:'10px'}}  onClick={handleAddUserOpen}>
-        Add User
-      </button>
-      <div style={{  display:'flex' , justifyContent:'center' , alignItems:'center' , color: theme.palette.secondColor.main}}><span>table for auth type specific users</span></div>
-      
-      <UserAddModal open={openAddUser} onClose={handleAddUserClose} hash={hash} />
-    </div></div>} */}
-  {/* {alignment == 3 && <div><button className="btn" style={{margin:'10px'}}  onClick={() => downloadCSV(responses)}>
-        Download_CSV
-      </button></div>} */}
-{/* // </div> */}
-        {/* </div> */}
       </div>
       {alignment == 1 && (<div>
         <div className="renderView">

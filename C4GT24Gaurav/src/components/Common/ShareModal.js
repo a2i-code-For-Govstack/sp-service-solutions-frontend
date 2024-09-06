@@ -37,7 +37,7 @@ const ShareModal = ({ open, handleClose, shareUrl , hash }) => {
   };
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareUrl);
-    alert(shareLinks.facebook)
+    
     window.showToast('success','Link copied to clipboard!');
   };
 

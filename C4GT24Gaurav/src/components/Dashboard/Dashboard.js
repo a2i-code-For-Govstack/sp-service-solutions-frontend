@@ -44,7 +44,7 @@ export default function Dashboard() {
   if (!form) return null;
 
   return (
-    <div>
+    <div style={{ overflowX:'hidden'}}>
       <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: "100%", justifyContent: 'space-evenly' }}>
         <Card>
           <CardHeader>
