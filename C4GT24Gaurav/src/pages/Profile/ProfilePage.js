@@ -51,7 +51,7 @@ const ProfilePage = () => {
       if (response === 200) {
         sessionStorage.setItem('first_name', firstName);
         sessionStorage.setItem('last_name', lastName);
-        alert('Profile updated successfully');
+       window.showToast('success','Profile updated successfully');
         console.log('Profile updated successfully');
         setEditable(false);
       } else {

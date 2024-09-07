@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "./components/ui/card"
 import MultiCorrectChart from './MultiCorrectChart';
-import SingleCorrectChart from './SingleCorrectChart';
+// import SingleCorrectChart from './SingleCorrectChart';
 import { useParams } from 'react-router-dom';
 import { getResponses , getForm} from '../../services/dataService';
 

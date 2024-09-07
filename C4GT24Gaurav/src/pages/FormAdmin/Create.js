@@ -25,7 +25,7 @@ import ResponsesTable from "../../components/FormAdmin/ResponseTable";
 // import { createForm as saveForm } from "../db"
 import UserAddModal from "../../components/FormAdmin/UserAddModal";
 import { downloadCSV } from '../../components/Common/downloadCSV'
-import InputTypeMenu from "../../components/Common/InputTypeMenu";
+// import InputTypeMenu from "../../components/Common/InputTypeMenu";
 import { useTheme } from '@mui/material/styles';
 
 function Create() {
@@ -418,13 +418,13 @@ const updateFieldToFormModel = async (field) => {
   
   if (loading) {
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <img 
-                src={`${process.env.PUBLIC_URL}/loader.gif`} 
-                alt="Loading..." 
-                style={{ width: '50px', height: '50px' }} 
-            />
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+      <img 
+          src={`${process.env.PUBLIC_URL}/loader.gif`} 
+          alt="Loading..." 
+          style={{ width: '50px', height: 'auto' }} 
+      />
+  </div>
     );
 }
 

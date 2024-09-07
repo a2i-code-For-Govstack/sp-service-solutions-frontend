@@ -96,6 +96,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                          variant="standard"
                         multiline
                         value={model.description}
+                        readOnly={true}
                         // placeholder=
                     />
                 </div>

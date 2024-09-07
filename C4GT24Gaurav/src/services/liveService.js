@@ -326,6 +326,7 @@ export const voterLogin = async (hash, username, password) => {
         });
         window.showToast('success', '"now you can vote"');
         // alert("now you can vote")
+        
         return response.data;
         
     } catch (error) {

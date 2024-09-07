@@ -5,6 +5,7 @@ import RenderReactiveForm from '../../components/FormAdmin/RenderReactiveForm';
 import SelectedUserLoginPage from '../Auth/SelectedUserLoginPage';
 import { fetchInstanceData, fetchInstanceInfo } from '../../services/liveService';
 import { fetchFormData } from '../../services/dataService';
+import "./style.css";
 
 function Fill() {
     const { hash } = useParams();
@@ -73,7 +74,9 @@ function Fill() {
                   ) : null}
               </>
           ) : (
-              <p>Form is no longer accepting responses.</p>
+            <div class="Denycontainer">
+  <p class="typing-text">Form is no longer accepting responses.</p>
+</div>
           )}
         </div>
     );
