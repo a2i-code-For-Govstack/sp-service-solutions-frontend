@@ -39,11 +39,11 @@ const IndividualResponse = () => {
 
   if (loading) {
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
             <img 
                 src={`${process.env.PUBLIC_URL}/loader.gif`} 
                 alt="Loading..." 
-                style={{ width: '50px', height: '50px' }} 
+                style={{ width: '50px', height: 'auto' }} 
             />
         </div>
     );

@@ -6,12 +6,12 @@ import OrgLoginPage from './pages/Auth/OrgLoginPage';
 import SelectedUserLoginPage from './pages/Auth/SelectedUserLoginPage';
 
 import Home from './pages/Home/Home';
-import Header from './components/Common/Header';
-import Footer from './components/Common/Footer';
+// import Header from './components/Common/Header';
+// import Footer from './components/Common/Footer';
 
 import ActivatePage from './pages/Auth/ActivatePage';
 import ResetPasswordPage from './pages/Auth/ResetPasswordPage';
-import UserHomePage from './pages/Landing/UserHomePage';
+// import UserHomePage from './pages/Landing/UserHomePage';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -26,7 +26,7 @@ import Create from './pages/FormAdmin/Create'
 // import RenderReactiveForm from './components/FormAdmin/RenderReactiveForm';
 import Fill from './pages/FormAdmin/Fill';
 import FormTable from './components/FormAdmin/FormTable';
-import Voters from './pages/FormAdmin/Voters';
+// import Voters from './pages/FormAdmin/Voters';
 import ToastNotification from './components/Common/ToastNotification';
 import theme from './components/Theme/theme';
 import IndividualResponse from './components/Response/IndividualResponse';
@@ -72,7 +72,7 @@ function App() {
           {/* <Route path="/" element={<OAuthCallbackHandler />} /> */}
           <Route path="/:hash" element={<Fill/>}/>
           <Route path="/" exact element={<Home/>} />
-          <Route path="/voters" element={<Voters/>}/>
+          {/* <Route path="/voters" element={<Voters/>}/> */}
           <Route path="/response/:hash/answers/:id" element={<IndividualResponse/>} />
 
           {/* Add more routes as needed */}

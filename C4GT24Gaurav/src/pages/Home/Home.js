@@ -26,17 +26,27 @@ const Home = () => {
   <CssBaseline />
     {/* <Navbar/> */}
     <div className="home">
-    
+    <div style={{ display: 'flex', justifyContent:"space-between", alignItems: 'center', height: '25vh'  }}>
+            <img 
+                src={`${process.env.PUBLIC_URL}/landing.gif`} 
+                alt="Loading..." 
+                style={{ width: '300px', height: 'auto' }} 
+            />
+        </div>
     <h1>Create Surveys & Polls</h1>
-    <p>Create, share, get the responses & collect data</p>
+    {/* <p>Create, share, get the responses & collect data</p> */}
       <ButtonGroup variant="contained" aria-label="Large button group">
 
         <Button onClick={createInstance} value="create">CREATE</Button>
         {/* <Link to = "/creator-login"><Button value="vote-email">   VOTE   </Button></Link> */}
         {/* <Link to = "/org-login"><Button value="vote-oauth">VOTE BY OAUTH</Button></Link> */}
       </ButtonGroup>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '25vh' }}>
+  <p>Create, share, get the responses & analyse data</p>
+</div>
+
     </div>
-   
+    
     
     </ThemeProvider>
     

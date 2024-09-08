@@ -1,0 +1,30 @@
+.Denycontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+  }
+  
+  .typing-text {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid;
+    animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+  
+  /* Typing effect */
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 25%; }
+  }
+  
+  /* Blinking cursor effect */
+  @keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: black; }
+  }
+  

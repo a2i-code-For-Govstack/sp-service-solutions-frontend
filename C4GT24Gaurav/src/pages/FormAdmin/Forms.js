@@ -51,13 +51,13 @@ function Forms(){
 
     if (loading) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <img 
-                    src={`${process.env.PUBLIC_URL}/loader.gif`} 
-                    alt="Loading..." 
-                    style={{ width: '50px', height: '50px' }} 
-                />
-            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+            <img 
+                src={`${process.env.PUBLIC_URL}/loader.gif`} 
+                alt="Loading..." 
+                style={{ width: '50px', height: 'auto' }} 
+            />
+        </div>
         );
     }
   
