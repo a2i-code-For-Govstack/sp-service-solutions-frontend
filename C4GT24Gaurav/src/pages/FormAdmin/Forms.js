@@ -5,6 +5,7 @@ import FormCard from "../../components/FormAdmin/FormCard";
 import axios from 'axios';
 import FormTable from '../../components/FormAdmin/FormTable';
 import {getInstances} from '../../services/liveService'
+import loader from '../../components/Theme/images/loader.gif'
 function Forms(){
     const [forms, setForms] = useState([])
     const [msg, setMsg] = useState('')
@@ -53,7 +54,7 @@ function Forms(){
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
             <img 
-                src={`${process.env.PUBLIC_URL}/loader.gif`} 
+                src={loader} 
                 alt="Loading..." 
                 style={{ width: '50px', height: 'auto' }} 
             />

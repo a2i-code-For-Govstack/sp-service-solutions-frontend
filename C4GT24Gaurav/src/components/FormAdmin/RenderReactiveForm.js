@@ -14,6 +14,7 @@ import { submitForm } from '../../services/dataService';
 import { useTheme } from '@mui/material/styles';
 import { showToast } from '../../utils/index'; // assuming showToast is imported from utils
 import '../../css/Create.css';
+import a2iicon from '../Theme/images/a2iicon.png'
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -292,7 +293,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
 
 <div className="landingLogodiv">
     <img 
-        src={`${process.env.PUBLIC_URL}/a2iicon.png`} 
+        src={a2iicon} 
         alt="Loading..." 
         style={{ width: '50px', height: 'auto' }} 
     />

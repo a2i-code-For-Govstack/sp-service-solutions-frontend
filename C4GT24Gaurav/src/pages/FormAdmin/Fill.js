@@ -6,7 +6,7 @@ import SelectedUserLoginPage from '../Auth/SelectedUserLoginPage';
 import { fetchInstanceData, fetchInstanceInfo } from '../../services/liveService';
 import { fetchFormData } from '../../services/dataService';
 import "./style.css";
-
+import loader from '../../components/Theme/images/loader.gif'
 function Fill() {
     const { hash } = useParams();
     const location = useLocation();
@@ -51,7 +51,7 @@ function Fill() {
             return (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <img 
-                        src={`${process.env.PUBLIC_URL}/loader.gif`} 
+                        src={loader} 
                         alt="Loading..." 
                         style={{ width: '50px', height: '50px' }} 
                     />

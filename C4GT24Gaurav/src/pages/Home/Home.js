@@ -9,7 +9,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import landing from '../../components/Theme/images/landing.gif'
+import a2iicon from '../../components/Theme/images/a2iicon.png'
 import { useTheme } from '@mui/material/styles';
 import { createInstance } from '../../services/liveService'
 
@@ -28,7 +29,7 @@ const Home = () => {
     <div className="home">
     <div style={{ display: 'flex', justifyContent:"space-between", alignItems: 'center', height: '25vh'  }}>
             <img 
-                src={`${process.env.PUBLIC_URL}/landing.gif`} 
+                src={landing} 
                 alt="product by a2i" 
                 style={{ width: '300px', height: 'auto' }} 
             />
@@ -54,7 +55,7 @@ const Home = () => {
 
 <div className="landingLogodiv">
     <img 
-        src={`${process.env.PUBLIC_URL}/a2iicon.png`} 
+        src={a2iicon} 
         alt="Loading..." 
         style={{ width: '50px', height: 'auto' }} 
     />
