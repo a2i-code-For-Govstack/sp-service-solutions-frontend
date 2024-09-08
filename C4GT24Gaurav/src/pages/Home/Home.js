@@ -29,7 +29,7 @@ const Home = () => {
     <div style={{ display: 'flex', justifyContent:"space-between", alignItems: 'center', height: '25vh'  }}>
             <img 
                 src={`${process.env.PUBLIC_URL}/landing.gif`} 
-                alt="Loading..." 
+                alt="product by a2i" 
                 style={{ width: '300px', height: 'auto' }} 
             />
         </div>
@@ -41,9 +41,24 @@ const Home = () => {
         {/* <Link to = "/creator-login"><Button value="vote-email">   VOTE   </Button></Link> */}
         {/* <Link to = "/org-login"><Button value="vote-oauth">VOTE BY OAUTH</Button></Link> */}
       </ButtonGroup>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '25vh' }}>
+  
+      
+      
+
+
+  
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '25vh'  }}>
   <p>Create, share, get the responses & analyse data</p>
+
 </div>
+
+<div className="landingLogodiv">
+    <img 
+        src={`${process.env.PUBLIC_URL}/a2iicon.png`} 
+        alt="Loading..." 
+        style={{ width: '50px', height: 'auto' }} 
+    />
+   </div>
 
     </div>
     
