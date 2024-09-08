@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, TextField, FormControl, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox } from '@mui/material';
 import { getForm, getIndividualResponses } from '../../services/dataService';  // Import your API functions
-
+import loader from '../Theme/images/loader.gif'
 const IndividualResponse = () => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
@@ -41,7 +41,7 @@ const IndividualResponse = () => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
             <img 
-                src={`${process.env.PUBLIC_URL}/loader.gif`} 
+                src={loader} 
                 alt="Loading..." 
                 style={{ width: '50px', height: 'auto' }} 
             />

@@ -25,6 +25,7 @@ import ResponsesTable from "../../components/FormAdmin/ResponseTable";
 // import { createForm as saveForm } from "../db"
 import UserAddModal from "../../components/FormAdmin/UserAddModal";
 import { downloadCSV } from '../../components/Common/downloadCSV'
+import loader from '../../components/Theme/images/loader.gif'
 // import InputTypeMenu from "../../components/Common/InputTypeMenu";
 import { useTheme } from '@mui/material/styles';
 
@@ -420,7 +421,7 @@ const updateFieldToFormModel = async (field) => {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
       <img 
-          src={`${process.env.PUBLIC_URL}/loader.gif`} 
+          src={loader} 
           alt="Loading..." 
           style={{ width: '50px', height: 'auto' }} 
       />
