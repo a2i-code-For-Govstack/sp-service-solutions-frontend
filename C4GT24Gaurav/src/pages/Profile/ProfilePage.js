@@ -13,7 +13,7 @@ const ProfilePage = () => {
   const [lastName, setLastName] = useState(''); // State for editable last name
   const [deleteModalOpen, setDeleteModalOpen] = useState(false); // State to control delete modal
   const [currentPassword, setCurrentPassword] = useState(''); // State for password input in delete modal
-
+  
   useEffect(() => {
     const storedToken = sessionStorage.getItem('token');
     const storedFirstName = sessionStorage.getItem('first_name');
@@ -46,6 +46,7 @@ const ProfilePage = () => {
 
   const handleSaveChanges = async () => {
     const token = sessionStorage.getItem('token');
+
     try {
       const response = await updateProfile(firstName, lastName, token);
       if (response === 200) {
@@ -60,6 +61,7 @@ const ProfilePage = () => {
     } catch (error) {
       console.error('Error updating profile:', error);
     }
+   
   };
 
   const handleInputChange = (event) => {
@@ -103,6 +105,8 @@ const ProfilePage = () => {
   const handlePasswordChange = (event) => {
     setCurrentPassword(event.target.value);
   };
+
+ 
 
   return (
     <Container component="main" maxWidth="xs">

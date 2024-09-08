@@ -18,14 +18,16 @@ import { useNavigate} from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
 import logo from "../Theme/a2i-logo-lottie.gif"
 
-const logoStyle = {
+const oldlogoStyle = {
   width: '90px',
   height: 'auto',
   cursor: 'pointer',
   // border:'solid 2px black',
   marginBottom:'28px',
-  marginLeft:'5px'
+  marginLeft:'5px',
+
 };
+
 
 
 
@@ -52,6 +54,17 @@ function Navbar() {
     window.history.back(); // Navigate back to the previous page
   };
   const theme = useTheme();
+  const logoStyle = {
+    width: '69px',
+    height: 'auto',
+    cursor: 'pointer',
+    // border:'solid 2px black',
+    marginBottom:'10px',
+    marginLeft:'-100px',
+    marginRight:'40px',
+    backgroundColor:theme.palette.firstColor.main,
+    // border:'solid 2px grey'
+  };
   console.log(theme)
   return (
     <div >
@@ -105,10 +118,12 @@ function Navbar() {
               }}
             >
               <img
-                // src={
-                //   'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
-                // }
-                src={logo}
+                src={
+                  'https://a2i.gov.bd/wp-content/uploads/2022/08/a2i-Logo-100px.png'
+                }
+
+                // style={{backgroundColor:'green'}}
+                // src={logo}
                 style={logoStyle}
                 alt="logo of sitemark"
               />
@@ -327,7 +342,7 @@ function Navbar() {
                     >
                       Create
                     </Button>
-                    <Button
+                    {/* <Button
                        color="secondary"
                       variant="outlined"
                       component="a"
@@ -339,7 +354,7 @@ function Navbar() {
                       sx={{ width: '100%'  , marginRight: '6%' }}
                     >
                       Vote
-                    </Button>
+                    </Button> */}
                     <Button
                        color="secondary"
                       variant="outlined"
@@ -358,7 +373,7 @@ function Navbar() {
                       variant="outlined"
                       component="a"
                       onClick={()=>{
-                        window.location.href = 'user-profile';
+                        window.location.href = '/user-profile';
                       }}
                       // href='user-profile'
                     //   target="_blank"
@@ -368,8 +383,9 @@ function Navbar() {
                     </Button>
                
               </Box>
+
                 </Box>
-            
+                
               </Drawer>
             </Box>
           </Toolbar>

@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, Checkbox, FormGroup } from '@mui/material';
 import { submitForm } from '../../services/dataService';
+import { useTheme } from '@mui/material/styles';
 import { showToast } from '../../utils/index'; // assuming showToast is imported from utils
 import '../../css/Create.css';
 const VisuallyHiddenInput = styled("input")({
@@ -30,6 +31,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
     const [fillableModel, setFillableModel] = useState(createFillableModel(model));
     const [loading, setLoading] = useState(false);
     const [err, setErr] = useState("");
+    const theme = useTheme();
  
     const { hash } = useParams();
     const handleSubmit = async () => {
@@ -248,12 +250,24 @@ function RenderReactiveForm({ model, onSubmitted }) {
                 </div>
             ) : null)}
             {err && <p style={{ color: "red" }}>{err}</p>}
-            <Button
+            <div style={{display:'flex' , flexDirection:'row' }}> 
+            {/* <Button
                 onClick={handleSubmit}
                 variant="contained"
                 color="primary"
                 disabled={loading}
                 style={{ marginTop: "1em" }}
+                   size="small"
+            >
+                Submit
+            </Button> */}
+            <Button
+                onClick={handleSubmit}
+                variant="contained"
+                color="primary"
+                disabled={loading}
+                style={{ margin: "1em" }}
+                size="small"
             >
                 Submit
             </Button>
@@ -267,6 +281,22 @@ function RenderReactiveForm({ model, onSubmitted }) {
             >
                 LogOut
             </Button>
+            </div>
+           
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '4vh' }}>
+    <p>
+        Form created with <a href="https://a2i.gov.bd/" target="_blank" rel="noopener noreferrer" style={{ color: 'blue' }}>a2i</a>
+    </p>
+</div>
+
+
+<div className="landingLogodiv">
+    <img 
+        src={`${process.env.PUBLIC_URL}/a2iicon.png`} 
+        alt="Loading..." 
+        style={{ width: '50px', height: 'auto' }} 
+    />
+   </div>
  
         </div>
     );
