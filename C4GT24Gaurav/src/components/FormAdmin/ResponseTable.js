@@ -81,21 +81,21 @@ const ResponsesTable = ({ hash }) => {
         
         <Paper sx={{ width: '100%', padding: '0em 1em 1em 1em', backgroundColor: theme.palette.secondColor.main, }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                { ! dashboard && <><TextField
-                    label="Search by Username"
-                    value={search}
-                    onChange={handleSearchChange}
-                    variant="standard"
-                    fullWidth
-                    margin="normal"
-                    color="firstColor"
-                    size='small'
-                />
+                { ! dashboard && <> <TextField
+            label="Search by Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={search}
+            onChange={handleSearchChange}
+            size='small'
+            sx={{ flex: 1 }}
+          />
                 <Button
                  variant="contained" 
                  color="secondary" 
                  size="small"
-                 style={{ margin: '0 10px'   , border:'solid 2px green' , width: '175px' }}
+                 style={{ margin: '0 10px'   , border:'solid 2px green'  }}
                     onClick={() => downloadCSV(responses)}
                     // size="small"
                 >
@@ -115,7 +115,7 @@ const ResponsesTable = ({ hash }) => {
                  variant="contained" 
                  color="secondary" 
                  size="small"
-                 style={{ margin: '0 10px' ,  border:'solid 2px green' , width: '140px' }}
+                 style={{ margin: '0 10px' ,  border:'solid 2px green'  }}
                     onClick={() =>{setDashboard(1)}}
                     // size="small"
                 >
@@ -124,7 +124,7 @@ const ResponsesTable = ({ hash }) => {
             </div>
             {!dashboard ? <>
 
-            <TableContainer sx={{ maxHeight: 440, height: '70%' }}>
+            <TableContainer component={Paper}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <StyledTableRow>

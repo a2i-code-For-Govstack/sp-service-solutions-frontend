@@ -42,7 +42,7 @@
  /* Base style */
 .renderView {
   /* border: solid 1px red; */
-   overflow-y: hidden;
+   /* overflow-y: hidden; */
     width: 100%;
   }
 

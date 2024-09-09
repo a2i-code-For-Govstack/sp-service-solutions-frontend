@@ -47,6 +47,7 @@ const VotersTable = ({ hash }) => {
         const fetchData = async () => {
             const result = await getUsers(hash);
             setUsers(result);
+            console.log(result ,"hererererreccywqwvdygwevgadsd ew");
         };
         fetchData();
     }, [hash]);
@@ -105,9 +106,9 @@ const VotersTable = ({ hash }) => {
     );
 
     return ( 
-        <Paper sx={{ width: '100%', height: '70vh', padding: '1em 1em 1em 1em', backgroundColor: theme.palette.secondColor.main, }}>
+        <Paper sx={{ width: '100%', height: '70vh', padding: '0em 1em 1em 1em', backgroundColor: theme.palette.secondColor.main, }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <TextField
+                {/* <TextField
                     id="standard-helperText"
                     label="Search by Name"
                     value={search}
@@ -118,7 +119,17 @@ const VotersTable = ({ hash }) => {
                     color="firstColor"
                     size='small'
                     sx={{ flex: 1 }}
-                />
+                /> */}
+                 <TextField
+            label="Search by Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={search}
+            onChange={handleSearchChange}
+               size='small'
+            sx={{ flex: 1 }}
+          />
                 <Button 
                     variant="contained" 
                     color="primary" 
@@ -139,7 +150,7 @@ const VotersTable = ({ hash }) => {
             </div>
             <UsersFileUpload open={openUserUpload} onClose={handleUploadFileClose} />
             <UserAddModal open={openAddUser} onClose={handleAddUserClose} hash={hash} />
-            <TableContainer sx={{ maxHeight: 440, height: '70%' }}>
+            <TableContainer component={Paper}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <StyledTableRow>

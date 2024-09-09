@@ -12,6 +12,8 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio, Checkbox, FormGroup } from '@mui/material';
 import { submitForm } from '../../services/dataService';
 import { useTheme } from '@mui/material/styles';
+// import { PublicFormTable } from './PublicFormTable';
+import PublicFormTable from './PublicFormTable';
 import { showToast } from '../../utils/index'; // assuming showToast is imported from utils
 import '../../css/Create.css';
 import a2iicon from '../Theme/images/a2iicon.png'
@@ -27,10 +29,11 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function RenderReactiveForm({ model, onSubmitted }) {
+function RenderReactiveForm({ model, onSubmitted , instanceAuthType }) {
     // console.log("instanceInfo in render reactive form", instance);
     const [fillableModel, setFillableModel] = useState(createFillableModel(model));
     const [loading, setLoading] = useState(false);
+    const [showForms , setShowForms] = useState(0);
     const [err, setErr] = useState("");
     const theme = useTheme();
  
@@ -74,8 +77,43 @@ function RenderReactiveForm({ model, onSubmitted }) {
     //     setFillableModel(createFillableModel(model))
     // }, []);
 
-    return (
-        <div className="surveyView">
+    return ( <>
+        {  instanceAuthType != 1 ?
+           <div style={{width:'98%' , margin:"15px 5px 15px 15px" , border:'solid 1px green' ,padding:'5px' , borderRadius:'4px'}}>   
+          <Button
+                 variant="contained" 
+                 color="secondary" 
+                 size="small"
+                 style={{ margin: '0 10px' }}
+                    onClick={() => {setShowForms(0)}}
+                    // size="small"
+                >
+                 Fill Form
+                </Button>  
+                <Button
+                 variant="contained" 
+                 color="secondary" 
+                 size="small"
+                 style={{ margin: '0 10px' }}
+                    onClick={() => {setShowForms(1)}}
+                    // size="small"
+                >
+                Other Forms
+                </Button>  
+                <Button
+                onClick={logoutUser}
+                variant="contained" 
+                 color="error" 
+                 size="small"
+                 style={{ margin: '0 10px' }}
+            >
+                LogOut
+            </Button>
+                </div> : <div></div> }
+        { !showForms ? <div className="surveyView">
+        {/* if user is authenticated he can see all other public forms  */}
+        
+             
             <h2 style={{color:'black', fontSize:"25px" }}>{model.title}</h2>
             <div
                  
@@ -271,7 +309,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                 size="small"
             >
                 Submit
-            </Button>
+            </Button> {  instanceAuthType != 1 ?  
             <Button
                 onClick={logoutUser}
                 variant="contained"
@@ -281,7 +319,7 @@ function RenderReactiveForm({ model, onSubmitted }) {
                 size="small"
             >
                 LogOut
-            </Button>
+            </Button>:<></>}
             </div>
            
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '4vh' }}>
@@ -299,7 +337,8 @@ function RenderReactiveForm({ model, onSubmitted }) {
     />
    </div>
  
-        </div>
+        </div> : <PublicFormTable/>}
+        </>
     );
 }
 

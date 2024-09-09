@@ -143,3 +143,9 @@ export const getIndividualResponses = async (hash, id, token) => {
   });
   return response.data;
 };
+
+// get all public forms details 
+export const getPublicForms  = async () => {
+  const response = await axios.get(`${BASE_URL}/voter/open-forms`);
+  return response.data;
+};

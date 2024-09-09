@@ -66,9 +66,9 @@ function Fill() {
            {instanceStatus === 2 ? (
               <>  
                   {instanceAuthType === 1 ? (
-                      <RenderReactiveForm model={form}  onSubmitted={() => setSubmitted(true)} />
+                      <RenderReactiveForm model={form}  onSubmitted={() => setSubmitted(true)} instanceAuthType = {instanceAuthType}  />
                   ) : (instanceAuthType === 2 || instanceAuthType === 4) && voteAccessToken ? (
-                      <RenderReactiveForm model={form}  onSubmitted={() => setSubmitted(true)} />
+                      <RenderReactiveForm model={form}  onSubmitted={() => setSubmitted(true)} instanceAuthType = {instanceAuthType}  />
                   ) : (instanceAuthType === 2 || instanceAuthType === 4) ? (
                       <SelectedUserLoginPage />
                   ) : null}
