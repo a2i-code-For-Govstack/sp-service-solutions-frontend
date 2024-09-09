@@ -28,7 +28,13 @@
   display: none;
   height: 0;
 }
-
+.hometext{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 25vh;
+  /* display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '25vh' */
+}
 /* Show the div only on mobile devices (max-width: 767px) */
 @media only screen and (max-width: 767px) {
   .landingLogodiv {
@@ -36,5 +42,13 @@
       justify-content: space-between;
       align-items: center;
       height: fit-content;
+  }
+  .hometext{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 18vh;
+    width: 95%;
+    /* display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '25vh' */
   }
 }

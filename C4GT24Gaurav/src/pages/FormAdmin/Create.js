@@ -154,7 +154,8 @@ const updateFieldToFormModel = async (field) => {
     "number",
     "multioption-singleanswer",
     "multioption-multianswer",
-    "file",
+    // "file",
+    //currently file is removed as there is no backend for this logic , frontend logic is okay for it , just comment out file here and it will be fine 
   ];
   
   const [instanceModel, setInstanceModel] = useState({

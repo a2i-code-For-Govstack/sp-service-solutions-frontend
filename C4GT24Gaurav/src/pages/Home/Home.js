@@ -48,7 +48,7 @@ const Home = () => {
 
 
   
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', height: '25vh'  }}>
+      <div className='hometext'>
   <p>Create, share, get the responses & analyse data</p>
 
 </div>
