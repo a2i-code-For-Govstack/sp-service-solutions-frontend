@@ -34,12 +34,16 @@ const SelectedUserLoginPage = () => {
     
           handleGoogleCallback(hashFromStorage, state, code)
             .then((data) => {
-              const accessToken = data.access_token;
-              sessionStorage.setItem('google_auth_voting_token', accessToken); // Store the token in session storage
-              window.location.reload();
+              const accessToken = data.access;
+              sessionStorage.setItem('voting_token', accessToken); // Store the token in session storage
+              alert("verifying.... please click ok")
+              window.location.href = `${window.location.origin}/${hashFromStorage}`;
             })
             .catch((error) => {
+                // window.location.reload();
+                alert("error in verifying.... please click ok")
               console.error('OAuth callback error:', error);
+            //   window.location.href = `${window.location.origin}/${hashFromStorage}`;
             });
         }
       }, [location.search]);
