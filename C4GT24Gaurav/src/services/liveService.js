@@ -220,7 +220,7 @@ export const updateUser = async (hash, username, userData) => {
 };
 
 export const getGoogleAuthUrl = async (hash) => {
-  const url = `${BASE_URL}/${hash}/google-oauth2/?redirect_uri=http://localhost:3000`;
+  const url = `${BASE_URL}/${hash}/google-oauth2/?redirect_uri=http://localhost:3000/selected-user-login`;
   try {
     const response = await axios.get(url);
     return response.data.authorization_url;
