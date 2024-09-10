@@ -5,9 +5,11 @@ import { initiateGoogleLogin, voterLogin, getGoogleAuthUrl, handleGoogleCallback
 // import { getGoogleAuthUrl , handleGoogleCallback } from '../../services/liveService';
 import { useParams , useLocation } from 'react-router-dom';
 import { useState , useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 const SelectedUserLoginPage = () => {
     const { hash } = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
     const handleUserLogin = async (username, password) => {
         try {
             const { access } = await voterLogin(hash, username, password);
@@ -18,6 +20,30 @@ const SelectedUserLoginPage = () => {
             console.error('Login error:', error);
         }
     };
+   
+
+    useEffect(() => {
+        // Extract state and code from the URL after Google redirects back
+        const params = new URLSearchParams(window.location.search);
+        const state = params.get('state');
+        const code = params.get('code');
+    
+        if (state && code) {
+          // Use the extracted state and code to handle OAuth callback
+          const hashFromStorage = sessionStorage.getItem('hash'); // Get saved hash from sessionStorage
+    
+          handleGoogleCallback(hashFromStorage, state, code)
+            .then((data) => {
+              const accessToken = data.access_token;
+              sessionStorage.setItem('google_auth_voting_token', accessToken); // Store the token in session storage
+              window.location.reload();
+            })
+            .catch((error) => {
+              console.error('OAuth callback error:', error);
+            });
+        }
+      }, [location.search]);
+    
 
    
 //   useEffect(() => {
