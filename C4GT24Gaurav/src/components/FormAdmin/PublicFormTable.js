@@ -84,7 +84,20 @@ const PublicFormTable = () => {
         backgroundColor: theme.palette.secondColor.main,
       }}
     >
-      <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", flexDirection:'column' }}>
+      <TextField
+            // label="Search by Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value="List of All Open-to-All Forms Created by All Admins"
+            // onChange={handleSearchChange}
+            // className="typing-text "
+          
+            size='small'
+            sx={{ flex: 1 }}
+          />
+      
       <TextField
             label="Search by Name"
             variant="outlined"

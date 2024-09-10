@@ -33,6 +33,7 @@ import IndividualResponse from './components/Response/IndividualResponse';
 // import ProcessGoogleAuth from './pages/Auth/ProcessGoogleAuth';
 import OAuthCallbackHandler from './pages/Auth/OAuthCallbackHandler';
 import ProcessGAuth from './pages/Auth/ProcessGAuth';
+import PublicFormTable from './components/FormAdmin/PublicFormTable';
 function App() {
   return (<>
     <ThemeProvider theme={theme}>
@@ -74,6 +75,7 @@ function App() {
           <Route path="/" exact element={<Home/>} />
           {/* <Route path="/voters" element={<Voters/>}/> */}
           <Route path="/response/:hash/answers/:id" element={<IndividualResponse/>} />
+          <Route path="/all-publicforms" element={<PublicFormTable />} />
 
           {/* Add more routes as needed */}
         </Routes>

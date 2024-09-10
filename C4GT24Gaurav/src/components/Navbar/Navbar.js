@@ -190,6 +190,20 @@ function Navbar() {
                       component="a"
                       // href='user-profile'
                       onClick={()=>{
+                        window.location.href = '/all-publicforms';
+                      }}
+                    //   target="_blank"
+                      sx={{ width: '100%' , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' , 
+                        fontWeight: 550, borderColor:theme.palette.secondColor.main  }}
+                    >
+                      PublicForms
+                    </Button>
+                    <Button
+                       color="secondary"
+                      variant="outlined"
+                      component="a"
+                      // href='user-profile'
+                      onClick={()=>{
                         window.location.href = '/user-profile';
                       }}
                     //   target="_blank"
@@ -367,6 +381,19 @@ function Navbar() {
                       sx={{ width: '100%'  , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
                     >
                       MyForms
+                    </Button>
+                    <Button
+                       color="secondary"
+                      variant="outlined"
+                      component="a"
+                      onClick={()=>{
+                        window.location.href = "/all-publicforms";
+                      }}
+                      // href='/forms'
+                    //   target="_blank"
+                      sx={{ width: '100%'  , marginRight: '6%' , paddingLeft:'16%' , paddingRight:'16%' }}
+                    >
+                      PublicForms
                     </Button>
                     <Button
                        color="secondary"
