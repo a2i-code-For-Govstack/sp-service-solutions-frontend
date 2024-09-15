@@ -1,21 +1,21 @@
-import React from 'react';
-import OrgLogin from '../../components/Auth/OrgLogin';
-import { useAuth } from '../../hooks/useAuth';
+// import React from 'react';
+// import OrgLogin from '../../components/Auth/OrgLogin';
+// import { useAuth } from '../../hooks/useAuth';
 
-const OrgLoginPage = () => {
-    const { googleLogin } = useAuth();
+// const OrgLoginPage = () => {
+//     const { googleLogin } = useAuth();
 
-    const handleGoogleLogin = () => {
-        googleLogin();
-    };
+//     const handleGoogleLogin = () => {
+//         googleLogin();
+//     };
 
-    return (
-        <div>
-        hey
-            <h1>Organization Login</h1>
-            <OrgLogin onGoogleLogin={handleGoogleLogin} />
-        </div>
-    );
-};
+//     return (
+//         <div>
+//         hey
+//             <h1>Organization Login</h1>
+//             <OrgLogin onGoogleLogin={handleGoogleLogin} />
+//         </div>
+//     );
+// };
 
-export default OrgLoginPage;
+// export default OrgLoginPage;
