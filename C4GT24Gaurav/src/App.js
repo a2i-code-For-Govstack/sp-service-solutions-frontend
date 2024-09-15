@@ -31,9 +31,10 @@ import ToastNotification from './components/Common/ToastNotification';
 import theme from './components/Theme/theme';
 import IndividualResponse from './components/Response/IndividualResponse';
 // import ProcessGoogleAuth from './pages/Auth/ProcessGoogleAuth';
-import OAuthCallbackHandler from './pages/Auth/OAuthCallbackHandler';
-import ProcessGAuth from './pages/Auth/ProcessGAuth';
+// import OAuthCallbackHandler from './pages/Auth/OAuthCallbackHandler';
+// import ProcessGAuth from './pages/Auth/ProcessGAuth';
 import PublicFormTable from './components/FormAdmin/PublicFormTable';
+import ProcessGAuth from './pages/Auth/ProcessGAuth';
 function App() {
   return (<>
     <ThemeProvider theme={theme}>
@@ -60,7 +61,7 @@ function App() {
           <Route path="/creator-login" element={<CreatorLoginPage/>} />
           <Route path="/creator-signup" element={<CreatorSignupPage/>} />
           {/* <Route path="/org-login" element={<OrgLoginPage/>} /> */}
-          <Route path="/selected-user-login" element={<SelectedUserLoginPage/>} />
+          <Route path="/selected-user-login" element={<ProcessGAuth />} />
          
 
           <Route path="/auth/activate" element={<ActivatePage/>} />
@@ -76,7 +77,8 @@ function App() {
           {/* <Route path="/voters" element={<Voters/>}/> */}
           <Route path="/response/:hash/answers/:id" element={<IndividualResponse/>} />
           <Route path="/all-publicforms" element={<PublicFormTable />} />
-
+          {/* <Route path="/:hash/google-oauth2" element={<ProcessGAuth />} /> */}
+  
           {/* Add more routes as needed */}
         </Routes>
         {/* <Footer /> */}

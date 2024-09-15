@@ -1,5 +1,5 @@
 // src/services/instanceService.js
-
+import qs from 'qs'; // Querystring library for URL-encoded format
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 const BASE_URL = 'http://localhost:8000/api/v1/live';
@@ -220,7 +220,7 @@ export const updateUser = async (hash, username, userData) => {
 };
 
 export const getGoogleAuthUrl = async (hash) => {
-  const url = `${BASE_URL}/${hash}/google-oauth2/?redirect_uri=http://localhost:3000/selected-user-login`;
+  const url = `${BASE_URL}/${hash}/google-oauth2/?redirect_uri=http://localhost:8000/api/v1/live/google-oauth2/callback/`;
   try {
     const response = await axios.get(url);
     return response.data.authorization_url;
@@ -230,20 +230,36 @@ export const getGoogleAuthUrl = async (hash) => {
   }
 };
 
+
+
+
+// const BASE_URL = 'http://localhost:8000/api/v1/live';
+
 export const handleGoogleCallback = async (hash, state, code) => {
   try {
-    const response = await axios.post(`${BASE_URL}/${hash}/google-oauth2`, null, {
-      params: {
-        state,
-        code
+    // Send the state and code as query parameters in the URL
+    const response = await axios.post(
+      `${BASE_URL}/${hash}/google-oauth2/`, 
+      {}, // Empty body for POST
+      {
+        params: {
+          state: state,
+          code: code
+        },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       }
-    });
-    return response.data;
+    );
+
+    return response.data; // Assuming the access token is in response.data.access
   } catch (error) {
-    console.error("Error handling Google callback:", error);
+    console.error("Error in Google OAuth callback:", error);
     throw error;
   }
 };
+
+
 
 
 
@@ -285,15 +301,15 @@ export const initiateGoogleLogin = async (baseUrl, instanceHash, redirectUri) =>
   }
 };
 
-export const handleGoogleAuthResponse = async ( instanceHash, state, code) => {
-  console.log(state,code,"in service")
-  try {
-      const response = await axios.post(`${BASE_URL}/${instanceHash}/google-oauth2/?state=${state}&code=${code}`);
-      return response.data;
-  } catch (error) {
-      throw new Error('Failed to handle Google auth response');
-  }
-};
+// export const handleGoogleAuthResponse = async ( instanceHash, state, code) => {
+//   console.log(state,code,"in service")
+//   try {
+//       const response = await axios.post(`${BASE_URL}/${instanceHash}/google-oauth2/?state=${state}&code=${code}`);
+//       return response.data;
+//   } catch (error) {
+//       throw new Error('Failed to handle Google auth response');
+//   }
+// };
 
 
 
