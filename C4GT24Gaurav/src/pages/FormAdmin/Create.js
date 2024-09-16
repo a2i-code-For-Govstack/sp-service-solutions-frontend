@@ -28,6 +28,7 @@ import { downloadCSV } from '../../components/Common/downloadCSV'
 import loader from '../../components/Theme/images/loader.gif'
 // import InputTypeMenu from "../../components/Common/InputTypeMenu";
 import { useTheme } from '@mui/material/styles';
+import SelectedDomain from "../Auth/SelectedDomain";
 
 function Create() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -43,6 +44,7 @@ function Create() {
   const [shareUrl, setShareUrl] = useState('');
   const [shareHash, setShareHash] = useState('');
   const { hash } = useParams();
+  const [instanceAuthType , setInstanceAuthType] = useState(1)
   // Track login status
   // const history = useHistory()
   const theme = useTheme(); // Hook to access the theme
@@ -164,6 +166,7 @@ const updateFieldToFormModel = async (field) => {
     instanceAuthType: 1,
     instanceStatus: 1,
     createdAt: '',
+    allowed_domains:'',
   });
   const updateObjState = (setState, state, key, value) => {
     setState({
@@ -185,7 +188,8 @@ const updateFieldToFormModel = async (field) => {
           description: data.description,
           instanceAuthType: data.instance_auth_type,
           instanceStatus: data.instance_status,
-          createdAt: data.created_at.split('T')[0], // Extract date part
+          createdAt: data.created_at.split('T')[0], 
+          allowed_domains: data.allowed_domains// Extract date part
         });
       } catch (error) {
         console.error('Error fetching instance data:', error);
@@ -200,6 +204,7 @@ const updateFieldToFormModel = async (field) => {
  
 
   const handleChangeAuthType = (event) => {
+    setInstanceAuthType(event.target.value);
     updateObjState(setInstanceModel, instanceModel, 'instanceAuthType', event.target.value);
     // alert(event.target.value)
   };
@@ -573,10 +578,19 @@ const updateFieldToFormModel = async (field) => {
         </div>
     
       </div>
+     
       {alignment == 1 && (<div>
+      
         <div className="renderView">
-        <div>
+        
+        <div> 
+        {console.log("{instanceModel.allowed_domains}" , instanceModel.allowed_domains)}
+        {
+          instanceModel.instanceAuthType == 2 ?    <div style={{width:'100vw',  background:'white' , display:"flex" , justifyContent:'center'}}> <SelectedDomain allowedDomain={instanceModel.allowed_domains} hashpage={hash} /> </div>
+       : <></>}
+       
           {formModel.fields.length > 0 && <RenderPlainForm model={formModel} deleteField={deleteFieldFromFormModel} editField={editFieldFromFormModel} />}
+         
        </div>
        </div>
 

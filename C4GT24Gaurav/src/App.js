@@ -35,6 +35,7 @@ import IndividualResponse from './components/Response/IndividualResponse';
 // import ProcessGAuth from './pages/Auth/ProcessGAuth';
 import PublicFormTable from './components/FormAdmin/PublicFormTable';
 import ProcessGAuth from './pages/Auth/ProcessGAuth';
+import BlankError from './components/Common/BlankError';
 function App() {
   return (<>
     <ThemeProvider theme={theme}>
@@ -63,7 +64,8 @@ function App() {
           {/* <Route path="/org-login" element={<OrgLoginPage/>} /> */}
           <Route path="/selected-user-login" element={<ProcessGAuth />} />
          
-
+         
+          <Route path="/blank-error" element={<BlankError/>} />
           <Route path="/auth/activate" element={<ActivatePage/>} />
           <Route path="/auth/reset-password" element={<ResetPasswordPage/>} />
           {/* <Route path="/user-home" element={<UserHomePage/>} /> */}
