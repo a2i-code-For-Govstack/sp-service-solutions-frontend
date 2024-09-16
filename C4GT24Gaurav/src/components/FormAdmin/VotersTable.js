@@ -108,18 +108,7 @@ const VotersTable = ({ hash }) => {
     return ( 
         <Paper sx={{ width: '100%', height: '70vh', padding: '0em 1em 1em 1em', backgroundColor: theme.palette.secondColor.main, }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                {/* <TextField
-                    id="standard-helperText"
-                    label="Search by Name"
-                    value={search}
-                    onChange={handleSearchChange}
-                    variant="standard"
-                    fullWidth
-                    margin="normal"
-                    color="firstColor"
-                    size='small'
-                    sx={{ flex: 1 }}
-                /> */}
+              
                  <TextField
             label="Search by Name"
             variant="outlined"
