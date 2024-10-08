@@ -98,7 +98,7 @@ function RenderReactiveForm({ model, onSubmitted , instanceAuthType }) {
                     onClick={() => {setShowForms(1)}}
                     // size="small"
                 >
-                Other Forms
+                Public Forms
                 </Button>  
                 <Button
                 onClick={logoutUser}
@@ -109,7 +109,29 @@ function RenderReactiveForm({ model, onSubmitted , instanceAuthType }) {
             >
                 LogOut
             </Button>
-                </div> : <div></div> }
+                </div> :   
+                
+                <div style={{width:'98%' , margin:"15px 5px 15px 15px" , border:'solid 1px green' ,padding:'5px' , borderRadius:'4px'}}>
+                <Button
+                 variant="contained" 
+                 color="secondary" 
+                 size="small"
+                 style={{ margin: '0 10px' }}
+                    onClick={() => {setShowForms(0)}}
+                    // size="small"
+                >
+                 Fill Form
+                </Button>  <Button
+                 variant="contained" 
+                 color="secondary" 
+                 size="small"
+                 style={{ margin: '0 10px' }}
+                    onClick={() => {setShowForms(1)}}
+                    // size="small"
+                >
+                Public Forms
+                </Button>     
+</div> }
         { !showForms ? <div className="surveyView">
         {/* if user is authenticated he can see all other public forms  */}
         

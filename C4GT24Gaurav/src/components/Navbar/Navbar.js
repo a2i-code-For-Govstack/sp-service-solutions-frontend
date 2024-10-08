@@ -31,7 +31,7 @@ const oldlogoStyle = {
 
 
 
-function Navbar() {
+function VoterNavbar() {
   const [open, setOpen] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(!!sessionStorage.getItem('token'));
   console.log(loggedIn , "here")
@@ -47,6 +47,7 @@ function Navbar() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('username');
     setLoggedIn(false);
+    window.location.href = "/creator-home";
   };
 
  
@@ -117,6 +118,7 @@ function Navbar() {
                 // border: 'solid , 2px ,black'
               }}
             >
+            
               <img
                 src={
                   'https://a2i.gov.bd/wp-content/uploads/2022/08/a2i-Logo-100px.png'
@@ -124,11 +126,16 @@ function Navbar() {
 
                 // style={{backgroundColor:'green'}}
                 // src={logo}
+                onClick={()=>{
+                        window.location.href = "/creator-home";
+                      }}
                 style={logoStyle}
+                href="/creator-home"
                 alt="logo of sitemark"
               />
+             
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-              <Button
+              {/* <Button
                       color="secondary"
                       variant="outlined"
                       component="a"
@@ -140,7 +147,7 @@ function Navbar() {
                      borderColor:theme.palette.secondColor.main }}
                     >
                       Back
-                    </Button>
+                    </Button> */}
                     <Button
                        color="secondary"
                       variant="outlined"
@@ -231,6 +238,7 @@ function Navbar() {
                   variant="text"
                   size="small"
                   onClick={handleLogout}
+                  // href="/creator-home"
                 >
                  Logout
                 </Button>
@@ -297,6 +305,7 @@ function Navbar() {
                   variant="text"
                   size="small"
                   onClick={handleLogout}
+                  //  href="/creator-home"
                 >
                   Logout
                 </Button>
@@ -333,7 +342,7 @@ function Navbar() {
                   </MenuItem>
                   <Divider />
                   <Box style={{display:'flex', flexDirection:'column'}}>
-              <Button
+              {/* <Button
                        color="secondary"
                       variant="outlined"
                       component="a"
@@ -342,7 +351,7 @@ function Navbar() {
                       sx={{ width: '100%' , marginRight: '6%' }}
                     >
                       Back
-                    </Button>
+                    </Button> */}
                     <Button
                        color="secondary"
                       variant="outlined"
@@ -422,9 +431,9 @@ function Navbar() {
   );
 }
 
-Navbar.propTypes = {
-  mode: PropTypes.oneOf(['dark', 'light']).isRequired,
-  toggleColorMode: PropTypes.func.isRequired,
-};
+// Navbar.propTypes = {
+//   mode: PropTypes.oneOf(['dark', 'light']).isRequired,
+//   toggleColorMode: PropTypes.func.isRequired,
+// };
 
-export default Navbar;
+export default VoterNavbar;
