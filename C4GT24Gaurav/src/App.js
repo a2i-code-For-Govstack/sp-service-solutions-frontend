@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import CreatorLoginPage from './pages/Auth/CreatorLoginPage';
 import CreatorSignupPage from './pages/Auth/CreatorSignupPage';
 import OrgLoginPage from './pages/Auth/OrgLoginPage';
@@ -36,20 +36,43 @@ import IndividualResponse from './components/Response/IndividualResponse';
 import PublicFormTable from './components/FormAdmin/PublicFormTable';
 import ProcessGAuth from './pages/Auth/ProcessGAuth';
 import BlankError from './components/Common/BlankError';
+import VoterNavbar from './components/Navbar/VoterNavbar';
 function App() {
+
+  const currentPath = window.location.pathname;
+
+  // Function to validate the hash
+  const isValidHash = (hash) => {
+    const hashRegex = /^[a-zA-Z0-9]+$/; // Adjust regex based on your hash requirements
+    return hashRegex.test(hash);
+  };
+
+  // Check if the route contains at least one digit
+  const hasNumber = /\d/;
+
+  // Check if the current path is a hash route (e.g., "/12345" or "/asdmek123wdkl")
+  const isHashRoute = currentPath.split('/').length === 2 && 
+                      isValidHash(currentPath.split('/')[1]) && 
+                      hasNumber.test(currentPath.split('/')[1]);
+
+  
   return (<>
     <ThemeProvider theme={theme}>
     <CssBaseline />
-   
-      <div style={{ 
-        // border:'solid 2px red' , 
- 
-        marginBottom:'0px',
-        height:'12.8vh'  , background: theme.palette.primary.main,opacity:1, 
-        // top:'12.8vh' 
-       }}>
-      <Navbar />
-      </div>
+    
+    
+          <div
+            style={{
+              marginBottom: '0px',
+              height: '12.8vh',
+              background: theme.palette.primary.main,
+              opacity: 1,
+            }}
+          >
+            {!isHashRoute && <Navbar />} {/* Conditionally render Navbar */}
+            {isHashRoute && <VoterNavbar />}
+          </div>
+      
   
       </ThemeProvider>
    
@@ -86,6 +109,10 @@ function App() {
         {/* <Footer /> */}
       </div>
     </Router>
+
+
+
+    
    
     </>);
 }

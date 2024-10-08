@@ -360,13 +360,34 @@ const updateFieldToFormModel = async (field) => {
    
   };
 
-  const [alignment, setAlignment] = useState(1);
+  // const [alignment, setAlignment] = useState(1);
+
+  // const handleChange = (event, newAlignment) => {
+  //   setAlignment(newAlignment);
+    
+   
+  // }; 
+
+
+
+  const [alignment, setAlignment] = useState(
+    () => sessionStorage.getItem('alignmentValue') || 1
+  );
+
 
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
-    
-   
-  }; 
+    sessionStorage.setItem('alignmentValue', newAlignment);  
+  };
+
+  
+  useEffect(() => {
+    sessionStorage.setItem('alignmentValue', alignment);
+  }, [alignment]);
+
+
+
+
   
 
 

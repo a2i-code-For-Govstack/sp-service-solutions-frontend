@@ -155,6 +155,7 @@ export default function FormTable() {
                           color="success"
                           onClick={() => {
                             if (sessionStorage.getItem("token")) {
+                              sessionStorage.setItem('alignmentValue', 1);
                               window.location.href = `${window.location.origin}/live/instance/${instance.hash}`;
                             }
                           }}
@@ -169,8 +170,11 @@ export default function FormTable() {
                           color="success"
                           onClick={() => {
                             if (sessionStorage.getItem("token")) {
+                              sessionStorage.setItem('alignmentValue', 3);
                               window.location.href = `${window.location.origin}/live/instance/${instance.hash}`;
                             }
+                            
+                            
                           }}
                         >
                           RESPONSES
